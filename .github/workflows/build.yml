@@ -46,7 +46,7 @@ jobs:
       # Output
       - uses: actions/upload-artifact@v3
         with:
-          name: build-win-${{ github.ref_name }}-${{ github.sha }}
+          name: build-win
           path: build
   
           # Build for MacOS
@@ -82,5 +82,5 @@ jobs:
       # Output
       - uses: actions/upload-artifact@v3
         with:
-          name: build-macos-${{ github.ref_name }}-${{ github.sha }}
+          name: build-macos
           path: build
