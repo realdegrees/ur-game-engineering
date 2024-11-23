@@ -1,0 +1,11 @@
+# ! This config allows for the use of the command "git mergetool" which starts unityyamlmerge
+# ! Make sure to set the path if you want to use it
+# ? UnityYAMLMerge is a tool that helps you resolve conflicts in Unity scenes and prefabs files
+# https://docs.unity3d.com/Manual/SmartMerge.html
+
+[merge]
+tool = unityyamlmerge
+
+[mergetool "unityyamlmerge"]
+trustExitCode = false
+cmd = '<path to UnityYAMLMerge>' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"

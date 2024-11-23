@@ -91,6 +91,8 @@ Unity projects have specific considerations when used with version control syste
 - **Merging Scene Files**: Unity scene files (`.unity` files) are extremely hard to merge
 - **Exclusive Editing**: To prevent conflicts, **only one person** should work on a scene at any given time.
 
+The  [.gitignore](.gitignore) includes a rule to exclude scenes that end in *"-dev"*.  
+You can name your own scenes e.g. `lighting-scene-dev.unity` to exclude them from the repository as a playground to test your code.
 
 ### Handling Conflicts
 

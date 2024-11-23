@@ -8,14 +8,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Friendly
+  - Hostile
+  - Props
+  - Environment
+  - Projectile
   - 
   - 
   - 
@@ -40,4 +40,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1534516143
+    locked: 0
+  - name: Player
+    uniqueID: 1875338485
+    locked: 0
+  - name: Friendly
+    uniqueID: 580470041
+    locked: 0
+  - name: Hostile
+    uniqueID: 1232885659
+    locked: 0
+  - name: UI
+    uniqueID: 3026230265
+    locked: 0
+  - name: Projectile
+    uniqueID: 3601746055
     locked: 0
