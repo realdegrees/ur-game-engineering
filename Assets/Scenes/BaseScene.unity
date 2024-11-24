@@ -256,13 +256,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuScene: {fileID: 0}
   loadingScene: {fileID: 0}
-  levels:
-  - {fileID: 0}
-  scenes:
-  - scene: {fileID: 102900000, guid: 1a1587e77f4bb64428f4ce04349bfdd6, type: 3}
-    _scene: 
-    loadAsync: 0
-    exclude: []
+  levels: {fileID: 0}
+  scenes: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
