@@ -60,6 +60,5 @@
   "[csharp]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
-  "git.autofetch": true,
-  "dotnet.defaultSolution": "Game Engineering Project.sln"
+  "git.autofetch": true
 }
