@@ -93,8 +93,14 @@ public class SceneLoader : Manager<SceneLoader>
     {
         scenes.ForEach(sceneInfo =>
         {
-            sceneInfo.name ??= sceneInfo.scene.name;
-            sceneInfo._exclude = sceneInfo.exclude.Select(scene => scene.name).ToList();
+            if (sceneInfo.scene != null)
+            {
+                sceneInfo.name ??= sceneInfo.scene.name;
+            }
+            if (sceneInfo._exclude != null)
+            {
+                sceneInfo._exclude = sceneInfo.exclude?.Where(scene => scene != null).Select(scene => scene.name).ToList();
+            }
         });
 
     }
