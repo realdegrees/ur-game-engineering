@@ -29,7 +29,7 @@ public class SceneLoader : Manager<SceneLoader>
 
 #if UNITY_EDITOR
     [SerializeField]
-    private SceneAsset menuScene, loadingScene, levels;    
+    private SceneAsset menuScene, loadingScene, levels;
 #endif
     private string _menuScene, _loadingScene, _levels;
     [Tooltip("These scenes are additively added every time a new scene loads")]
