@@ -17,6 +17,7 @@ MonoBehaviour:
   GroundDeceleration: 33.3
   AirAcceleration: 6.2
   AirDeceleration: 28
+  TurnThreshold: 0.1
   GroundLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -28,14 +29,14 @@ MonoBehaviour:
   JumpHeightCompensationFactor: 1.0344
   GravityOnReleaseMultiplier: 1.6
   NumberOfJumpsAllowed: 1
-  TimeForUpwardsCancel: 0.1
+  TimeForUpwardsCancel: 0.0379
   ApexThreshold: 0.938
   ApexHangTime: 0.01
-  JumpBufferTime: 0.2
+  JumpBufferTime: 0.1
   JumpCoyoteTime: 0.05
   ShowJumpArc: 1
-  StopOnCollision: 0
+  StopOnCollision: 1
   DrawRight: 1
-  ArcResolution: 14
-  VisualizationSteps: 20
+  ArcResolution: 25
+  VisualizationSteps: 34
   DrawGizmos: 1

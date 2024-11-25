@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void FlipCheck()
     {
-        if (rb.velocity.x > 5f && !isFacingRight || rb.velocity.x < -5f && isFacingRight)
+        if (rb.velocity.x > MovementConfig.TurnThreshold && !isFacingRight || rb.velocity.x < -MovementConfig.TurnThreshold && isFacingRight)
         {
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
@@ -306,6 +306,10 @@ public class PlayerController : MonoBehaviour
 
     private void DrawJumpArc(float moveSpeed, Color gizmoColor)
     {
+        if (!isOnGround) return;
+
+        Gizmos.color = gizmoColor;
+
         Vector2 startPosition = new(feetCollider.bounds.center.x, feetCollider.bounds.min.y);
         Vector2 previousPosition = startPosition;
 
@@ -313,7 +317,6 @@ public class PlayerController : MonoBehaviour
 
         Vector2 velocity = new(speed, MovementConfig.InitialJumpVelocity);
 
-        Gizmos.color = gizmoColor;
 
         float timeStep = 2 * MovementConfig.TimeTillJumpApex / MovementConfig.ArcResolution; // time step for the simulation
                                                                                              // float totalTime = (2 * MovementConfig.TimeTillJumpApex) + MovementConfig.ApexHangTime; // total time of the arc including hang time
@@ -373,7 +376,6 @@ public class PlayerController : MonoBehaviour
         if (!isOnGround && coyoteTimer > 0f)
         {
             coyoteTimer -= Time.deltaTime;
-            Debug.Log(coyoteTimer);
         }
     }
     #endregion

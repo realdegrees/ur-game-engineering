@@ -10,6 +10,8 @@ public class PlayerMovementConfig : ScriptableObject
     [Range(0.25f, 40f)] public float GroundDeceleration = 18f;
     [Range(0.25f, 40f)] public float AirAcceleration = 4f;
     [Range(0.25f, 40f)] public float AirDeceleration = 18f;
+    [Tooltip("The horizontal speed at which the character should turn.")]
+    [Range(0f, 1f)] public float TurnThreshold = .2f;
 
     [Header("Ground Detection")]
     public LayerMask GroundLayer;
