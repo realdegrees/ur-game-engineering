@@ -12,16 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e57c5637230914488bcd3d7b640cae5, type: 3}
   m_Name: MovementConfig
   m_EditorClassIdentifier: 
-  MaxWalkSpeed: 10
-  GroundAcceleration: 4
-  GroundDeceleration: 18
-  AirAcceleration: 4
-  AirDeceleration: 18
-  MaxRunSpeed: 20
+  MaxWalkSpeed: 13.1
+  GroundAcceleration: 4.3
+  GroundDeceleration: 33.3
+  AirAcceleration: 6.2
+  AirDeceleration: 28
   GroundLayer:
     serializedVersion: 2
     m_Bits: 2048
-  BottomRange: 0.02
-  TopRange: 0.02
-  HeadWidth: 0.5
+  BottomRange: 0.05
+  TopRange: 0.05
+  JumpHeight: 3.36
+  TimeTillJumpApex: 0.4
+  MaxFallSpeed: 25.1
+  JumpHeightCompensationFactor: 1.0344
+  GravityOnReleaseMultiplier: 1.6
+  NumberOfJumpsAllowed: 1
+  TimeForUpwardsCancel: 0.1
+  ApexThreshold: 0.938
+  ApexHangTime: 0.01
+  JumpBufferTime: 0.2
+  JumpCoyoteTime: 0.05
+  ShowJumpArc: 1
+  StopOnCollision: 0
+  DrawRight: 1
+  ArcResolution: 14
+  VisualizationSteps: 20
   DrawGizmos: 1

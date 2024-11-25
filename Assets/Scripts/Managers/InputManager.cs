@@ -36,12 +36,12 @@ public class InputManager : Manager<InputManager>
     void Update()
     {
         Movement = moveAction.ReadValue<Vector2>();
-        JumpPressed = jumpAction.triggered;
-        JumpCharged = jumpAction.phase == InputActionPhase.Performed;
-        JumpReleased = jumpAction.phase == InputActionPhase.Canceled;
+        JumpPressed = jumpAction.WasPressedThisFrame();
+        JumpCharged = jumpAction.ReadValue<float>() > 0;
+        JumpReleased = jumpAction.WasReleasedThisFrame();
         CrouchHeld = crouchAction.ReadValue<float>() > 0;
-        AttackPressed = attackAction.triggered;
-        AttackCharged = attackAction.phase == InputActionPhase.Performed;
-        AttackReleased = attackAction.phase == InputActionPhase.Canceled;
+        AttackPressed = attackAction.WasPressedThisFrame();
+        AttackCharged = attackAction.ReadValue<float>() > 0;
+        AttackReleased = attackAction.WasReleasedThisFrame();
     }
 }
