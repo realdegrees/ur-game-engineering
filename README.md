@@ -118,6 +118,7 @@ You can name your own scenes e.g. `lighting-scene-dev.unity` to exclude them fro
 You can also add a commit type in front of the message.
 
 - **Types**:
+
   - `feat`: New feature
   - `fix`: Bug fix
   - `docs`: Documentation changes
@@ -125,3 +126,18 @@ You can also add a commit type in front of the message.
   - `refactor`: Refactoring code
   - `test`: Adding tests
   - `chore`: Updating build tasks, package manager configs, etc.; no production code change
+
+  ## Troubleshooting
+
+  ### Git Clone or Pull Failed
+
+  If you encounter issues while cloning or pulling the repository, you can use the GitHub CLI to handle authentication.
+
+  - **Install GitHub CLI**: [GitHub CLI](https://cli.github.com/)
+
+  ### .NET SDK Missing
+
+  If you receive errors related to the .NET SDK, make sure you have the .NET SDK 8.0 installed.
+  This issue can arise when using VSCode as it does not come bundled with the dotnet SDK like Visual Studio.
+
+  - **Install .NET SDK 8.0**: [Download .NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
