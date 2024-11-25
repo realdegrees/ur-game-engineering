@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e57c5637230914488bcd3d7b640cae5, type: 3}
+  m_Name: MovementConfig
+  m_EditorClassIdentifier: 
+  MaxWalkSpeed: 10
+  GroundAcceleration: 4
+  GroundDeceleration: 18
+  AirAcceleration: 4
+  AirDeceleration: 18
+  MaxRunSpeed: 20
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  BottomRange: 0.02
+  TopRange: 0.02
+  HeadWidth: 0.5
+  DrawGizmos: 1
