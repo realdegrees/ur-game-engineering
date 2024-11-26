@@ -24,7 +24,7 @@ jobs:
         # ! Enable this if LFS is added
         # ! with:
         # !   lfs: true
-      
+
       # Cache
       - uses: actions/cache@v3
         with:
@@ -48,7 +48,7 @@ jobs:
         with:
           name: build-win
           path: build
-  
+
           # Build for MacOS
   build-ios:
     name: Build for MacOS
@@ -77,10 +77,10 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: StandaloneOSX 
+          targetPlatform: StandaloneOSX
 
       # Output
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: build-macos
           path: build
