@@ -13,23 +13,15 @@
     "**/*.unityproj": true,
     "**/*.dll": true,
     "**/*.exe": true,
-    "**/*.pdf": true,
     "**/*.mid": true,
     "**/*.midi": true,
-    "**/*.wav": true,
-    "**/*.gif": true,
     "**/*.ico": true,
-    "**/*.jpg": true,
-    "**/*.jpeg": true,
-    "**/*.png": true,
     "**/*.psd": true,
     "**/*.tga": true,
     "**/*.tif": true,
     "**/*.tiff": true,
     "**/*.3ds": true,
     "**/*.3DS": true,
-    "**/*.fbx": true,
-    "**/*.FBX": true,
     "**/*.lxo": true,
     "**/*.LXO": true,
     "**/*.ma": true,
@@ -39,10 +31,7 @@
     "**/*.asset": true,
     "**/*.cubemap": true,
     "**/*.flare": true,
-    "**/*.mat": true,
     "**/*.meta": true,
-    "**/*.prefab": true,
-    "**/*.unity": true,
     "build/": true,
     "Build/": true,
     "Library/": true,
@@ -60,5 +49,6 @@
   "[csharp]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
-  "git.autofetch": true
+  "git.autofetch": true,
+  "dotnet.defaultSolution": "ur-game-engineering.sln"
 }
