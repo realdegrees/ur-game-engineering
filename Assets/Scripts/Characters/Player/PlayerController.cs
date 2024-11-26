@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D headHit;
     private bool isOnGround;
     private bool isHeadBlocked;
+    private Collider2D connectedGround;
+    private Collider2D connectedCeiling;
 
     public float VerticalVelocity { get; private set; }
     private bool isJumping;
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
     private float coyoteTimer;
 
+    private Bounds playerBounds;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -52,6 +56,10 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        playerBounds = headCollider.bounds;
+        playerBounds.Encapsulate(bodyCollider.bounds);
+        playerBounds.Encapsulate(feetCollider.bounds);
+
         CheckCollisions();
         Jump();
 
@@ -137,8 +145,8 @@ public class PlayerController : MonoBehaviour
         // Air jump after coyote time
         else if (jumpBufferTimer > 0f && isFalling && numberOfJumpsUsed < MovementConfig.NumberOfJumpsAllowed - 1)
         {
-            InitiateJump(2);
             isFastFalling = false;
+            InitiateJump(2);
         }
         // Landing
         if ((isJumping || isFalling) && isOnGround && VerticalVelocity <= 0f)
@@ -151,7 +159,7 @@ public class PlayerController : MonoBehaviour
             isPastApexThreshold = false;
             numberOfJumpsUsed = 0;
             coyoteTimer = MovementConfig.JumpCoyoteTime;
-            VerticalVelocity = Physics2D.gravity.y; ;
+            VerticalVelocity = 0f;
         }
     }
 
@@ -171,74 +179,14 @@ public class PlayerController : MonoBehaviour
         if (isJumping)
         {
             // Check head collision
-            if (isHeadBlocked)
-            {
-                isFastFalling = true;
-            }
-
-            // Handle Gravity when ascending
-            if (VerticalVelocity >= 0f)
-            {
-                apexPoint = Mathf.InverseLerp(MovementConfig.InitialJumpVelocity, 0f, VerticalVelocity);
-
-                // Gravity when ascending after apex
-                if (apexPoint >= MovementConfig.ApexThreshold)
-                {
-                    if (!isPastApexThreshold)
-                    {
-                        isPastApexThreshold = true;
-                        timePastApexThreshold = 0f;
-                    }
-
-                    if (isPastApexThreshold)
-                    {
-                        timePastApexThreshold += Time.fixedDeltaTime;
-                        if (timePastApexThreshold < MovementConfig.ApexHangTime)
-                        {
-                            VerticalVelocity = 0f;
-                        }
-                        else
-                        {
-                            VerticalVelocity = -.1f;
-                        }
-                    }
-                }
-                // Gravity when ascending before apex
-                else
-                {
-                    VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
-                    if (isPastApexThreshold)
-                    {
-                        isPastApexThreshold = false;
-                    }
-                }
-            }
-            // Handle Gravity when descending
-            else if (!isFastFalling)
-            {
-                VerticalVelocity += MovementConfig.Gravity * MovementConfig.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
-            }
-            else if (VerticalVelocity < 0f)
-            {
-                if (!isFalling)
-                {
-                    isFalling = true;
-                }
-            }
+            if (isHeadBlocked) isFastFalling = true;
+            ApplyJumpGravity();
         }
 
         // Cut Jump
         if (isFastFalling)
         {
-            if (fastFallTime >= MovementConfig.TimeForUpwardsCancel)
-            {
-                VerticalVelocity += MovementConfig.Gravity * MovementConfig.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
-            }
-            else if (fastFallTime < MovementConfig.TimeForUpwardsCancel)
-            {
-                VerticalVelocity = Mathf.Lerp(fastFallReleaseSpeed, 0f, fastFallTime / MovementConfig.TimeForUpwardsCancel);
-            }
-            fastFallTime += Time.fixedDeltaTime;
+            HandleCutJump();
         }
 
         // Gravity without jumping
@@ -256,6 +204,77 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, VerticalVelocity);
     }
 
+    private void HandleCutJump()
+    {
+        if (fastFallTime >= MovementConfig.TimeForUpwardsCancel)
+        {
+            VerticalVelocity += MovementConfig.Gravity * MovementConfig.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
+        }
+        else if (fastFallTime < MovementConfig.TimeForUpwardsCancel)
+        {
+            VerticalVelocity = Mathf.Lerp(fastFallReleaseSpeed, 0f, fastFallTime / MovementConfig.TimeForUpwardsCancel);
+        }
+        fastFallTime += Time.fixedDeltaTime;
+    }
+
+    private void ApplyJumpGravity()
+    {
+        // Handle Gravity when ascending
+        if (VerticalVelocity >= 0f)
+        {
+            apexPoint = Mathf.InverseLerp(MovementConfig.InitialJumpVelocity, 0f, VerticalVelocity);
+
+            // Gravity when ascending after apex (manages hang time)
+            if (apexPoint > MovementConfig.ApexThreshold)
+            {
+                HandleApex();
+            }
+            // Gravity when ascending normally during jump
+            else
+            {
+                VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
+                if (isPastApexThreshold)
+                {
+                    isPastApexThreshold = false;
+                }
+            }
+        }
+        // Handle Gravity when descending
+        else if (!isFastFalling)
+        {
+            VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
+        }
+        else if (VerticalVelocity < 0f)
+        {
+            if (!isFalling)
+            {
+                isFalling = true;
+            }
+        }
+    }
+
+    private void HandleApex()
+    {
+        if (!isPastApexThreshold)
+        {
+            isPastApexThreshold = true;
+            timePastApexThreshold = 0f;
+        }
+
+        if (isPastApexThreshold)
+        {
+            timePastApexThreshold += Time.fixedDeltaTime;
+            if (timePastApexThreshold < MovementConfig.ApexHangTime)
+            {
+                VerticalVelocity = 0f;
+            }
+            else
+            {
+                VerticalVelocity = -.1f;
+            }
+        }
+    }
+
     #endregion
 
     #region Collision Detection
@@ -269,6 +288,7 @@ public class PlayerController : MonoBehaviour
     {
         groundHit = Physics2D.CapsuleCast(feetCollider.bounds.center, feetCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, Vector2.down, MovementConfig.BottomRange, MovementConfig.GroundLayer);
         isOnGround = groundHit.collider != null;
+        connectedGround = isOnGround ? groundHit.collider : null;
     }
 
     private void IsHeadBlocked()
@@ -282,6 +302,7 @@ public class PlayerController : MonoBehaviour
             float angle = Vector2.Angle(Vector2.up, headToHit);
             Debug.Log("Angle: " + angle);
             isHeadBlocked = angle <= 25f;
+            connectedCeiling = isHeadBlocked ? headHit.collider : null;
         }
 
     }
@@ -300,66 +321,104 @@ public class PlayerController : MonoBehaviour
         {
             Debug.DrawRay(new Vector2(headCollider.bounds.center.x, headCollider.bounds.center.y), headHit.point - (Vector2)headCollider.bounds.center, Color.red);
         }
-        if (MovementConfig.ShowJumpArc)
-            DrawJumpArc(MovementConfig.MaxWalkSpeed, Color.white);
+        if (MovementConfig.Show)
+            DrawJumpArc();
     }
 
-    private void DrawJumpArc(float moveSpeed, Color gizmoColor)
+    private class JumpArcData
     {
-        if (!isOnGround) return;
+        public Vector2 startPosition;
+        public Vector2 velocity;
+        public float timeStep;
+        public Color color;
+        public Vector2? targetPosition;
+    }
+    private readonly JumpArcData jumpArcData = new();
 
-        Gizmos.color = gizmoColor;
+    private void DrawJumpArc()
+    {
+        float speed = isFacingRight ? MovementConfig.MaxWalkSpeed : -MovementConfig.MaxWalkSpeed;
 
-        Vector2 startPosition = new(feetCollider.bounds.center.x, feetCollider.bounds.min.y);
-        Vector2 previousPosition = startPosition;
-
-        float speed = isFacingRight ? moveSpeed : -moveSpeed;
-
-        Vector2 velocity = new(speed, MovementConfig.InitialJumpVelocity);
-
-
-        float timeStep = 2 * MovementConfig.TimeTillJumpApex / MovementConfig.ArcResolution; // time step for the simulation
-                                                                                             // float totalTime = (2 * MovementConfig.TimeTillJumpApex) + MovementConfig.ApexHangTime; // total time of the arc including hang time
+        if (isOnGround)
+        {
+            jumpArcData.startPosition = playerBounds.center;
+            jumpArcData.velocity = new(speed, MovementConfig.InitialJumpVelocity);
+            jumpArcData.timeStep = 2 * MovementConfig.TimeTillJumpApex / MovementConfig.ArcResolution;
+            jumpArcData.color = Color.white;
+        }
+        else
+        {
+            if (!isJumping) return;
+            jumpArcData.color = Color.gray;
+        }
+        Vector2 previousPosition = jumpArcData.startPosition;
 
         for (int i = 0; i < MovementConfig.VisualizationSteps; i++)
         {
-            float simulationTime = i * timeStep;
+            float simulationTime = i * jumpArcData.timeStep;
             Vector2 displacement;
             Vector2 drawPoint;
 
             if (simulationTime < MovementConfig.TimeTillJumpApex) // Ascending
             {
-                displacement = velocity * simulationTime + simulationTime * simulationTime * 0.5f * new Vector2(0f, MovementConfig.Gravity);
+                displacement = jumpArcData.velocity * simulationTime + simulationTime * simulationTime * 0.5f * new Vector2(0f, MovementConfig.Gravity);
             }
             else if (simulationTime < MovementConfig.TimeTillJumpApex + MovementConfig.ApexHangTime) // Apex hang time
             {
                 float apexTime = simulationTime - MovementConfig.TimeTillJumpApex;
-                displacement = velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
+                displacement = jumpArcData.velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
                 displacement += new Vector2(speed, 0) * apexTime; // No vertical movement during hang time
             }
             else // Descending
             {
                 float descendTime = simulationTime - (MovementConfig.TimeTillJumpApex + MovementConfig.ApexHangTime);
-                displacement = velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
+                displacement = jumpArcData.velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
                 displacement += new Vector2(speed, 0f) * MovementConfig.ApexHangTime; // Horizontal movement during hang time
                 displacement += new Vector2(speed, 0f) * descendTime + 0.5f * descendTime * descendTime * new Vector2(0f, MovementConfig.Gravity);
             }
 
-            drawPoint = startPosition + displacement;
+            drawPoint = jumpArcData.startPosition + displacement;
 
-            if (MovementConfig.StopOnCollision)
+
+            float checkDistance = Vector2.Distance(previousPosition, drawPoint);
+            Vector2 checkDirection = drawPoint - previousPosition;
+            RaycastHit2D check = Physics2D.BoxCast(previousPosition, playerBounds.size, 0, checkDirection, checkDistance, MovementConfig.GroundLayer);
+            var isConnectedGround = check.collider == connectedGround;
+            var isValidTarget = !isConnectedGround || (isConnectedGround && (Vector2.Distance(check.centroid, playerBounds.center) > playerBounds.size.y));
+
+
+            if (check.collider != null && isValidTarget)
             {
-                RaycastHit2D hit = Physics2D.Raycast(previousPosition, drawPoint - previousPosition, Vector2.Distance(previousPosition, drawPoint), MovementConfig.GroundLayer);
-                if (hit.collider != null)
-                {
-                    // If a hit is detected, stop drawing the arc at the hit point
-                    Gizmos.DrawLine(previousPosition, hit.point);
-                    break;
-                }
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(check.centroid, playerBounds.center);
+
+                jumpArcData.targetPosition ??= check.centroid;
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(check.centroid, 0.1f);
+                Gizmos.DrawSphere(check.point, 0.1f);
+                break;
+            }
+            else
+            {
+                jumpArcData.targetPosition = null;
             }
 
-            Gizmos.DrawLine(previousPosition, drawPoint);
+
+            // Draw only if the index is even to create a striped effect
+            if (i % 2 == 0)
+            {
+                Gizmos.color = jumpArcData.color;
+                Gizmos.DrawLine(previousPosition, drawPoint);
+            }
             previousPosition = drawPoint;
+        }
+
+        if (jumpArcData.targetPosition.Value != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(jumpArcData.targetPosition.Value, playerBounds.size);
+            Gizmos.DrawSphere(jumpArcData.startPosition, .05f);
         }
     }
 

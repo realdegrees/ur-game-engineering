@@ -21,7 +21,7 @@ public class PlayerMovementConfig : ScriptableObject
 
     [Header("Jump")]
     public float JumpHeight = 6.5f;
-    public float TimeTillJumpApex = 0.35f;
+    [Range(0f, 1f)] public float TimeTillJumpApex = 0.35f;
     public float MaxFallSpeed = 26f;
     [Range(1f, 1.1f)] public float JumpHeightCompensationFactor = 1.054f;
     [Range(0.01f, 5f)] public float GravityOnReleaseMultiplier = 2f;
@@ -31,7 +31,7 @@ public class PlayerMovementConfig : ScriptableObject
     [Range(0.02f, 0.3f)] public float TimeForUpwardsCancel = 0.027f;
 
     [Header("Jump Apex")]
-    [Range(0.5f, 1f)] public float ApexThreshold = 0.97f;
+    [Range(0.8f, 1f)] public float ApexThreshold = 0.97f;
     [Range(0.01f, 1f)] public float ApexHangTime = 0.075f;
 
     [Header("Jump Buffer")]
@@ -41,11 +41,9 @@ public class PlayerMovementConfig : ScriptableObject
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;
 
     [Header("Jump Visualization")]
-    public bool ShowJumpArc = false;
-    public bool StopOnCollision = true;
-    public bool DrawRight = true;
-    [Range(5, 100)] public int ArcResolution = 20;
-    [Range(0, 500)] public int VisualizationSteps = 90;
+    public bool Show = false;
+    [Range(5, 100)] public int ArcResolution = 100;
+    [Range(0, 500)] public int VisualizationSteps = 150;
 
     [Header("Debug")]
     public bool DrawGizmos = true;

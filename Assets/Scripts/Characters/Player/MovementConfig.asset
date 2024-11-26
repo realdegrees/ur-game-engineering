@@ -13,30 +13,28 @@ MonoBehaviour:
   m_Name: MovementConfig
   m_EditorClassIdentifier: 
   MaxWalkSpeed: 13.1
-  GroundAcceleration: 4.3
-  GroundDeceleration: 33.3
-  AirAcceleration: 6.2
-  AirDeceleration: 28
+  GroundAcceleration: 11.1
+  GroundDeceleration: 21
+  AirAcceleration: 5.9
+  AirDeceleration: 4.2
   TurnThreshold: 0.1
   GroundLayer:
     serializedVersion: 2
     m_Bits: 2048
   BottomRange: 0.05
   TopRange: 0.05
-  JumpHeight: 3.36
-  TimeTillJumpApex: 0.4
-  MaxFallSpeed: 25.1
-  JumpHeightCompensationFactor: 1.0344
-  GravityOnReleaseMultiplier: 1.6
+  JumpHeight: 4
+  TimeTillJumpApex: 0.3
+  MaxFallSpeed: 35
+  JumpHeightCompensationFactor: 1.07
+  GravityOnReleaseMultiplier: 1.25
   NumberOfJumpsAllowed: 1
   TimeForUpwardsCancel: 0.0379
-  ApexThreshold: 0.938
-  ApexHangTime: 0.01
-  JumpBufferTime: 0.1
-  JumpCoyoteTime: 0.05
-  ShowJumpArc: 1
-  StopOnCollision: 1
-  DrawRight: 1
-  ArcResolution: 25
-  VisualizationSteps: 34
+  ApexThreshold: 0.98
+  ApexHangTime: 0.03
+  JumpBufferTime: 0.07
+  JumpCoyoteTime: 0.03
+  Show: 0
+  ArcResolution: 100
+  VisualizationSteps: 200
   DrawGizmos: 1
