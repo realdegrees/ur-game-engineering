@@ -15,7 +15,10 @@ public class CameraManager : Manager<CameraManager>
     private CinemachineFramingTransposer framingTransposer;
 
     private Coroutine verticalSnapCoroutine;
+    private Coroutine flipCoroutine;
 
+    private float defaultDampening;
+    private float defaultXOffset;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -25,8 +28,12 @@ public class CameraManager : Manager<CameraManager>
             if (child.TryGetComponent(out CinemachineVirtualCamera virtualCamera)) // Crispy clean
             {
                 cameras.Add(virtualCamera);
-                activeCamera = virtualCamera;
-                framingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+                var isEnabled = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>().enabled;
+                if (isEnabled)
+                {
+                    SetActiveCamera(virtualCamera);
+                }
+
             }
         }
 
@@ -37,34 +44,77 @@ public class CameraManager : Manager<CameraManager>
 
             verticalSnapCoroutine = StartCoroutine(IncreaseDampening(config.VerticalSnapDuration));
         });
-        player.OnStartFaling.AddListener(() =>
+        player.OnStartFalling.AddListener(() =>
         {
             if (verticalSnapCoroutine != null)
                 StopCoroutine(verticalSnapCoroutine);
 
             verticalSnapCoroutine = StartCoroutine(DecreaseDampening(config.VerticalSnapDuration));
         });
+        player.OnFlip.AddListener((_) =>
+        {
+            if (flipCoroutine != null)
+                StopCoroutine(flipCoroutine);
+
+            flipCoroutine = StartCoroutine(FlipOffset(config.DirectionFlipDuration));
+        });
     }
 
-    private IEnumerator DecreaseDampening(float duration)
+    private void SetActiveCamera(CinemachineVirtualCamera camera)
+    {
+        if (framingTransposer != null)
+            framingTransposer.enabled = false;
+
+
+        activeCamera = camera;
+        framingTransposer = camera.GetCinemachineComponent<CinemachineFramingTransposer>();
+        framingTransposer.enabled = true;
+
+        // Initialize default values
+        defaultDampening = framingTransposer.m_YDamping;
+        defaultXOffset = framingTransposer.m_TrackedObjectOffset.x;
+    }
+
+    private IEnumerator FlipOffset(float duration)
     {
         float elapsedTime = 0;
-        float initialDampening = framingTransposer.m_YDamping;
+        Debug.Log("DecreaseDampening");
+        framingTransposer.m_TrackedObjectOffset.x = -framingTransposer.m_TrackedObjectOffset.x;
+        var startValue = framingTransposer.m_TrackedObjectOffset.x;
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            framingTransposer.m_YDamping = Mathf.Lerp(initialDampening, 0, elapsedTime / duration);
+            float ratio = elapsedTime / duration;
+            ratio = config.DirectionFlipCurve.Evaluate(ratio);
+            framingTransposer.m_TrackedObjectOffset.x = Mathf.Lerp(startValue, defaultXOffset, ratio);
+            yield return null;
+        }
+    }
+    private IEnumerator DecreaseDampening(float duration)
+    {
+        float elapsedTime = 0;
+        Debug.Log("DecreaseDampening");
+        float startValue = framingTransposer.m_YDamping;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float ratio = elapsedTime / duration;
+            ratio = config.VerticalSnapCurve.Evaluate(ratio);
+            framingTransposer.m_YDamping = Mathf.Lerp(startValue, 0, ratio);
             yield return null;
         }
     }
     private IEnumerator IncreaseDampening(float duration)
     {
+        Debug.Log("IncreaseDampening");
         float elapsedTime = 0;
-        float initialDampening = framingTransposer.m_YDamping;
+        float startValue = framingTransposer.m_YDamping;
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            framingTransposer.m_YDamping = Mathf.Lerp(initialDampening, config.VerticalSnapDuration, elapsedTime / duration);
+            float ratio = elapsedTime / duration;
+            ratio = config.VerticalSnapCurve.Evaluate(ratio);
+            framingTransposer.m_YDamping = Mathf.Lerp(startValue, defaultDampening, ratio);
             yield return null;
         }
     }

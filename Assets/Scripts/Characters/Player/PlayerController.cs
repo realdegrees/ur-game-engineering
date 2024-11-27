@@ -50,8 +50,9 @@ public class PlayerController : MonoBehaviour
 
     private Bounds playerBounds;
 
-    public UnityEvent OnStartFaling { get; private set; } = new();
+    public UnityEvent OnStartFalling { get; private set; } = new();
     public UnityEvent OnLand { get; private set; } = new();
+    public UnityEvent<bool> OnFlip { get; private set; } = new();
 
     private void Awake()
     {
@@ -163,6 +164,7 @@ public class PlayerController : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
+            OnFlip.Invoke(isFacingRight);
         }
     }
 
@@ -186,6 +188,7 @@ public class PlayerController : MonoBehaviour
             if (isJumping && VerticalVelocity > 0f)
             {
                 isFastFalling = true;
+                OnStartFalling.Invoke();
                 if (isPastApexThreshold)
                 {
                     isPastApexThreshold = false;
@@ -207,6 +210,7 @@ public class PlayerController : MonoBehaviour
             if (jumpReleaseDuringBuffer)
             {
                 isFastFalling = true;
+                OnStartFalling.Invoke();
                 fastFallReleaseSpeed = VerticalVelocity;
             }
         }
@@ -253,7 +257,11 @@ public class PlayerController : MonoBehaviour
         if (isJumping)
         {
             // Check head collision
-            if (isHeadBlocked) isFastFalling = true;
+            if (isHeadBlocked)
+            {
+                isFastFalling = true;
+                OnStartFalling.Invoke();
+            }
             ApplyJumpGravity();
         }
 
@@ -269,7 +277,7 @@ public class PlayerController : MonoBehaviour
             if (!IsFalling)
             {
                 IsFalling = true;
-                OnStartFaling?.Invoke();
+                OnStartFalling?.Invoke();
             }
             VerticalVelocity += config.Gravity * Time.fixedDeltaTime;
         }
@@ -327,7 +335,7 @@ public class PlayerController : MonoBehaviour
             if (!IsFalling)
             {
                 IsFalling = true;
-                OnStartFaling?.Invoke();
+                OnStartFalling?.Invoke();
             }
         }
     }
