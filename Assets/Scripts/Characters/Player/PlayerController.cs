@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider2D feetCollider;
     [SerializeField] private Collider2D bodyCollider;
     [SerializeField] private Collider2D headCollider;
+    public Collider2D interactionCollider;
 
     private Rigidbody2D rb;
 
