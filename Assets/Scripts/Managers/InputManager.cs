@@ -6,7 +6,7 @@ public class InputManager : Manager<InputManager>
 {
     private PlayerInput PlayerInput;
 
-    public Vector2 Movement { get; private set; }
+    public float Movement { get; private set; }
     public bool JumpPressed { get; private set; }
     public bool JumpCharged { get; private set; } // Maybe Implement a system where you can charge your jump with the character visually charging the jump too, could be a nice mechanic
     public bool JumpReleased { get; private set; }
@@ -23,7 +23,7 @@ public class InputManager : Manager<InputManager>
 
     public void Move(InputAction.CallbackContext context)
     {
-        Movement = context.action.ReadValue<Vector2>();
+        Movement = context.action.ReadValue<float>();
     }
     public void Jump(InputAction.CallbackContext context)
     {

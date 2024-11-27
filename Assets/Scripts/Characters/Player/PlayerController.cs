@@ -13,12 +13,19 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private Vector2 moveVelocity;
+    private Vector2 movementVector;
+    private Vector2 desiredMovementVector;
     private bool isFacingRight = true;
 
     private RaycastHit2D groundHit;
     private RaycastHit2D headHit;
     private bool isOnGround;
+    private bool isOnSlope;
+    private bool isOnUpSlope;
+    private float slopeAngle;
+
+    private float groundAngle;
+
     private bool isHeadBlocked;
     private Collider2D connectedGround;
     private Collider2D connectedCeiling;
@@ -51,35 +58,99 @@ public class PlayerController : MonoBehaviour
     {
         UpdateTimers();
         FlipCheck();
-        JumpCheck();
+        if (Math.Abs(groundAngle) <= MovementConfig.MaxSlopeAngle) JumpCheck();
     }
 
     private void FixedUpdate()
     {
+        // ! TODO: probably not the smartest way to build these bounds, maybe use a composite collider?
         playerBounds = headCollider.bounds;
         playerBounds.Encapsulate(bodyCollider.bounds);
         playerBounds.Encapsulate(feetCollider.bounds);
 
         CheckCollisions();
         Jump();
-
-        if (isOnGround) Move(MovementConfig.GroundAcceleration, MovementConfig.GroundDeceleration, InputManager.Instance.Movement);
-        else Move(MovementConfig.AirAcceleration, MovementConfig.AirDeceleration, InputManager.Instance.Movement);
+        Move();
     }
+
 
     #region Movement
 
-    public void Move(float acceleration, float deceleration, Vector2 moveInput)
+    public void Move()
     {
-        if (moveInput != Vector2.zero)
+        // Set acceleration and deceleration based on whether the player is on the ground or in the air
+        float acceleration = isOnGround ? MovementConfig.GroundAcceleration : MovementConfig.AirAcceleration;
+        float deceleration = isOnGround ? MovementConfig.GroundDeceleration : MovementConfig.AirDeceleration;
+
+        movementVector = rb.velocity; // use the actual velocity as base for calculations
+
+        // Accelerate
+        if (InputManager.Instance.Movement != 0)
         {
-            moveVelocity = Vector2.Lerp(moveVelocity, moveInput * MovementConfig.MaxWalkSpeed, acceleration * Time.fixedDeltaTime);
+            desiredMovementVector = CalculateDesiredMovementVector();
+            desiredMovementVector = ApplySlopeModifiers(desiredMovementVector, acceleration);
+            movementVector = Vector2.Lerp(movementVector, desiredMovementVector, acceleration * Time.fixedDeltaTime); // Lerp the current velocity to the desired one based on the acceleration
         }
+
+        // Decelerate
         else
         {
-            moveVelocity = Vector2.Lerp(moveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+            movementVector = Vector2.Lerp(movementVector, Vector2.zero, deceleration * Time.fixedDeltaTime);
         }
-        rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y);
+
+        rb.velocity = movementVector;
+    }
+
+    private Vector2 ApplySlopeModifiers(Vector2 movementVector, float acceleration)
+    {
+
+        if (isOnSlope)
+        {
+            var wantsToWalkUp = desiredMovementVector.y > 0;
+            var canWalkUp = slopeAngle <= MovementConfig.MaxSlopeAngle;
+            var slopeSpeedMultiplier = isOnUpSlope ? MovementConfig.UpSlopeSpeedMultiplier : MovementConfig.DownSlopeSpeedMultiplier;
+            if (wantsToWalkUp) // If the player wants to walk up a slope that is too steep, don't allow it
+            {
+                if (canWalkUp)
+                {
+                    var slowdown = 1 - (slopeAngle / MovementConfig.MaxSlopeAngle);
+                    var slopeAngleSlowdownMultiplier = Mathf.Lerp(1, slowdown, MovementConfig.SlopeSteepnessFactor);
+                    movementVector *= slopeAngleSlowdownMultiplier * slopeSpeedMultiplier; // Lerp the current velocity to the desired one based on the acceleration
+                }
+                else
+                {
+                    var rejectionForce = Mathf.Pow(MovementConfig.SlopeRejectionForce, 2); // Adjust the curve so that 0.5 becomes 0.25
+                    movementVector = Vector2.Lerp(movementVector, -movementVector, rejectionForce + 0.5f); // Lerp the current velocity to the opposite direction based on the acceleration
+                // TODO: maybe trigger an animation or sound effect to indicate that the player can't walk up the slope
+            }
+
+            }
+            else
+            {
+                var speedup = 1 + (slopeAngle / MovementConfig.MaxSlopeAngle);
+                var slopeAngleSpeedupMultiplier = Mathf.Lerp(1, speedup, MovementConfig.SlopeSteepnessFactor);
+                movementVector *= slopeAngleSpeedupMultiplier * slopeSpeedMultiplier;
+            }
+        }
+        if (!isOnSlope) movementVector.y = rb.velocity.y; // If not on slope, preserve the y velocity
+        // Apply the slope effect multiplier to the velocity
+        return movementVector;
+
+    }
+
+    private Vector2 CalculateDesiredMovementVector()
+    {
+        // calculate the direction the player should move in based on the input and the normal of the ground the player is standing on
+        var desiredDirection = GetDesiredDirection();
+
+
+        var velocity = MovementConfig.MaxWalkSpeed * desiredDirection; // Construct the desired movement vector based on the maximum walk speed, slope effect multiplier and the desired direction
+        return velocity;
+    }
+
+    private Vector2 GetDesiredDirection()
+    {
+        return -InputManager.Instance.Movement * Vector2.Perpendicular(groundHit.normal).normalized;
     }
 
     private void FlipCheck()
@@ -151,7 +222,6 @@ public class PlayerController : MonoBehaviour
         // Landing
         if ((isJumping || isFalling) && isOnGround && VerticalVelocity <= 0f)
         {
-            Debug.Log("Landed");
             isJumping = false;
             isFastFalling = false;
             isFalling = false;
@@ -165,7 +235,6 @@ public class PlayerController : MonoBehaviour
 
     private void InitiateJump(int cost)
     {
-        Debug.Log("Jumped");
         if (!isJumping)
         {
             isJumping = true;
@@ -199,9 +268,12 @@ public class PlayerController : MonoBehaviour
             VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
         }
 
-        // Clamp vertical velocity
-        VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MovementConfig.MaxFallSpeed, 50f);
-        rb.velocity = new Vector2(rb.velocity.x, VerticalVelocity);
+        if (!isOnGround || isJumping)
+        {
+            // Clamp vertical velocity
+            VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MovementConfig.MaxFallSpeed, 50f);
+            rb.velocity = new Vector2(rb.velocity.x, VerticalVelocity);
+        }
     }
 
     private void HandleCutJump()
@@ -286,25 +358,43 @@ public class PlayerController : MonoBehaviour
     }
     private void IsOnGround()
     {
-        groundHit = Physics2D.CapsuleCast(feetCollider.bounds.center, feetCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, Vector2.down, MovementConfig.BottomRange, MovementConfig.GroundLayer);
+        var checkDirection = -transform.up;
+        groundHit = Physics2D.CapsuleCast(feetCollider.bounds.center, feetCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, MovementConfig.BottomRange, MovementConfig.GroundLayer);
         isOnGround = groundHit.collider != null;
+        isOnSlope = false;
+        isOnUpSlope = false;
+        groundAngle = 0;
+        if (isOnGround)
+        {
+            float angle = Vector2.Angle(-checkDirection, groundHit.normal);
+            groundAngle = Mathf.RoundToInt(angle);
+            isOnSlope = angle > 2f;
+            isOnUpSlope = isOnSlope && (isFacingRight ? groundHit.normal.x < 0 : groundHit.normal.x > 0);
+            slopeAngle = Vector2.Angle(Vector2.up, groundHit.normal); // TODO: change Vector2.up to the inverse of the gravity vector
+        }
+        else
+        {
+            groundHit.normal = Vector2.up;
+        }
         connectedGround = isOnGround ? groundHit.collider : null;
     }
 
     private void IsHeadBlocked()
     {
-
-        headHit = Physics2D.CapsuleCast(headCollider.bounds.center, headCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, Vector2.up, MovementConfig.TopRange, MovementConfig.GroundLayer);
+        var checkDirection = transform.up;
+        headHit = Physics2D.CapsuleCast(headCollider.bounds.center, headCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, MovementConfig.TopRange, MovementConfig.GroundLayer);
         isHeadBlocked = headHit.collider != null;
         if (isHeadBlocked)
         {
             Vector2 headToHit = headHit.point - (Vector2)headCollider.bounds.center;
             float angle = Vector2.Angle(Vector2.up, headToHit);
-            Debug.Log("Angle: " + angle);
             isHeadBlocked = angle <= 25f;
             connectedCeiling = isHeadBlocked ? headHit.collider : null;
         }
-
+        else
+        {
+            headHit.normal = Vector2.down;
+        }
     }
 
     #endregion
@@ -313,16 +403,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (MovementConfig.CollisionGizmos)
+            DrawCollisionGizmos();
+        if (MovementConfig.VelocityGizmos)
+            DrawVelocityGizmos();
+        if (MovementConfig.Show)
+            DrawJumpArc();
+    }
+
+    private void DrawCollisionGizmos()
+    {
+        Gizmos.color = Color.blue;
         if (isOnGround)
         {
-            Debug.DrawRay(new Vector2(feetCollider.bounds.center.x, feetCollider.bounds.center.y), groundHit.point - (Vector2)feetCollider.bounds.center, Color.red);
+            Gizmos.DrawRay(new Vector2(feetCollider.bounds.center.x, feetCollider.bounds.center.y), groundHit.point - (Vector2)feetCollider.bounds.center);
         }
         if (isHeadBlocked)
         {
-            Debug.DrawRay(new Vector2(headCollider.bounds.center.x, headCollider.bounds.center.y), headHit.point - (Vector2)headCollider.bounds.center, Color.red);
+            Gizmos.DrawRay(new Vector2(headCollider.bounds.center.x, headCollider.bounds.center.y), headHit.point - (Vector2)headCollider.bounds.center);
         }
-        if (MovementConfig.Show)
-            DrawJumpArc();
+    }
+    private void DrawVelocityGizmos()
+    {
+        Debug.DrawRay(playerBounds.center, movementVector, Color.green);
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube((Vector2)playerBounds.center + desiredMovementVector, Vector3.one * 0.1f);
+        Gizmos.DrawRay(playerBounds.center, desiredMovementVector.normalized * 1);
+
     }
 
     private class JumpArcData
