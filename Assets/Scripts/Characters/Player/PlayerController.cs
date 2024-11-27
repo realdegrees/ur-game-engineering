@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 // ! While adding stuff keep in mind that this could also be used a base class for all entities that can move in the game
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
-    public PlayerMovementConfig MovementConfig;
+    public PlayerMovementConfig config;
     [SerializeField] private Collider2D feetCollider;
     [SerializeField] private Collider2D bodyCollider;
     [SerializeField] private Collider2D headCollider;
@@ -33,7 +34,7 @@ public class PlayerController : MonoBehaviour
     public float VerticalVelocity { get; private set; }
     private bool isJumping;
     private bool isFastFalling;
-    private bool isFalling;
+    public bool IsFalling { get; private set; }
     private float fastFallTime;
     private float fastFallReleaseSpeed;
     private int numberOfJumpsUsed;
@@ -49,6 +50,9 @@ public class PlayerController : MonoBehaviour
 
     private Bounds playerBounds;
 
+    public UnityEvent OnStartFaling { get; private set; } = new();
+    public UnityEvent OnLand { get; private set; } = new();
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,7 +62,7 @@ public class PlayerController : MonoBehaviour
     {
         UpdateTimers();
         FlipCheck();
-        if (Math.Abs(groundAngle) <= MovementConfig.MaxSlopeAngle) JumpCheck();
+        if (Math.Abs(groundAngle) <= config.MaxSlopeAngle) JumpCheck();
     }
 
     private void FixedUpdate()
@@ -79,8 +83,8 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         // Set acceleration and deceleration based on whether the player is on the ground or in the air
-        float acceleration = isOnGround ? MovementConfig.GroundAcceleration : MovementConfig.AirAcceleration;
-        float deceleration = isOnGround ? MovementConfig.GroundDeceleration : MovementConfig.AirDeceleration;
+        float acceleration = isOnGround ? config.GroundAcceleration : config.AirAcceleration;
+        float deceleration = isOnGround ? config.GroundDeceleration : config.AirDeceleration;
 
         movementVector = rb.velocity; // use the actual velocity as base for calculations
 
@@ -107,28 +111,28 @@ public class PlayerController : MonoBehaviour
         if (isOnSlope)
         {
             var wantsToWalkUp = desiredMovementVector.y > 0;
-            var canWalkUp = slopeAngle <= MovementConfig.MaxSlopeAngle;
-            var slopeSpeedMultiplier = isOnUpSlope ? MovementConfig.UpSlopeSpeedMultiplier : MovementConfig.DownSlopeSpeedMultiplier;
+            var canWalkUp = slopeAngle <= config.MaxSlopeAngle;
+            var slopeSpeedMultiplier = isOnUpSlope ? config.UpSlopeSpeedMultiplier : config.DownSlopeSpeedMultiplier;
             if (wantsToWalkUp) // If the player wants to walk up a slope that is too steep, don't allow it
             {
                 if (canWalkUp)
                 {
-                    var slowdown = 1 - (slopeAngle / MovementConfig.MaxSlopeAngle);
-                    var slopeAngleSlowdownMultiplier = Mathf.Lerp(1, slowdown, MovementConfig.SlopeSteepnessFactor);
+                    var slowdown = 1 - (slopeAngle / config.MaxSlopeAngle);
+                    var slopeAngleSlowdownMultiplier = Mathf.Lerp(1, slowdown, config.SlopeSteepnessFactor);
                     movementVector *= slopeAngleSlowdownMultiplier * slopeSpeedMultiplier; // Lerp the current velocity to the desired one based on the acceleration
                 }
                 else
                 {
-                    var rejectionForce = Mathf.Pow(MovementConfig.SlopeRejectionForce, 2); // Adjust the curve so that 0.5 becomes 0.25
+                    var rejectionForce = Mathf.Pow(config.SlopeRejectionForce, 2); // Adjust the curve so that 0.5 becomes 0.25
                     movementVector = Vector2.Lerp(movementVector, -movementVector, rejectionForce + 0.5f); // Lerp the current velocity to the opposite direction based on the acceleration
-                // TODO: maybe trigger an animation or sound effect to indicate that the player can't walk up the slope
-            }
+                                                                                                           // TODO: maybe trigger an animation or sound effect to indicate that the player can't walk up the slope
+                }
 
             }
             else
             {
-                var speedup = 1 + (slopeAngle / MovementConfig.MaxSlopeAngle);
-                var slopeAngleSpeedupMultiplier = Mathf.Lerp(1, speedup, MovementConfig.SlopeSteepnessFactor);
+                var speedup = 1 + (slopeAngle / config.MaxSlopeAngle);
+                var slopeAngleSpeedupMultiplier = Mathf.Lerp(1, speedup, config.SlopeSteepnessFactor);
                 movementVector *= slopeAngleSpeedupMultiplier * slopeSpeedMultiplier;
             }
         }
@@ -144,7 +148,7 @@ public class PlayerController : MonoBehaviour
         var desiredDirection = GetDesiredDirection();
 
 
-        var velocity = MovementConfig.MaxWalkSpeed * desiredDirection; // Construct the desired movement vector based on the maximum walk speed, slope effect multiplier and the desired direction
+        var velocity = config.MaxWalkSpeed * desiredDirection; // Construct the desired movement vector based on the maximum walk speed, slope effect multiplier and the desired direction
         return velocity;
     }
 
@@ -155,7 +159,7 @@ public class PlayerController : MonoBehaviour
 
     private void FlipCheck()
     {
-        if (rb.velocity.x > MovementConfig.TurnThreshold && !isFacingRight || rb.velocity.x < -MovementConfig.TurnThreshold && isFacingRight)
+        if (rb.velocity.x > config.TurnThreshold && !isFacingRight || rb.velocity.x < -config.TurnThreshold && isFacingRight)
         {
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
@@ -170,7 +174,7 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.Instance.JumpPressed)
         {
-            jumpBufferTimer = MovementConfig.JumpBufferTime;
+            jumpBufferTimer = config.JumpBufferTime;
             jumpReleaseDuringBuffer = false;
         }
         if (InputManager.Instance.JumpReleased)
@@ -185,7 +189,7 @@ public class PlayerController : MonoBehaviour
                 if (isPastApexThreshold)
                 {
                     isPastApexThreshold = false;
-                    fastFallTime = MovementConfig.TimeForUpwardsCancel;
+                    fastFallTime = config.TimeForUpwardsCancel;
                     VerticalVelocity = 0f;
                 }
                 else
@@ -208,28 +212,29 @@ public class PlayerController : MonoBehaviour
         }
 
         // Double Jump
-        else if (jumpBufferTimer > 0f && isJumping && numberOfJumpsUsed < MovementConfig.NumberOfJumpsAllowed)
+        else if (jumpBufferTimer > 0f && isJumping && numberOfJumpsUsed < config.NumberOfJumpsAllowed)
         {
             isFastFalling = false;
             InitiateJump(1);
         }
         // Air jump after coyote time
-        else if (jumpBufferTimer > 0f && isFalling && numberOfJumpsUsed < MovementConfig.NumberOfJumpsAllowed - 1)
+        else if (jumpBufferTimer > 0f && IsFalling && numberOfJumpsUsed < config.NumberOfJumpsAllowed - 1)
         {
             isFastFalling = false;
             InitiateJump(2);
         }
         // Landing
-        if ((isJumping || isFalling) && isOnGround && VerticalVelocity <= 0f)
+        if ((isJumping || IsFalling) && isOnGround && VerticalVelocity <= 0f)
         {
             isJumping = false;
             isFastFalling = false;
-            isFalling = false;
+            IsFalling = false;
             fastFallTime = 0f;
             isPastApexThreshold = false;
             numberOfJumpsUsed = 0;
-            coyoteTimer = MovementConfig.JumpCoyoteTime;
+            coyoteTimer = config.JumpCoyoteTime;
             VerticalVelocity = 0f;
+            OnLand?.Invoke();
         }
     }
 
@@ -241,7 +246,7 @@ public class PlayerController : MonoBehaviour
         }
         jumpBufferTimer = 0f;
         numberOfJumpsUsed += cost;
-        VerticalVelocity = MovementConfig.InitialJumpVelocity;
+        VerticalVelocity = config.InitialJumpVelocity;
     }
     private void Jump()
     {
@@ -261,30 +266,31 @@ public class PlayerController : MonoBehaviour
         // Gravity without jumping
         if (!isOnGround && !isJumping)
         {
-            if (!isFalling)
+            if (!IsFalling)
             {
-                isFalling = true;
+                IsFalling = true;
+                OnStartFaling?.Invoke();
             }
-            VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
+            VerticalVelocity += config.Gravity * Time.fixedDeltaTime;
         }
 
         if (!isOnGround || isJumping)
         {
             // Clamp vertical velocity
-            VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MovementConfig.MaxFallSpeed, 50f);
+            VerticalVelocity = Mathf.Clamp(VerticalVelocity, -config.MaxFallSpeed, 50f);
             rb.velocity = new Vector2(rb.velocity.x, VerticalVelocity);
         }
     }
 
     private void HandleCutJump()
     {
-        if (fastFallTime >= MovementConfig.TimeForUpwardsCancel)
+        if (fastFallTime >= config.TimeForUpwardsCancel)
         {
-            VerticalVelocity += MovementConfig.Gravity * MovementConfig.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
+            VerticalVelocity += config.Gravity * config.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
         }
-        else if (fastFallTime < MovementConfig.TimeForUpwardsCancel)
+        else if (fastFallTime < config.TimeForUpwardsCancel)
         {
-            VerticalVelocity = Mathf.Lerp(fastFallReleaseSpeed, 0f, fastFallTime / MovementConfig.TimeForUpwardsCancel);
+            VerticalVelocity = Mathf.Lerp(fastFallReleaseSpeed, 0f, fastFallTime / config.TimeForUpwardsCancel);
         }
         fastFallTime += Time.fixedDeltaTime;
     }
@@ -294,17 +300,17 @@ public class PlayerController : MonoBehaviour
         // Handle Gravity when ascending
         if (VerticalVelocity >= 0f)
         {
-            apexPoint = Mathf.InverseLerp(MovementConfig.InitialJumpVelocity, 0f, VerticalVelocity);
+            apexPoint = Mathf.InverseLerp(config.InitialJumpVelocity, 0f, VerticalVelocity);
 
             // Gravity when ascending after apex (manages hang time)
-            if (apexPoint > MovementConfig.ApexThreshold)
+            if (apexPoint > config.ApexThreshold)
             {
                 HandleApex();
             }
             // Gravity when ascending normally during jump
             else
             {
-                VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
+                VerticalVelocity += config.Gravity * Time.fixedDeltaTime;
                 if (isPastApexThreshold)
                 {
                     isPastApexThreshold = false;
@@ -314,13 +320,14 @@ public class PlayerController : MonoBehaviour
         // Handle Gravity when descending
         else if (!isFastFalling)
         {
-            VerticalVelocity += MovementConfig.Gravity * Time.fixedDeltaTime;
+            VerticalVelocity += config.Gravity * Time.fixedDeltaTime;
         }
         else if (VerticalVelocity < 0f)
         {
-            if (!isFalling)
+            if (!IsFalling)
             {
-                isFalling = true;
+                IsFalling = true;
+                OnStartFaling?.Invoke();
             }
         }
     }
@@ -336,7 +343,7 @@ public class PlayerController : MonoBehaviour
         if (isPastApexThreshold)
         {
             timePastApexThreshold += Time.fixedDeltaTime;
-            if (timePastApexThreshold < MovementConfig.ApexHangTime)
+            if (timePastApexThreshold < config.ApexHangTime)
             {
                 VerticalVelocity = 0f;
             }
@@ -359,7 +366,7 @@ public class PlayerController : MonoBehaviour
     private void IsOnGround()
     {
         var checkDirection = -transform.up;
-        groundHit = Physics2D.CapsuleCast(feetCollider.bounds.center, feetCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, MovementConfig.BottomRange, MovementConfig.GroundLayer);
+        groundHit = Physics2D.CapsuleCast(feetCollider.bounds.center, feetCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, config.BottomRange, config.GroundLayer);
         isOnGround = groundHit.collider != null;
         isOnSlope = false;
         isOnUpSlope = false;
@@ -382,7 +389,7 @@ public class PlayerController : MonoBehaviour
     private void IsHeadBlocked()
     {
         var checkDirection = transform.up;
-        headHit = Physics2D.CapsuleCast(headCollider.bounds.center, headCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, MovementConfig.TopRange, MovementConfig.GroundLayer);
+        headHit = Physics2D.CapsuleCast(headCollider.bounds.center, headCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, checkDirection, config.TopRange, config.GroundLayer);
         isHeadBlocked = headHit.collider != null;
         if (isHeadBlocked)
         {
@@ -403,11 +410,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (MovementConfig.CollisionGizmos)
+        if (config.CollisionGizmos)
             DrawCollisionGizmos();
-        if (MovementConfig.VelocityGizmos)
+        if (config.VelocityGizmos)
             DrawVelocityGizmos();
-        if (MovementConfig.Show)
+        if (config.Show)
             DrawJumpArc();
     }
 
@@ -444,13 +451,13 @@ public class PlayerController : MonoBehaviour
 
     private void DrawJumpArc()
     {
-        float speed = isFacingRight ? MovementConfig.MaxWalkSpeed : -MovementConfig.MaxWalkSpeed;
+        float speed = isFacingRight ? config.MaxWalkSpeed : -config.MaxWalkSpeed;
 
         if (isOnGround)
         {
             jumpArcData.startPosition = playerBounds.center;
-            jumpArcData.velocity = new(speed, MovementConfig.InitialJumpVelocity);
-            jumpArcData.timeStep = 2 * MovementConfig.TimeTillJumpApex / MovementConfig.ArcResolution;
+            jumpArcData.velocity = new(speed, config.InitialJumpVelocity);
+            jumpArcData.timeStep = 2 * config.TimeTillJumpApex / config.ArcResolution;
             jumpArcData.color = Color.white;
         }
         else
@@ -460,28 +467,28 @@ public class PlayerController : MonoBehaviour
         }
         Vector2 previousPosition = jumpArcData.startPosition;
 
-        for (int i = 0; i < MovementConfig.VisualizationSteps; i++)
+        for (int i = 0; i < config.VisualizationSteps; i++)
         {
             float simulationTime = i * jumpArcData.timeStep;
             Vector2 displacement;
             Vector2 drawPoint;
 
-            if (simulationTime < MovementConfig.TimeTillJumpApex) // Ascending
+            if (simulationTime < config.TimeTillJumpApex) // Ascending
             {
-                displacement = jumpArcData.velocity * simulationTime + simulationTime * simulationTime * 0.5f * new Vector2(0f, MovementConfig.Gravity);
+                displacement = jumpArcData.velocity * simulationTime + simulationTime * simulationTime * 0.5f * new Vector2(0f, config.Gravity);
             }
-            else if (simulationTime < MovementConfig.TimeTillJumpApex + MovementConfig.ApexHangTime) // Apex hang time
+            else if (simulationTime < config.TimeTillJumpApex + config.ApexHangTime) // Apex hang time
             {
-                float apexTime = simulationTime - MovementConfig.TimeTillJumpApex;
-                displacement = jumpArcData.velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
+                float apexTime = simulationTime - config.TimeTillJumpApex;
+                displacement = jumpArcData.velocity * config.TimeTillJumpApex + 0.5f * config.TimeTillJumpApex * config.TimeTillJumpApex * new Vector2(0f, config.Gravity);
                 displacement += new Vector2(speed, 0) * apexTime; // No vertical movement during hang time
             }
             else // Descending
             {
-                float descendTime = simulationTime - (MovementConfig.TimeTillJumpApex + MovementConfig.ApexHangTime);
-                displacement = jumpArcData.velocity * MovementConfig.TimeTillJumpApex + 0.5f * MovementConfig.TimeTillJumpApex * MovementConfig.TimeTillJumpApex * new Vector2(0f, MovementConfig.Gravity);
-                displacement += new Vector2(speed, 0f) * MovementConfig.ApexHangTime; // Horizontal movement during hang time
-                displacement += new Vector2(speed, 0f) * descendTime + 0.5f * descendTime * descendTime * new Vector2(0f, MovementConfig.Gravity);
+                float descendTime = simulationTime - (config.TimeTillJumpApex + config.ApexHangTime);
+                displacement = jumpArcData.velocity * config.TimeTillJumpApex + 0.5f * config.TimeTillJumpApex * config.TimeTillJumpApex * new Vector2(0f, config.Gravity);
+                displacement += new Vector2(speed, 0f) * config.ApexHangTime; // Horizontal movement during hang time
+                displacement += new Vector2(speed, 0f) * descendTime + 0.5f * descendTime * descendTime * new Vector2(0f, config.Gravity);
             }
 
             drawPoint = jumpArcData.startPosition + displacement;
@@ -489,7 +496,7 @@ public class PlayerController : MonoBehaviour
 
             float checkDistance = Vector2.Distance(previousPosition, drawPoint);
             Vector2 checkDirection = drawPoint - previousPosition;
-            RaycastHit2D check = Physics2D.BoxCast(previousPosition, playerBounds.size, 0, checkDirection, checkDistance, MovementConfig.GroundLayer);
+            RaycastHit2D check = Physics2D.BoxCast(previousPosition, playerBounds.size, 0, checkDirection, checkDistance, config.GroundLayer);
             var isConnectedGround = check.collider == connectedGround;
             var isValidTarget = !isConnectedGround || (isConnectedGround && (Vector2.Distance(check.centroid, playerBounds.center) > playerBounds.size.y));
 
