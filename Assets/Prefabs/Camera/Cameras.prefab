@@ -71,7 +71,7 @@ MonoBehaviour:
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
-  m_UnlimitedSoftZone: 0
+  m_UnlimitedSoftZone: 1
   m_SoftZoneWidth: 0.2
   m_SoftZoneHeight: 0.35
   m_BiasX: 0
@@ -286,7 +286,7 @@ MonoBehaviour:
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
-  m_UnlimitedSoftZone: 0
+  m_UnlimitedSoftZone: 1
   m_SoftZoneWidth: 0.2
   m_SoftZoneHeight: 0.35
   m_BiasX: 0
@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 7239026390220974228}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 3, y: 3, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -352,7 +352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   config: {fileID: 11400000, guid: edaff2d334d45ed46b8fe138adf753dc, type: 2}
-  cameraDetails:
+  cameraData:
   - type: 0
     camera: {fileID: 9108970540138403051}
     transposer: {fileID: 0}
@@ -373,8 +373,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1361475258499446009}
   - component: {fileID: 9108970540138403051}
+  - component: {fileID: 6942320571383746470}
   m_Layer: 0
-  m_Name: Follow Camera
+  m_Name: Default Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -435,6 +436,22 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1838532970644819433}
+--- !u!114 &6942320571383746470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8478383775466738907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BoundingShape2D: {fileID: 0}
+  m_Damping: 4
+  m_MaxWindowSize: -1
+  m_Padding: 0
 --- !u!1 &9045980516086434594
 GameObject:
   m_ObjectHideFlags: 0

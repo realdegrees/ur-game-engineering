@@ -6,11 +6,11 @@ using UnityEngine;
 
 public enum CameraType
 {
-    Follow,
+    Default,
     Fixed
 }
 [Serializable]
-public class CameraDetails
+public class CameraData
 {
     public CameraType type;
     public CinemachineVirtualCamera camera;
@@ -21,38 +21,38 @@ public class CameraDetails
     [HideInInspector]
     public float defaultXOffset;
 }
+
 public class CameraManager : Manager<CameraManager>
 {
     public PlayerController player;
     public CameraConfig config;
     [SerializeField]
-    private CameraDetails[] cameraDetails;
-    private CameraDetails activeCameraDetails;
+    private CameraData[] cameraData;
+    private CameraData activeCameraData;
 
 
     private Coroutine verticalSnapCoroutine;
     private Coroutine flipCoroutine;
 
-    public void SetPlayer(PlayerController player)
+
+    public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
     {
-        if (this.player != null)
-        {
-            this.player.OnLand.RemoveListener(OnPlayerLand);
-            this.player.OnStartFalling.RemoveListener(OnPlayerStartFalling);
-            this.player.OnFlip.RemoveListener(OnPlayerFlip);
-        }
-
-        player.OnLand.AddListener(OnPlayerLand);
-        player.OnStartFalling.AddListener(OnPlayerStartFalling);
-        player.OnFlip.AddListener(OnPlayerFlip);
-
-        this.player = player;
-        activeCameraDetails.camera.Follow = player.transform;
+        CinemachineConfiner2D confiner = GetCameraData(cameraType).camera.GetComponent<CinemachineConfiner2D>();
+        confiner.m_BoundingShape2D = bounds;
     }
+    public Collider2D GetCameraBounds(CameraType cameraType)
+    {
+        if (GetCameraData(cameraType).camera.TryGetComponent(out CinemachineConfiner2D confiner))
+        {
+            return confiner.m_BoundingShape2D;
+        }
+        return null;
+    }
+
 
     private void OnPlayerFlip(bool isFacingRight)
     {
-        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        var isFollowCamera = activeCameraData.type == CameraType.Default;
         if (!isFollowCamera)
             return;
 
@@ -62,9 +62,10 @@ public class CameraManager : Manager<CameraManager>
         flipCoroutine = StartCoroutine(FlipOffset(config.DirectionFlipDuration));
     }
 
+
     private void OnPlayerStartFalling()
     {
-        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        var isFollowCamera = activeCameraData.type == CameraType.Default;
         if (!isFollowCamera)
             return;
 
@@ -76,7 +77,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerLand()
     {
-        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        var isFollowCamera = activeCameraData.type == CameraType.Default;
         if (!isFollowCamera)
             return;
 
@@ -90,7 +91,8 @@ public class CameraManager : Manager<CameraManager>
     protected override void Awake()
     {
         base.Awake();
-        foreach (CameraDetails details in cameraDetails)
+
+        foreach (CameraData details in cameraData)
         {
             // set transposer
             details.transposer = details.camera.GetCinemachineComponent<CinemachineFramingTransposer>();
@@ -105,12 +107,17 @@ public class CameraManager : Manager<CameraManager>
                 SetActiveCamera(details);
             }
         }
+
+        // ! Important to do this after setting up the cameras
+        player.OnLand.RemoveListener(OnPlayerLand);
+        player.OnStartFalling.RemoveListener(OnPlayerStartFalling);
+        player.OnFlip.RemoveListener(OnPlayerFlip);
     }
 
     public void SetCameraType(CameraType type, Transform target = null)
     {
-        CameraDetails match = null;
-        foreach (var details in cameraDetails)
+        CameraData match = null;
+        foreach (var details in cameraData)
         {
             if (details.type == type)
             {
@@ -126,20 +133,33 @@ public class CameraManager : Manager<CameraManager>
     }
     public CameraType GetCameraType()
     {
-        return activeCameraDetails.type;
+        return activeCameraData.type;
     }
+    public CameraData GetCameraData(CameraType type)
+    {
+        foreach (var details in cameraData)
+        {
+            if (details.type == type)
+            {
+                return details;
+            }
+        }
+        return null;
+    }
+
     public Transform GetTarget()
     {
-        return activeCameraDetails.camera.Follow;
+        return activeCameraData.camera.Follow;
     }
 
-    private void SetActiveCamera(CameraDetails details, Transform target = null)
+    private void SetActiveCamera(CameraData details, Transform target = null)
     {
-        if (activeCameraDetails != null)
-            activeCameraDetails.camera.enabled = false;
-
-        activeCameraDetails = details;
         details.camera.enabled = true;
+
+        if (activeCameraData?.camera != null && activeCameraData.camera != details.camera)
+            activeCameraData.camera.enabled = false;
+
+        activeCameraData = details;
 
         if (target != null)
             details.camera.Follow = target;
@@ -148,8 +168,7 @@ public class CameraManager : Manager<CameraManager>
     private IEnumerator FlipOffset(float duration)
     {
         float elapsedTime = 0;
-        var transposer = activeCameraDetails.transposer;
-        Debug.Log("DecreaseDampening");
+        var transposer = activeCameraData.transposer;
         transposer.m_TrackedObjectOffset.x = -transposer.m_TrackedObjectOffset.x;
         var startValue = transposer.m_TrackedObjectOffset.x;
         while (elapsedTime < duration)
@@ -157,15 +176,14 @@ public class CameraManager : Manager<CameraManager>
             elapsedTime += Time.deltaTime;
             float ratio = elapsedTime / duration;
             ratio = config.DirectionFlipCurve.Evaluate(ratio);
-            transposer.m_TrackedObjectOffset.x = Mathf.Lerp(startValue, activeCameraDetails.defaultXOffset, ratio);
+            transposer.m_TrackedObjectOffset.x = Mathf.Lerp(startValue, activeCameraData.defaultXOffset, ratio);
             yield return null;
         }
     }
     private IEnumerator DecreaseDampening(float duration)
     {
         float elapsedTime = 0;
-        Debug.Log("DecreaseDampening");
-        var transposer = activeCameraDetails.transposer;
+        var transposer = activeCameraData.transposer;
         float startValue = transposer.m_YDamping;
         while (elapsedTime < duration)
         {
@@ -178,16 +196,15 @@ public class CameraManager : Manager<CameraManager>
     }
     private IEnumerator IncreaseDampening(float duration)
     {
-        Debug.Log("IncreaseDampening");
         float elapsedTime = 0;
-        var transposer = activeCameraDetails.transposer;
+        var transposer = activeCameraData.transposer;
         float startValue = transposer.m_YDamping;
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float ratio = elapsedTime / duration;
             ratio = config.VerticalSnapCurve.Evaluate(ratio);
-            transposer.m_YDamping = Mathf.Lerp(startValue, activeCameraDetails.defaultDampening, ratio);
+            transposer.m_YDamping = Mathf.Lerp(startValue, activeCameraData.defaultDampening, ratio);
             yield return null;
         }
     }
