@@ -9,7 +9,7 @@ public class CameraConfig : ScriptableObject
     public AnimationCurve VerticalSnapCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
     [Header("Direction Flip")]
-    [Range(0f, 1f)] public float DirectionFlipDuration = .15f;
+    [Range(0f, 3f)] public float DirectionFlipDuration = 1.5f;
     public AnimationCurve DirectionFlipCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
 

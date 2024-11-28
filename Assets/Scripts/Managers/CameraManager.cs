@@ -109,9 +109,9 @@ public class CameraManager : Manager<CameraManager>
         }
 
         // ! Important to do this after setting up the cameras
-        player.OnLand.RemoveListener(OnPlayerLand);
-        player.OnStartFalling.RemoveListener(OnPlayerStartFalling);
-        player.OnFlip.RemoveListener(OnPlayerFlip);
+        player.OnLand.AddListener(OnPlayerLand);
+        player.OnStartFalling.AddListener(OnPlayerStartFalling);
+        player.OnFlip.AddListener(OnPlayerFlip);
     }
 
     public void SetCameraType(CameraType type, Transform target = null)
