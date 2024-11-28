@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Manager;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum CameraType
@@ -35,6 +33,59 @@ public class CameraManager : Manager<CameraManager>
     private Coroutine verticalSnapCoroutine;
     private Coroutine flipCoroutine;
 
+    public void SetPlayer(PlayerController player)
+    {
+        if (this.player != null)
+        {
+            this.player.OnLand.RemoveListener(OnPlayerLand);
+            this.player.OnStartFalling.RemoveListener(OnPlayerStartFalling);
+            this.player.OnFlip.RemoveListener(OnPlayerFlip);
+        }
+
+        player.OnLand.AddListener(OnPlayerLand);
+        player.OnStartFalling.AddListener(OnPlayerStartFalling);
+        player.OnFlip.AddListener(OnPlayerFlip);
+
+        this.player = player;
+        activeCameraDetails.camera.Follow = player.transform;
+    }
+
+    private void OnPlayerFlip(bool isFacingRight)
+    {
+        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        if (!isFollowCamera)
+            return;
+
+        if (flipCoroutine != null)
+            StopCoroutine(flipCoroutine);
+
+        flipCoroutine = StartCoroutine(FlipOffset(config.DirectionFlipDuration));
+    }
+
+    private void OnPlayerStartFalling()
+    {
+        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        if (!isFollowCamera)
+            return;
+
+        if (verticalSnapCoroutine != null)
+            StopCoroutine(verticalSnapCoroutine);
+
+        verticalSnapCoroutine = StartCoroutine(DecreaseDampening(config.VerticalSnapDuration));
+    }
+
+    private void OnPlayerLand()
+    {
+        var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
+        if (!isFollowCamera)
+            return;
+
+        if (verticalSnapCoroutine != null)
+            StopCoroutine(verticalSnapCoroutine);
+
+        verticalSnapCoroutine = StartCoroutine(IncreaseDampening(config.VerticalSnapDuration));
+    }
+
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -54,43 +105,6 @@ public class CameraManager : Manager<CameraManager>
                 SetActiveCamera(details);
             }
         }
-
-
-        // Vertical Snap Trigger Events
-        player.OnLand.AddListener(() =>
-        {
-            var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
-            if (!isFollowCamera)
-                return;
-
-            if (verticalSnapCoroutine != null)
-                StopCoroutine(verticalSnapCoroutine);
-
-            verticalSnapCoroutine = StartCoroutine(IncreaseDampening(config.VerticalSnapDuration));
-        });
-        player.OnStartFalling.AddListener(() =>
-        {
-            var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
-            if (!isFollowCamera)
-                return;
-
-            if (verticalSnapCoroutine != null)
-                StopCoroutine(verticalSnapCoroutine);
-
-            verticalSnapCoroutine = StartCoroutine(DecreaseDampening(config.VerticalSnapDuration));
-        });
-        // Flip Trigger Event
-        player.OnFlip.AddListener((_) =>
-        {
-            var isFollowCamera = activeCameraDetails.type == CameraType.Follow;
-            if (!isFollowCamera)
-                return;
-
-            if (flipCoroutine != null)
-                StopCoroutine(flipCoroutine);
-
-            flipCoroutine = StartCoroutine(FlipOffset(config.DirectionFlipDuration));
-        });
     }
 
     public void SetCameraType(CameraType type, Transform target = null)
