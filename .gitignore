@@ -3,6 +3,7 @@
 # Exclude developer playground scenes
 *-dev.unity
 *-dev.unity.meta
+*.pdn
 
 ######## Default Unity .gitignore
 
