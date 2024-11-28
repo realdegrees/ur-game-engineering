@@ -38,7 +38,7 @@ MonoBehaviour:
   ApexThreshold: 0.98
   ApexHangTime: 0.03
   JumpBufferTime: 0.07
-  JumpCoyoteTime: 0.03
+  JumpCoyoteTime: 0.1
   Show: 1
   ArcResolution: 100
   VisualizationSteps: 200
