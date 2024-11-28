@@ -294,7 +294,7 @@ MonoBehaviour:
     m_ActionName: UI/RightClick
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: Default
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1572878978
