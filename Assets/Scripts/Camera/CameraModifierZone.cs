@@ -1,86 +1,83 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CameraModifierZone : MonoBehaviour
+public class CameraModifierZone : EditorZone<CameraModifierZone>
 {
-    public CameraType modifierType;
+    [Tooltip("This defines which camera type will be used by cinemachine when the player enters the trigger")]
+    public CameraType requiredCameraType;
     public Transform target;
-    [Range(1, 3)]
-    public int numberOfAllowedActivations = 1;
+
+    public float zoom = 1; // TODO: implement fov change (with curve)
+
+
     private CameraType? cachedType;
     private Transform cachedTarget;
-    [Range(0, 60)]
-    [Description("The duration of the camera modifier in seconds (0 = until collision ends)")]
-    public float duration = 0;
-    public UnityEvent onActivate = new();
-    public UnityEvent onDeactivate = new();
 
-    private Coroutine resetCoroutine;
 
-    // Set the camera type to the modifier type when the player enters the trigger
-    private void OnTriggerEnter2D(Collider2D other)
+    #region Zone Events
+
+    protected override void Awake()
     {
-        if (numberOfAllowedActivations == 0) return;
-        if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
-        {
-            if (other == controller.interactionCollider)
-            {
-                numberOfAllowedActivations--;
-                resetCoroutine = StartCoroutine(ResetAfterDuration());
-                ApplyModifier();
-            }
-
-        }
+        base.Awake();
+        OnActivate.AddListener(ApplyModifier);
+        OnDeactivate.AddListener(ResetCamera);
+        OnDurationPassed.AddListener(ResetCamera);
     }
-
-    private IEnumerator ResetAfterDuration()
-    {
-        if (duration > 0)
-        {
-            yield return new WaitForSeconds(duration);
-            ResetCamera();
-        }
-    }
+    #endregion
 
     private void ApplyModifier()
     {
         cachedType = CameraManager.Instance.GetCameraType();
         cachedTarget = CameraManager.Instance.GetTarget();
-        CameraManager.Instance.SetCameraType(modifierType, target);
-        onActivate.Invoke();
-    }
-
-    // Reset the camera type to the cached type when the player exits the trigger but only if the camera type hasn't been altered
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
-        {
-            if (other == controller.interactionCollider)
-            {
-                ResetCamera();
-            }
-        }
+        CameraManager.Instance.SetCameraType(requiredCameraType, target);
     }
 
     private void ResetCamera()
     {
-        if (resetCoroutine != null)
-        {
-            StopCoroutine(resetCoroutine);
-            resetCoroutine = null;
-        }
-
-
         var currentType = CameraManager.Instance.GetCameraType();
-        if (currentType == modifierType)
+        if (currentType == requiredCameraType && cachedType.HasValue)
         {
             CameraManager.Instance.SetCameraType(cachedType.Value, cachedTarget);
             cachedTarget = null;
             cachedType = null;
-            onActivate.Invoke();
         }
     }
+
+    #region Gizmos
+    // Draw the zone in the editor
+    public override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        if (!showZone) return;
+
+        // Need to get component seperately here because Awake() is not called in editor mode
+        if (!TryGetComponent(out Collider2D collider))
+            return;
+
+        var bounds = collider.bounds;
+
+        if (target != null)
+        {
+            Gizmos.color = zoneColor;
+            Gizmos.DrawWireCube(target.position, Vector3.one * 0.2f);
+            Gizmos.color = new Color(zoneColor.r, zoneColor.g, zoneColor.b, 0.2f);
+            Gizmos.DrawLine(bounds.center, target.position);
+        }
+
+        if (cooldown > 0 && currentCooldown > 0)
+        {
+            var width = bounds.size.x * (currentCooldown / cooldown);
+            var height = bounds.size.y;
+            var center = new Vector3(bounds.center.x - (bounds.size.x - width) / 2, bounds.min.y + height / 2, bounds.center.z);
+
+            Gizmos.color = Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
+            Gizmos.DrawCube(center, new Vector3(width, height, bounds.size.z));
+        }
+    }
+
+
+    #endregion
+
 }

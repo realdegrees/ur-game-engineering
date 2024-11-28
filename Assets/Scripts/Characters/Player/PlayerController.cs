@@ -537,7 +537,7 @@ public class PlayerController : MonoBehaviour
             previousPosition = drawPoint;
         }
 
-        if (jumpArcData.targetPosition.Value != null)
+        if (jumpArcData.targetPosition.HasValue)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(jumpArcData.targetPosition.Value, playerBounds.size);
