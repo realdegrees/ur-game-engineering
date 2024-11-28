@@ -1,6 +1,8 @@
----
+<div align="center">
+
+[![Develop Build Status](https://github.com/realdegrees/ur-game-engineering/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/realdegrees/ur-game-engineering/actions/workflows/build.yml?query=branch%3Adevelop)
+
 # 🎮 Game Engineering Unity Project
----
 
 ## 📖 Table of Contents
 
@@ -14,6 +16,8 @@
 | [Troubleshooting](#-troubleshooting)                       | Solutions for common issues              |
 
 ---
+
+</div>
 
 ## 📝 Description
 
