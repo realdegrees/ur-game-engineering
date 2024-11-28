@@ -1,52 +1,55 @@
-# Game Engineering Unity Project
+---
+# 🎮 Game Engineering Unity Project
+---
 
-## Table of Contents
+## 📖 Table of Contents
 
-- [Description](#description)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Branching Strategy](#branching-strategy)
-- [Working with Unity and Git](#working-with-unity-and-git)
-  - [Scene Management](#scene-management)
-- [Contribution Guidelines](#contribution-guidelines)
+| Section                                                    | Description                              |
+| ---------------------------------------------------------- | ---------------------------------------- |
+| [Description](#-description)                               | Overview of the project                  |
+| [Getting Started](#-getting-started)                       | Steps to set up the project locally      |
+| [Branching Strategy](#-branching-strategy)                 | Guidelines for branching and merging     |
+| [Working with Unity and Git](#-working-with-unity-and-git) | Best practices for Unity projects in Git |
+| [Contribution Guidelines](#-contribution-guidelines)       | Rules and tips for contributing          |
+| [Troubleshooting](#-troubleshooting)                       | Solutions for common issues              |
 
-## Description
+---
 
-This repository contains the Unity project for a 2D game, developed as part of the Game Engineering course at University of Regensburg. The project is a collaborative effort, and this README outlines important information regarding project setup, contribution guidelines, and special considerations when working with Unity and Git.
+## 📝 Description
 
-_Please read it before starting to collaborate._
+This repository contains the Unity project for a 2D game, developed as part of the **Game Engineering course at the University of Regensburg**. It’s a collaborative effort with guidelines for setup, contributions, and special considerations when working with Unity and Git.
 
-## Getting Started
+👉 **Please read this README before collaborating.**
 
-These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to set up the project on your local machine.
 
 ### Prerequisites
 
-- **Unity**: [2022.3.53f1](https://unity3d.com/get-unity/download) _(Any 2022.3.\* should work)_
-- **Git**: [Latest version](https://git-scm.com/downloads)
-- **Editor**:  
-  You can use any editor but [VSCode](https://code.visualstudio.com/) or Visual Studio _(bundled with Unity)_ are recommended for easier collaborative work.  
-  The project also included workspace and extension recommendations for VSCode.
+| Requirement | Version / Link                                                                                              |
+| ----------- | ----------------------------------------------------------------------------------------------------------- |
+| Unity       | [2022.3.53f1](https://unity3d.com/get-unity/download) _(Any 2022.3.\* should work)_                         |
+| Git         | [Latest version](https://git-scm.com/downloads)                                                             |
+| Editor      | Use any editor. Recommended: [VSCode](https://code.visualstudio.com/) or Visual Studio (bundled with Unity) |
 
-### Installation
+---
+
+### 🛠️ Installation
 
 1. **Clone the Repository**
-
-   **http:**
 
    ```bash
    git clone https://github.com/realdegrees/ur-game-engineering.git
    ```
 
-   **ssh _(recommended)_:**
-
    ```bash
    git clone git@github.com:realdegrees/ur-game-engineering.git
    ```
 
-   **github-desktop:**  
-   [Follow the instructions in this article from github.](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-a-repository-from-github-to-github-desktop)
+   [Follow these instructions for GitHub Desktop.](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-a-repository-from-github-to-github-desktop)
 
 2. **Navigate to the Project Directory**
 
@@ -56,88 +59,131 @@ These instructions will help you get a copy of the project up and running on you
 
 3. **Open the Project in Unity**
 
-   - Open Unity Hub
-   - Click on **"Add" -> "Add project from disk"** and select the project directory
-   - Open the project
+   - Open Unity Hub.
+   - Click **"Add" -> "Add project from disk"** and select the project directory.
+   - Open the project.
 
-4. **Start a feature branch**
+4. **Start a Feature Branch**
+   Refer to the [Branching Strategy](#-branching-strategy) section to create a new branch.
 
-   Follow the [Branching Strategy](#branching-strategy) section below to create a new feature branch.
+---
 
-## Branching Strategy
+### 🛠️ Sample Scenes
 
-- **Protected Branches**: To keep the git tree clean, the `develop` and `main` branches are protected. Direct pushes to these branches are restricted.
-- **Feature Branches**: When working on new features or fixes, create a new branch from `develop`.
+To help you get started quickly, the project includes sample scenes that demonstrate various features. These scenes can be found in the following directory:
 
-  ```bash
-  git checkout develop
-  git pull
-  git checkout -b feature/your-feature-name
-  ```
+**`Assets/Scenes/Samples`**
 
-- **Pull Requests (PRs)**: Once your feature is ready, push your branch, open a [Pull Request](https://github.com/realdegrees/ur-game-engineering/pulls) to merge your branch back into `develop`.
+| Scene        | Description                                          |
+| ------------ | ---------------------------------------------------- |
+| **Input**    | Examples of player input handling and key bindings.  |
+| **Camera**   | Demonstrates camera movement and transitions.        |
+| **Movement** | Showcases player movement mechanics.                 |
+| **Tilemaps** | Includes examples of creating and managing tilemaps. |
 
-- **Review Process**
+Open these scenes in Unity to explore their functionality and use them as a reference for your development.
 
-  - All PRs _should_ be reviewed by at least 1 other teammember.
-  - Address any feedback before requesting a merge.
+---
 
-## Working with Unity and Git
+### Ignore Playground Scenes
 
-Unity projects have specific considerations when used with version control systems like Git.
+- Name personal test scenes with `-dev` (e.g., `lighting-scene-dev.unity`) to exclude them via `.gitignore`.
+- Use these scenes to prototype and test before applying your changes to game scenes.
+
+## 🌲 Branching Strategy
+
+| Strategy           | Description                                                               |
+| ------------------ | ------------------------------------------------------------------------- |
+| Protected Branches | Direct pushes to `develop` and `main` are restricted.                     |
+| Feature Branches   | Work on new features/fixes in a branch created from `develop`.            |
+| Pull Requests      | Merge your feature branch into `develop` via a Pull Request after review. |
+
+### Creating a Feature Branch
+
+```bash
+git checkout develop
+```
+
+```bash
+git pull
+```
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+### 🔎 Review Process
+
+- Describe your changes briefly in the PR so others can understand your changes.
+- PRs _should_ be reviewed by **at least 1 team member**.
+- Address feedback before requesting a merge.
+
+---
+
+## 🛠️ Working with Unity and Git
+
+Unity projects require specific version control practices.
 
 ### Scene Management
 
-- **Merging Scene Files**: Unity scene files (`.unity` files) are extremely hard to merge
-- **Exclusive Editing**: To prevent conflicts, **only one person** should work on a scene at any given time.
+| Tip                   | Explanation                                                         |
+| --------------------- | ------------------------------------------------------------------- |
+| **Merging Scenes**    | Scene files (`.unity`) are hard to merge. Avoid simultaneous edits. |
+| **Rebasing**          | Frequently rebase your branch onto develop to avoid conflicts       |
+| **Exclusive Editing** | Only one person should work on a scene at a time.                   |
 
-The [.gitignore](.gitignore) includes a rule to exclude scenes that end in _"-dev"_.  
-You can name your own scenes e.g. `lighting-scene-dev.unity` to exclude them from the repository as a playground to test your code.
+### ⚠️ Handling Scene Conflicts
 
-### Handling Conflicts
+- **Do not attempt to merge scene files.**
 
-- **Do Not Attempt to Merge Scene Files**
+  - If a conflict occurs, coordinate with the team to resolve it.
+  - Overwrite one version and reapply the other’s changes later.
 
-  - If a conflict occurs in a scene file, communicate with the team member involved to decide whose changes to keep.
-  - One option is for one person to overwrite the scene file and the other to reapply their changes afterward.
+- **Regularly pull changes** to avoid conflicts.
 
-- **Regularly Pull Changes**
+  ```bash
+  git pull origin develop
+  ```
 
-  - Frequently pull changes from `develop` to minimize the risk of conflicts.
+---
 
-## Contribution Guidelines
+## 🤝 Contribution Guidelines
 
-- **Commit Messages**
+### Commit Messages
 
-  - Use clear and descriptive commit messages.
-  - **Examples**
-    - "feature: adds double jump"
-    - "adjusts player speed to 30"
-    - "increases boss loot drop chance to 10%"
+Use clear, descriptive commit messages.  
+**Examples**:
 
-You can also add a commit type in front of the message.
+- feat: adds double jump
+- fix: adjusts player speed to 30
+- refactor: reorganizes player input system
 
-- **Types**:
+### Commit Types
 
-  - `feat`: New feature
-  - `fix`: Bug fix
-  - `docs`: Documentation changes
-  - `style`: Formatting, missing semi colons, etc.; no code change
-  - `refactor`: Refactoring code
-  - `test`: Adding tests
-  - `chore`: Updating build tasks, package manager configs, etc.; no production code change
+| Type       | Description                                               |
+| ---------- | --------------------------------------------------------- |
+| `feat`     | New feature.                                              |
+| `fix`      | Bug fix.                                                  |
+| `docs`     | Documentation changes.                                    |
+| `style`    | Code style changes (no functional changes).               |
+| `refactor` | Code restructuring.                                       |
+| `test`     | Adding tests.                                             |
+| `chore`    | Build tasks, config changes (no production code changes). |
 
-  ## Troubleshooting
+---
 
-  ### Git Clone or Pull Failed
+## 🛠️ Troubleshooting
 
-  If you encounter issues while cloning or pulling the repository, you can use the GitHub CLI to handle authentication.
+### Git Clone or Pull Failed
 
-  - **Install GitHub CLI**: [GitHub CLI](https://cli.github.com/)
+If you encounter authentication issues, use the GitHub CLI:
 
-  ### .NET SDK Missing
+- [Install GitHub CLI](https://cli.github.com/)
 
-  If you receive errors related to the .NET SDK, make sure you have the .NET SDK 8.0 installed.
-  This issue can arise when using VSCode as it does not come bundled with the dotnet SDK like Visual Studio.
+### .NET SDK Missing
 
-  - **Install .NET SDK 8.0**: [Download .NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+Errors about the .NET SDK may occur, especially in VSCode. Install the required SDK:
+
+- [Download .NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+
+---
