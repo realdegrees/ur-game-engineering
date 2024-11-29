@@ -194,6 +194,6 @@ If you encounter authentication issues, use the GitHub CLI:
 
 Errors about the .NET SDK may occur, especially in VSCode. Install the required SDK:
 
-- [Download .NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Download .NET SDK 8.0](https://dotnet.microsoft.com/en-us/download)
 
 ---
