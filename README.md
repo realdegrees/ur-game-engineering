@@ -1,6 +1,12 @@
 <div align="center">
 
 [![Develop Build Status](https://github.com/realdegrees/ur-game-engineering/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/realdegrees/ur-game-engineering/actions/workflows/build.yml?query=branch%3Adevelop)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Unity Version](https://img.shields.io/badge/Unity-2022.3.53f1-blue.svg)](https://unity3d.com/get-unity/download)
+[![GitHub issues](https://img.shields.io/github/issues/realdegrees/ur-game-engineering)](https://github.com/realdegrees/ur-game-engineering/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/realdegrees/ur-game-engineering)](https://github.com/realdegrees/ur-game-engineering/pulls)
+[![GitHub last commit](https://img.shields.io/github/last-commit/realdegrees/ur-game-engineering)](https://github.com/realdegrees/ur-game-engineering/commits/main)
+[![GitHub repo size](https://img.shields.io/github/repo-size/realdegrees/ur-game-engineering)](https://github.com/realdegrees/ur-game-engineering)
 
 # 🎮 Game Engineering Unity Project
 
