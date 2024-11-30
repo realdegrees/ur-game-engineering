@@ -5,12 +5,13 @@ name: Unity Build CI
 on:
   push:
     branches:
-      - develop
-      - main
-  pull_request:
-    branches:
-      - develop
-      - main
+      - inno-ci
+  #     - develop
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - develop
+  #     - main
 
 jobs:
   # Build for Windows (32-Bit)
@@ -49,7 +50,35 @@ jobs:
           name: build-win
           path: build
 
-          # Build for MacOS
+  package-win:
+    name: Package for Windows
+    runs-on: windows-latest
+    needs: build-win
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Download Windows Build Artifact
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-win
+          path: build
+
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: inno.iss
+          options: /O+
+
+      # Output
+      - uses: actions/upload-artifact@v3
+        with:
+          name: installer-win
+          path: installer_win.exe
+
+  # Build for MacOS
   build-ios:
     name: Build for MacOS
     runs-on: ubuntu-latest
