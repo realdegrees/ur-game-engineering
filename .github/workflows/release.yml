@@ -1,0 +1,73 @@
+name: Create Github Release
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-win
+          path: build-win
+
+      - name: Download Installer Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: installer-win
+          path: Inno
+
+      - name: Download MacOS Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-macos
+          path: build-macos
+
+      - name: Create GitHub Release Draft
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: true
+
+      - name: Upload Windows Build to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build-win
+          asset_name: build-win.zip
+          asset_content_type: application/zip
+
+      - name: Upload Installer to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Inno/installer_win.exe
+          asset_name: installer-win.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload MacOS Build to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build-macos
+          asset_name: build-macos.zip
+          asset_content_type: application/zip
