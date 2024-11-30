@@ -16,7 +16,7 @@ on:
 jobs:
   # Build for Windows (32-Bit)
   build-win:
-    name: Build for Windows
+    name: Build Game for Windows
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -51,7 +51,7 @@ jobs:
           path: build
 
   package-win:
-    name: Package for Windows
+    name: Build Installer for Windows
     runs-on: windows-latest
     needs: build-win
     continue-on-error: true
@@ -84,7 +84,7 @@ jobs:
 
   # Build for MacOS
   build-ios:
-    name: Build for MacOS
+    name: Build Game for MacOS
     runs-on: ubuntu-latest
     steps:
       # Checkout
