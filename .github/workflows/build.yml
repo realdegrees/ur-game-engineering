@@ -71,7 +71,7 @@ jobs:
       - name: Compile .iss to .exe Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
-          path: inno.iss
+          path: Inno/inno.iss
           options: /O+
 
       # Output
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: installer-win
-          path: installer_win.exe
+          path: Inno/installer_win.exe
 
   # Build for MacOS
   build-ios:
