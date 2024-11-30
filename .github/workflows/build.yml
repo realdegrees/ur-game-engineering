@@ -45,7 +45,8 @@ jobs:
           targetPlatform: StandaloneWindows
 
       # Output
-      - uses: actions/upload-artifact@v3
+      - name: Upload Build as Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: build-win
           path: build
@@ -67,17 +68,15 @@ jobs:
           name: build-win
           path: build
 
-      - name: Compile .ISS to .EXE Installer
+      - name: Compile .iss to .exe Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: inno.iss
           options: /O+
 
-      - name: List directory after download
-        run: ls -R
-
       # Output
-      - uses: actions/upload-artifact@v3
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: installer-win
           path: installer_win.exe
@@ -113,7 +112,8 @@ jobs:
           targetPlatform: StandaloneOSX
 
       # Output
-      - uses: actions/upload-artifact@v4
+      - name: Upload Build as Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: build-macos
           path: build

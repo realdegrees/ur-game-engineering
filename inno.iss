@@ -1,10 +1,10 @@
 [Setup]
-AppName=installer_win
+AppName=UR_GE_2D_Platformer
 AppVersion=1.0
-DefaultDirName={pf}\game
-DefaultGroupName=game
+DefaultDirName={pf}\UR_GE_2D_Platformer
+DefaultGroupName=UR_GE_2D_Platformer
 OutputDir=.
-OutputBaseFilename=UR_GE_2D_Platformer_Installer
+OutputBaseFilename=installer_win
 Compression=lzma
 SolidCompression=yes
 
