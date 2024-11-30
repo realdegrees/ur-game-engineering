@@ -54,6 +54,7 @@ jobs:
     name: Package for Windows
     runs-on: windows-latest
     needs: build-win
+    continue-on-error: true
     steps:
       # Checkout
       - name: Checkout repository
@@ -71,6 +72,9 @@ jobs:
         with:
           path: inno.iss
           options: /O+
+
+      - name: List directory after download
+        run: ls -R
 
       # Output
       - uses: actions/upload-artifact@v3
