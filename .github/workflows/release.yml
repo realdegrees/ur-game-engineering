@@ -84,7 +84,7 @@ jobs:
       - name: Download Installer Artifact
         uses: actions/download-artifact@v3
         with:
-          name: StandaloneWindows
+          name: InstallerStandaloneWindows
           path: Inno
 
       - name: Download MacOS Build Artifact
