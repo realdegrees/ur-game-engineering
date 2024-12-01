@@ -32,13 +32,6 @@ jobs:
             exit 1
           fi
 
-      - name: Verify InstallerStandaloneWindows.exe download
-        run: |
-          if [ ! -f Release/InstallerStandaloneWindows.exe ]; then
-            echo "Failed to download InstallerStandaloneWindows.exe."
-            exit 1
-          fi
-
       - name: Download InstallerStandaloneWindows.exe from Release
         id: download_installer
         run: |
@@ -46,6 +39,13 @@ jobs:
           installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="InstallerStandaloneWindows.exe") | .browser_download_url')
           mkdir -p Release
           curl -L -o Release/InstallerStandaloneWindows.exe $installer_url
+
+      - name: Verify InstallerStandaloneWindows.exe download
+        run: |
+          if [ ! -f Release/InstallerStandaloneWindows.exe ]; then
+            echo "Failed to download InstallerStandaloneWindows.exe."
+            exit 1
+          fi
 
       - name: Publish to Itch.io
         uses: KikimoraGames/itch-publish@v0.0.3
