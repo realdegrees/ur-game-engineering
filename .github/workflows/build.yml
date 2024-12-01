@@ -3,6 +3,10 @@
 
 name: Build Unity Project
 on:
+  push:
+    branches:
+      - develop
+      - main
   pull_request:
     branches:
       - develop
@@ -40,7 +44,8 @@ jobs:
   installer-win:
     name: Build Installer for Windows
     runs-on: windows-latest
-    if: github.event.pull_request.merged == true
+    continue-on-error: true # Not necessary to merge PRs
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
     needs: build-win
     steps:
       - name: Checkout repository
