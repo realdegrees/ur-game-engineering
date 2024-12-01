@@ -1,3 +1,14 @@
+######## Custom ignores
+
+# Exclude developer playground scenes
+*-dev.unity
+*-dev.unity.meta
+*.pdn
+Inno/*.exe
+/[Rr]elease/
+
+######## Default Unity .gitignore
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore

@@ -1,0 +1,53 @@
+name: "Unity Build CI"
+description: "A reusable composite action to build Unity projects for Windows and Mac with artifacts."
+
+inputs:
+  unityLicense:
+    description: "Unity CI license key"
+    required: true
+  unityEmail:
+    description: "Unity CI account email"
+    required: true
+  unityPassword:
+    description: "Unity CI account password"
+    required: true
+  targetPlatform:
+    description: "Target platform to build for (Windows, MacOS)"
+    required: true
+    default: "StandaloneWindows"
+
+runs:
+  using: "composite"
+  steps:
+    # Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      # Uncomment if LFS is added
+      # with:
+      #   lfs: true
+
+    # Cache Unity project files
+    - name: Cache Library
+      uses: actions/cache@v3
+      with:
+        path: Library
+        key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+        restore-keys: |
+          Library-
+
+    # Build Unity project
+    - name: Build project for ${{ inputs.targetPlatform }}
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE: ${{ inputs.unityLicense }}
+        UNITY_EMAIL: ${{ inputs.unityEmail }}
+        UNITY_PASSWORD: ${{ inputs.unityPassword }}
+      with:
+        targetPlatform: ${{ inputs.targetPlatform }}
+
+    # Upload build artifact
+    - name: Upload Build as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ inputs.targetPlatform }}
+        path: build

@@ -1,0 +1,70 @@
+# from: https://game.ci/docs/
+# targetPlatform values: https://docs.unity3d.com/ScriptReference/BuildTarget.html
+
+name: Build Unity Project
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-win:
+    name: Build Game for Windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Unity Build CI for Windows
+        uses: ./.github/actions/build
+        with:
+          targetPlatform: StandaloneWindows
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+
+  build-macos:
+    name: Build Game for MacOS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Unity Build CI for MacOS
+        uses: ./.github/actions/build
+        with:
+          targetPlatform: StandaloneOSX
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+
+  installer-win:
+    name: Build Installer for Windows
+    runs-on: windows-latest
+    continue-on-error: true # Not necessary to merge PRs
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    needs: build-win
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-StandaloneWindows
+          path: build-StandaloneWindows
+
+      - name: Compile .iss to .exe Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: Inno/inno.iss
+          options: /O+
+
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: InstallerStandaloneWindows
+          path: Inno/InstallerStandaloneWindows.exe
