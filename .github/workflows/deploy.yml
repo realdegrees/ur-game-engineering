@@ -1,0 +1,56 @@
+name: Publish Release to Itch.io
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-to-itch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get install jq
+
+      - name: Get Release Information
+        id: release_info
+        run: |
+          echo "Fetching release information for ${{ github.event.release.id }}"
+          release_assets_url="${{ github.event.release.assets_url }}"
+          echo "Release assets URL: $release_assets_url"
+          echo "RELEASE_ASSETS_URL=$release_assets_url" >> $GITHUB_ENV
+
+      - name: Check if InstallerStandaloneWindows.exe exists in assets
+        run: |
+          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="InstallerStandaloneWindows.exe") | .browser_download_url')
+          if [ -z "$installer_url" ]; then
+            echo "InstallerStandaloneWindows.exe not found in release assets. Exiting."
+            exit 1
+          fi
+
+      - name: Verify InstallerStandaloneWindows.exe download
+        run: |
+          if [ ! -f Release/InstallerStandaloneWindows.exe ]; then
+            echo "Failed to download InstallerStandaloneWindows.exe."
+            exit 1
+          fi
+
+      - name: Download InstallerStandaloneWindows.exe from Release
+        id: download_installer
+        run: |
+          echo "Downloading InstallerStandaloneWindows.exe from release assets"
+          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="InstallerStandaloneWindows.exe") | .browser_download_url')
+          mkdir -p Release
+          curl -L -o Release/InstallerStandaloneWindows.exe $installer_url
+
+      - name: Publish to Itch.io
+        uses: KikimoraGames/itch-publish@v0.0.3
+        with:
+          butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
+          gameData: Release
+          itchUsername: degrees
+          itchGameId: ur-game-engineering-project
+          buildChannel: windows

@@ -4,6 +4,8 @@
 *-dev.unity
 *-dev.unity.meta
 *.pdn
+Inno/*.exe
+/[Rr]elease/
 
 ######## Default Unity .gitignore
 

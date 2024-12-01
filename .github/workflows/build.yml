@@ -1,86 +1,65 @@
 # from: https://game.ci/docs/
 # targetPlatform values: https://docs.unity3d.com/ScriptReference/BuildTarget.html
 
-name: Unity Build CI
+name: Build Unity Project
 on:
-  push:
-    branches:
-      - develop
-      - main
   pull_request:
     branches:
       - develop
       - main
 
 jobs:
-  # Build for Windows (32-Bit)
   build-win:
-    name: Build for Windows
+    name: Build Game for Windows
     runs-on: ubuntu-latest
     steps:
-      # Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
-        # ! Enable this if LFS is added
-        # ! with:
-        # !   lfs: true
-
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: Use Unity Build CI for Windows
+        uses: ./.github/actions/build
         with:
           targetPlatform: StandaloneWindows
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
-      # Output
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build-win
-          path: build
-
-          # Build for MacOS
-  build-ios:
-    name: Build for MacOS
+  build-macos:
+    name: Build Game for MacOS
     runs-on: ubuntu-latest
     steps:
-      # Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
-        # ! Enable this if LFS is added
-        # with:
-        #   lfs: true
-
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
-
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: Use Unity Build CI for MacOS
+        uses: ./.github/actions/build
         with:
           targetPlatform: StandaloneOSX
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
-      # Output
-      - uses: actions/upload-artifact@v4
+  installer-win:
+    name: Build Installer for Windows
+    runs-on: windows-latest
+    if: github.event.pull_request.merged == true
+    needs: build-win
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3
         with:
-          name: build-macos
-          path: build
+          name: build-StandaloneWindows
+          path: build-StandaloneWindows
+
+      - name: Compile .iss to .exe Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: Inno/inno.iss
+          options: /O+
+
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: InstallerStandaloneWindows
+          path: Inno/InstallerStandaloneWindows.exe

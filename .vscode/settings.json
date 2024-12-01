@@ -12,10 +12,8 @@
     "**/*.userprefs": true,
     "**/*.unityproj": true,
     "**/*.dll": true,
-    "**/*.exe": true,
     "**/*.mid": true,
     "**/*.midi": true,
-    "**/*.ico": true,
     "**/*.psd": true,
     "**/*.tga": true,
     "**/*.tif": true,
@@ -33,7 +31,6 @@
     "**/*.flare": true,
     "**/*.meta": true,
     "build/": true,
-    "Build/": true,
     "Library/": true,
     "library/": true,
     "obj/": true,
@@ -50,5 +47,8 @@
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
   "git.autofetch": true,
-  "dotnet.defaultSolution": "ur-game-engineering.sln"
+  "dotnet.defaultSolution": "ur-game-engineering.sln",
+  // This is optional and only required to build the installer locally
+  // Default install path for ISCC, override in personal settings if your path differs
+  "innosetup.pathToIscc": "C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe"
 }
