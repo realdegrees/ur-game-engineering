@@ -6,9 +6,67 @@ on:
     types: [closed]
 
 jobs:
+  build-win:
+    name: Build Game for Windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Unity Build CI for Windows
+        uses: ./.github/actions/build
+        with:
+          targetPlatform: StandaloneWindows
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+
+  build-macos:
+    name: Build Game for MacOS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Unity Build CI for MacOS
+        uses: ./.github/actions/build
+        with:
+          targetPlatform: StandaloneOSX
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+
+  installer-win:
+    name: Build Installer for Windows
+    runs-on: windows-latest
+    needs: build-win
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Download Windows Build Artifact
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-StandaloneWindows
+          path: build-StandaloneWindows
+
+      - name: Compile .iss to .exe Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: Inno/inno.iss
+          options: /O+
+
+      # Output
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: InstallerStandaloneWindows
+          path: Inno/InstallerStandaloneWindows.exe
+
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
+    needs: [build-win, build-macos, installer-win]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,20 +74,20 @@ jobs:
       - name: Download Windows Build Artifact
         uses: actions/download-artifact@v3
         with:
-          name: build-win
-          path: build-win
+          name: build-StandaloneWindows
+          path: build-StandaloneWindows
 
       - name: Download Installer Artifact
         uses: actions/download-artifact@v3
         with:
-          name: installer-win
+          name: StandaloneWindows
           path: Inno
 
       - name: Download MacOS Build Artifact
         uses: actions/download-artifact@v3
         with:
-          name: build-macos
-          path: build-macos
+          name: build-StandaloneOSX
+          path: build-StandaloneOSX
 
       - name: Create GitHub Release Draft
         id: create_release
@@ -48,8 +106,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build-win
-          asset_name: build-win.zip
+          asset_path: build-StandaloneWindows
+          asset_name: build-StandaloneWindows.zip
           asset_content_type: application/zip
 
       - name: Upload Installer to Release
@@ -58,8 +116,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Inno/installer_win.exe
-          asset_name: installer-win.exe
+          asset_path: Inno/InstallerStandaloneWindows.exe
+          asset_name: InstallerStandaloneWindows.exe
           asset_content_type: application/octet-stream
 
       - name: Upload MacOS Build to Release
@@ -68,6 +126,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build-macos
-          asset_name: build-macos.zip
+          asset_path: build-StandaloneOSX
+          asset_name: build-StandaloneOSX.zip
           asset_content_type: application/zip

@@ -23,28 +23,28 @@ jobs:
           echo "Release assets URL: $release_assets_url"
           echo "RELEASE_ASSETS_URL=$release_assets_url" >> $GITHUB_ENV
 
-      - name: Check if installer-win.exe exists in assets
+      - name: Check if InstallerStandaloneWindows.exe exists in assets
         run: |
-          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="installer-win.exe") | .browser_download_url')
+          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="InstallerStandaloneWindows.exe") | .browser_download_url')
           if [ -z "$installer_url" ]; then
-            echo "installer-win.exe not found in release assets. Exiting."
+            echo "InstallerStandaloneWindows.exe not found in release assets. Exiting."
             exit 1
           fi
 
-      - name: Verify installer-win.exe download
+      - name: Verify InstallerStandaloneWindows.exe download
         run: |
-          if [ ! -f Release/installer-win.exe ]; then
-            echo "Failed to download installer-win.exe."
+          if [ ! -f Release/InstallerStandaloneWindows.exe ]; then
+            echo "Failed to download InstallerStandaloneWindows.exe."
             exit 1
           fi
 
-      - name: Download installer-win.exe from Release
+      - name: Download InstallerStandaloneWindows.exe from Release
         id: download_installer
         run: |
-          echo "Downloading installer_win.exe from release assets"
-          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="installer-win.exe") | .browser_download_url')
+          echo "Downloading InstallerStandaloneWindows.exe from release assets"
+          installer_url=$(curl -s $RELEASE_ASSETS_URL | jq -r '.[] | select(.name=="InstallerStandaloneWindows.exe") | .browser_download_url')
           mkdir -p Release
-          curl -L -o Release/installer-win.exe $installer_url
+          curl -L -o Release/InstallerStandaloneWindows.exe $installer_url
 
       - name: Publish to Itch.io
         uses: KikimoraGames/itch-publish@v0.0.3

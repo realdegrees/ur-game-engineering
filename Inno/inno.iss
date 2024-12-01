@@ -4,7 +4,7 @@ AppVersion=1.0
 DefaultDirName={pf}\UR_GE_Platformer
 DefaultGroupName=UR_GE_Platformer
 OutputDir=.
-OutputBaseFilename=installer_win
+OutputBaseFilename=InstallerStandaloneWindows
 Compression=lzma
 SolidCompression=yes
 ; Custom Installer
