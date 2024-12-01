@@ -13,7 +13,6 @@ DisableWelcomePage=no
 AlwaysShowDirOnReadyPage=yes
 ShowComponentSizes=yes
 
-
 [Messages]
 WelcomeLabel1=Welcome to the installer!
 WelcomeLabel2=This is the setup wizard for a 2D platformer game for the Game Engineering course at Uni Regensburg. Please follow the instructions to install the game on your computer.
@@ -27,7 +26,7 @@ begin
 end;
 
 [Files]
-Source: "..\build\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\build-StandaloneWindows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Possibly include a script that runs on the targets PC that grabs data we log in Unity and sends it to us in case we do a remote study
 
 [Icons]
