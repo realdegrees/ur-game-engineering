@@ -22,6 +22,7 @@ jobs:
           release_assets_url="${{ github.event.release.assets_url }}"
           echo "Release assets URL: $release_assets_url"
           echo "RELEASE_ASSETS_URL=$release_assets_url" >> $GITHUB_ENV
+          export RELEASE_ASSETS_URL=$release_assets_url
 
       - name: Check if InstallerStandaloneWindows.exe exists in assets
         run: |
