@@ -48,7 +48,7 @@ jobs:
 
       # Download Windows Build Artifact
       - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows
           path: InnoBuild
@@ -61,7 +61,7 @@ jobs:
 
       # Output
       - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneWindows
           path: Inno/InstallerStandaloneWindows.exe
@@ -76,19 +76,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows
           path: build-StandaloneWindows
 
       - name: Download Installer Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: InstallerStandaloneWindows
           path: Inno
 
       - name: Download MacOS Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneOSX
           path: build-StandaloneOSX

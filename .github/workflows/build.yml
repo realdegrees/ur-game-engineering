@@ -7,10 +7,22 @@ on:
     branches:
       - develop
       - main
-  # pull_request:
-  #   branches:
-  #     - develop
-  #     - main
+    paths:
+      - "Assets/**"
+      - "ProjectSettings/**"
+      - "Packages/**"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - "Assets/**"
+      - "ProjectSettings/**"
+      - "Packages/**"
+      - ".github/workflows/**"
+      - ".github/actions/**"
 
 jobs:
   build-win:
@@ -46,19 +58,19 @@ jobs:
     runs-on: windows-latest
     continue-on-error: true # Not necessary to merge PRs
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
-    needs: build-win
+    needs: [build-win, build-macos]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows
           path: InnoBuild
 
       - name: Download MacOS Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneOSX
           path: MacBuild
@@ -74,13 +86,13 @@ jobs:
           hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
 
       - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneOSX
           path: GameInstaller.dmg
 
       - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneWindows
           path: Inno/InstallerStandaloneWindows.exe
