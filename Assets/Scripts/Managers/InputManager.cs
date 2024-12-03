@@ -12,7 +12,8 @@ public class InputManager : Manager<InputManager>
     public UnityEvent onAttackCharged = new();
     public UnityEvent onAttackReleased = new();
     public UnityEvent onCrouchHeld = new();
-    public UnityEvent<float> onMovement = new();
+    public UnityEvent<float> onMovementStart = new();
+    public UnityEvent<float> onMovementEnd = new();
 
     public bool JumpPressed;
     public bool JumpCharged;
@@ -25,9 +26,16 @@ public class InputManager : Manager<InputManager>
 
     public void Move(InputAction.CallbackContext context)
     {
+        var previousMovement = Movement;
         Movement = context.action.ReadValue<float>();
-        if (Movement != 0)
-            onMovement?.Invoke(Movement);
+        if (previousMovement != 0 && Movement == 0)
+        {
+            onMovementStart?.Invoke(Movement);
+        }
+        else if (previousMovement == 0 && Movement != 0)
+        {
+            onMovementEnd?.Invoke(Movement);
+        }
     }
     public void Jump(InputAction.CallbackContext context)
     {
