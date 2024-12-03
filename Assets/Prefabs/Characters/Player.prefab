@@ -348,6 +348,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2353405837647139473}
   - component: {fileID: 1156118234567648672}
+  - component: {fileID: -2780013989880506495}
+  - component: {fileID: 3535363739658791604}
   - component: {fileID: 6259766371626366281}
   - component: {fileID: 2856253638579531388}
   - component: {fileID: 2958846566432957508}
@@ -428,7 +430,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6259766371626366281
+--- !u!114 &-2780013989880506495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -436,6 +438,34 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6962759502354806734}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5a7de102476964ea63c066b203bb41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 5c96a381ecb83494a9f5a7558c847b80, type: 2}
+--- !u!114 &3535363739658791604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962759502354806734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130c389ddb89cd741a99e1f31cd406ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  states:
+  - {fileID: 11400000, guid: 1a948b1579627bd4581606fc195e5b1b, type: 2}
+  - {fileID: 11400000, guid: 1a948b1579627bd4581606fc195e5b1b, type: 2}
+--- !u!114 &6259766371626366281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962759502354806734}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 509b0c25bc5c0724bba24c62ff4c06ec, type: 3}
   m_Name: 
@@ -484,6 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dcb5f7de4bcd4f4ea89400adcc4112a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStateManager: {fileID: 0}
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0
