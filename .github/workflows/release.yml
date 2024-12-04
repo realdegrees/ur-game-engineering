@@ -51,7 +51,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-StandaloneWindows
-          path: build-StandaloneWindows
+          path: InnoBuild
 
       - name: Compile .iss to .exe Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
