@@ -26,7 +26,7 @@ begin
 end;
 
 [Files]
-Source: "..\build-StandaloneWindows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\InnoBuild\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Possibly include a script that runs on the targets PC that grabs data we log in Unity and sends it to us in case we do a remote study
 
 [Icons]

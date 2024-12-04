@@ -9,6 +9,8 @@
 
 [![PR Build Status](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)](https://unity.com/)
 
+[![Scene Conflict Stats](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering?label=Scene%20Conflict%20Status)](https://github.com/realdegrees/unity-badges)
+
 # 🎮 Game Engineering Unity Project
 
 ## 📖 Table of Contents
