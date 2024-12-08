@@ -23,9 +23,9 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D headHit;
     private bool isOnGround;
     private bool isOnSlope;
+    private Vector2 groundVelocityVector;
     private bool isOnUpSlope;
     private float slopeAngle;
-
     private float groundAngle;
 
     private bool isHeadBlocked;
@@ -75,8 +75,11 @@ public class PlayerController : MonoBehaviour
         playerBounds.Encapsulate(feetCollider.bounds);
 
         CheckCollisions();
+
+        groundVelocityVector = connectedGround ? connectedGround.attachedRigidbody.velocity : Vector2.zero;
         Jump();
         Move();
+        rb.velocity += groundVelocityVector * Time.fixedDeltaTime;
     }
 
 
@@ -101,7 +104,7 @@ public class PlayerController : MonoBehaviour
         // Decelerate
         else
         {
-            movementVector = Vector2.Lerp(movementVector, Vector2.zero, deceleration * Time.fixedDeltaTime);
+            movementVector = Vector2.Lerp(movementVector, groundVelocityVector, deceleration * Time.fixedDeltaTime);
         }
 
         rb.velocity = movementVector;
