@@ -30,11 +30,11 @@ public class InputManager : Manager<InputManager>
         Movement = context.action.ReadValue<float>();
         if (previousMovement != 0 && Movement == 0)
         {
-            onMovementStart?.Invoke(Movement);
+            onMovementEnd?.Invoke(Movement);
         }
         else if (previousMovement == 0 && Movement != 0)
         {
-            onMovementEnd?.Invoke(Movement);
+            onMovementStart?.Invoke(Movement);
         }
     }
     public void Jump(InputAction.CallbackContext context)
