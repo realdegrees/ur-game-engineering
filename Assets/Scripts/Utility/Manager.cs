@@ -22,7 +22,7 @@ namespace Manager
             {
                 Instance = this as T;
                 DontDestroyOnLoad(gameObject);
-                Debug.Log(typeof(T).Name + " initialized");
+                // Debug.Log(typeof(T).Name + " initialized");
             }
 
         }
@@ -31,7 +31,7 @@ namespace Manager
 
         protected virtual void OnDestroy()
         {
-            Debug.LogWarning(typeof(T).Name + " destroyed!");
+            // Debug.LogWarning(typeof(T).Name + " destroyed!");
         }
     }
 }
