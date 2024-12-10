@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour
     private bool isOnGround;
     private bool isOnSlope;
     private Vector2 groundVelocityVector;
+    public Vector2 RelativeVelocity => rb.velocity - groundVelocityVector;
     private bool isOnUpSlope;
     private float slopeAngle;
     private float groundAngle;
-
     private bool isHeadBlocked;
     private Collider2D connectedGround;
     private Collider2D connectedCeiling;
@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         UpdateTimers();
         FlipCheck();
-        if (Math.Abs(groundAngle) <= config.MaxSlopeAngle) JumpCheck();
+        if (groundAngle <= config.MaxSlopeAngle) JumpCheck();
     }
 
     private void FixedUpdate()
@@ -76,10 +76,16 @@ public class PlayerController : MonoBehaviour
 
         CheckCollisions();
 
-        groundVelocityVector = connectedGround ? connectedGround.attachedRigidbody.velocity : Vector2.zero;
+
         Jump();
         Move();
-        rb.velocity += groundVelocityVector * Time.fixedDeltaTime;
+
+        groundVelocityVector = connectedGround && connectedGround.attachedRigidbody ? connectedGround.attachedRigidbody.velocity : Vector2.zero;
+        if (groundVelocityVector.normalized != Vector2.zero)
+        {
+            rb.velocity += groundVelocityVector * Time.fixedDeltaTime;
+
+        }
     }
 
 
@@ -102,7 +108,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Decelerate
-        else
+        else if (RelativeVelocity.normalized != Vector2.zero)
         {
             movementVector = Vector2.Lerp(movementVector, groundVelocityVector, deceleration * Time.fixedDeltaTime);
         }

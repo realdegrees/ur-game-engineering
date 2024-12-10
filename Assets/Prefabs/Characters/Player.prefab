@@ -352,7 +352,6 @@ GameObject:
   - component: {fileID: 3535363739658791604}
   - component: {fileID: 6259766371626366281}
   - component: {fileID: 2856253638579531388}
-  - component: {fileID: 2958846566432957508}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -442,7 +441,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5a7de102476964ea63c066b203bb41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 5c96a381ecb83494a9f5a7558c847b80, type: 2}
 --- !u!114 &3535363739658791604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,9 +453,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130c389ddb89cd741a99e1f31cd406ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  states:
-  - {fileID: 11400000, guid: 1a948b1579627bd4581606fc195e5b1b, type: 2}
-  - {fileID: 11400000, guid: 1a948b1579627bd4581606fc195e5b1b, type: 2}
+  config: {fileID: 11400000, guid: 5c96a381ecb83494a9f5a7558c847b80, type: 2}
+  groundCheckCollider: {fileID: 4058238303049362350}
+  ceilingCheckCollider: {fileID: 1706616017903692556}
+  bodyCollider: {fileID: 6756067221394343119}
+  jumpsSinceGrounded: 0
 --- !u!114 &6259766371626366281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,10 +487,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 2.5
   m_Material: {fileID: 6200000, guid: 148751317c40316408226e07cb27145f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -498,23 +498,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2958846566432957508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962759502354806734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dcb5f7de4bcd4f4ea89400adcc4112a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerStateManager: {fileID: 0}
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0
