@@ -55,25 +55,26 @@ public class CameraBounds : EditorZone<CameraBounds>
     {
         OnActivate.AddListener(() =>
         {
-            if (activationType == CameraBoundsActivationType.Toggle)
+            switch (activationType)
             {
-                if (GetBounds() == boundsCollider)
-                {
-                    ResetBounds();
-                }
-                else
-                {
+                case CameraBoundsActivationType.Awake:
+                    break;
+                case CameraBoundsActivationType.Enter:
                     SetBounds();
-                }
+                    break;
+                case CameraBoundsActivationType.Stay:
+                    SetBounds();
+                    break;
+                case CameraBoundsActivationType.Toggle:
+                    if (GetBounds() == boundsCollider)
+                        ResetBounds();
+                    else
+                        SetBounds();
+                    break;
+                default:
+                    break;
             }
-            else if (activationType == CameraBoundsActivationType.Enter)
-            {
-                SetBounds();
-            }
-            else if (activationType == CameraBoundsActivationType.Stay)
-            {
-                SetBounds();
-            }
+
         });
         OnDeactivate.AddListener(() =>
         {
@@ -85,10 +86,8 @@ public class CameraBounds : EditorZone<CameraBounds>
         OnCooldownReset.AddListener(ResetBounds);
     }
 
-    private Collider2D GetBounds()
-    {
-        return CameraManager.Instance.GetCameraBounds(CameraType.Default);
-    }
+    private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Default);
+
     private void SetBounds()
     {
         cachedBounds = GetBounds() as CompositeCollider2D;
