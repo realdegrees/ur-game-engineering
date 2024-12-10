@@ -1,3 +1,4 @@
+using System;
 using Manager;
 using UnityEngine;
 using UnityEngine.Events;
@@ -5,76 +6,68 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Manager<InputManager>
 {
-    public UnityEvent onJumpPressed = new();
-    public UnityEvent onJumpCharged = new();
-    public UnityEvent onJumpReleased = new();
-    public UnityEvent onAttackPressed = new();
-    public UnityEvent onAttackCharged = new();
-    public UnityEvent onAttackReleased = new();
-    public UnityEvent onCrouchHeld = new();
-    public UnityEvent<float> onMovementStart = new();
-    public UnityEvent<float> onMovementEnd = new();
-    public UnityEvent<float> onMovementFlip = new();
+    public event Action OnJumpPressed = delegate { };
+    public event Action OnJumpReleased = delegate { };
+    public event Action OnAttackPressed = delegate { };
+    public event Action OnAttackReleased = delegate { };
+    public event Action OnCrouchPressed = delegate { };
+    public event Action OnCrouchReleased = delegate { };
+    public event Action<float> OnMovementStart = delegate { };
+    public event Action<float> OnMovementEnd = delegate { };
+    public event Action<float> OnMovementFlip = delegate { };
 
     public bool JumpPressed;
-    public bool JumpCharged;
+    public bool JumpHeld;
     public bool JumpReleased;
     public bool AttackPressed;
-    public bool AttackCharged;
+    public bool AttackHeld;
     public bool AttackReleased;
     public bool CrouchHeld;
+    public bool CrouchPressed;
+    public bool CrouchReleased;
     public float Movement;
 
     public void Move(InputAction.CallbackContext context)
     {
         var previousMovement = Movement;
         Movement = context.action.ReadValue<float>();
-        if (previousMovement != 0 && Movement == 0)
-        {
-            onMovementEnd?.Invoke(Movement);
-        }
-        else if (previousMovement == 0 && Movement != 0)
-        {
-            onMovementStart?.Invoke(Movement);
-        }
-        else if (previousMovement == -Movement)
-        {
-            onMovementFlip?.Invoke(Movement);
-        }
+
+        InvokeIfTrue(previousMovement != 0 && Movement == 0, () => OnMovementEnd?.Invoke(Movement));
+        InvokeIfTrue(previousMovement == 0 && Movement != 0, () => OnMovementStart?.Invoke(Movement));
+        InvokeIfTrue(previousMovement == -Movement, () => OnMovementFlip?.Invoke(Movement));
     }
     public void Jump(InputAction.CallbackContext context)
     {
         JumpPressed = context.action.WasPressedThisFrame();
-        JumpCharged = context.action.ReadValue<float>() > 0;
         JumpReleased = context.action.WasReleasedThisFrame();
+        JumpHeld = !(JumpHeld && JumpReleased) || JumpPressed;
 
-        if (JumpPressed)
-            onJumpPressed?.Invoke();
-        if (JumpCharged)
-            onJumpCharged?.Invoke();
-        if (JumpReleased)
-            onJumpReleased?.Invoke();
-
+        InvokeIfTrue(JumpPressed, OnJumpPressed);
+        InvokeIfTrue(JumpReleased, OnJumpReleased);
     }
 
     public void Crouch(InputAction.CallbackContext context)
     {
-        CrouchHeld = context.action.ReadValue<float>() > 0;
+        CrouchPressed = context.action.WasPressedThisFrame();
+        CrouchReleased = context.action.WasReleasedThisFrame();
+        CrouchHeld = !(CrouchHeld && CrouchReleased) || CrouchPressed;
 
-        if (CrouchHeld)
-            onCrouchHeld?.Invoke();
+        InvokeIfTrue(CrouchPressed, OnCrouchPressed);
+        InvokeIfTrue(CrouchReleased, OnCrouchReleased);
     }
     public void Attack(InputAction.CallbackContext context)
     {
         AttackPressed = context.action.WasPressedThisFrame();
-        AttackCharged = context.action.ReadValue<float>() > 0;
         AttackReleased = context.action.WasReleasedThisFrame();
+        AttackHeld = !(AttackHeld && AttackReleased) || AttackPressed;
 
-        if (AttackPressed)
-            onAttackPressed?.Invoke();
-        if (AttackCharged)
-            onAttackCharged?.Invoke();
-        if (AttackReleased)
-            onAttackReleased?.Invoke();
+        InvokeIfTrue(AttackPressed, OnAttackPressed);
+        InvokeIfTrue(AttackReleased, OnAttackReleased);
+    }
+
+    private void InvokeIfTrue(bool condition, Action inputEvent)
+    {
+        if (condition)
+            inputEvent.Invoke();
     }
 }
