@@ -12,12 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e57c5637230914488bcd3d7b640cae5, type: 3}
   m_Name: MovementConfig
   m_EditorClassIdentifier: 
-  MaxWalkSpeed: 13.5
-  GroundAcceleration: 8.7
-  GroundDeceleration: 22.5
-  AirAcceleration: 6.6
-  AirDeceleration: 4.2
-  TurnThreshold: 1.5
+  states:
+  - {fileID: 11400000, guid: 1a948b1579627bd4581606fc195e5b1b, type: 2}
+  - {fileID: 11400000, guid: 3573a0e0077e00c4d81c8e666d77775a, type: 2}
+  - {fileID: 11400000, guid: 1bd55857bb280da4f9122f8bc4f39c6d, type: 2}
+  - {fileID: 11400000, guid: 78727c9a15c5b394296b7ff0d385fa85, type: 2}
+  - {fileID: 11400000, guid: b0f2a732f7cb2154781aceb04bda3434, type: 2}
+  - {fileID: 11400000, guid: f7920760ba11a3044b51703d297ce82c, type: 2}
+  - {fileID: 11400000, guid: 460b3e734eb51454894af2cf53cf24ab, type: 2}
+  LedgeDepthThreshold: 1
+  LedgeDecelerationFactor: 2.5
+  MaxWalkSpeed: 14
+  GroundAccelerationRate: 4
+  GroundDecelerationRate: 8
+  AirAccelerationRate: 3
+  AirDecelerationRate: 4
+  TurnThreshold: 1
   MaxSlopeAngle: 62
   DownSlopeSpeedMultiplier: 0.7
   UpSlopeSpeedMultiplier: 1.3
@@ -28,19 +38,30 @@ MonoBehaviour:
     m_Bits: 2048
   BottomRange: 0.05
   TopRange: 0.05
-  JumpHeight: 4
+  CeilingAngleThreshold: 25
+  MaxJumpHeight: 12
+  MinJumpHeight: 1
   TimeTillJumpApex: 0.3
   MaxFallSpeed: 35
   JumpHeightCompensationFactor: 1.1
   GravityOnReleaseMultiplier: 1.2
   NumberOfJumpsAllowed: 1
+  FastFallIntensity: 13.6
+  FastFallIntensityApex: 3
+  CoyoteTime: 0.08
   TimeForUpwardsCancel: 0.0379
-  ApexThreshold: 0.98
-  ApexHangTime: 0.03
+  ApexHangTime: 0.05
+  ApexSlowDownMultiplier: 0.5
   JumpBufferTime: 0.07
-  JumpCoyoteTime: 0.1
   Show: 1
   ArcResolution: 100
   VisualizationSteps: 200
   CollisionGizmos: 1
   VelocityGizmos: 1
+  GroundAcceleration: 2.8
+  GroundDeceleration: 6.4
+  AirAcceleration: 3.6
+  AirDeceleration: 2.5
+  ApexThreshold: 0.98
+  JumpHeight: 4
+  JumpCoyoteTime: 0.1

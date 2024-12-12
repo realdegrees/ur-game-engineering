@@ -9,7 +9,7 @@
 
 [![PR Build Status](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)](https://unity.com/)
 
-[![Scene Conflict Stats](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering?label=Scene%20Conflict%20Status)](https://github.com/realdegrees/unity-badges)
+<img src="https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering" alt="Scene Conflict Overview" width="165px">
 
 # 🎮 Game Engineering Unity Project
 
@@ -24,8 +24,6 @@
 | [Contribution Guidelines](#-contribution-guidelines)       | Rules and tips for contributing          |
 | [Troubleshooting](#-troubleshooting)                       | Solutions for common issues              |
 
----
-
 </div>
 
 ## 📝 Description
@@ -33,8 +31,6 @@
 This repository contains the Unity project for a 2D game, developed as part of the **Game Engineering course at the University of Regensburg**. It’s a collaborative effort with guidelines for setup, contributions, and special considerations when working with Unity and Git.
 
 👉 **Please read this README before collaborating.**
-
----
 
 ## 🚀 Getting Started
 
@@ -47,8 +43,6 @@ Follow these instructions to set up the project on your local machine.
 | Unity       | [2022.3.53f1](https://unity3d.com/get-unity/download) _(Any 2022.3.\* should work)_                         |
 | Git         | [Latest version](https://git-scm.com/downloads)                                                             |
 | Editor      | Use any editor. Recommended: [VSCode](https://code.visualstudio.com/) or Visual Studio (bundled with Unity) |
-
----
 
 ### 🛠️ Installation
 
@@ -79,8 +73,6 @@ Follow these instructions to set up the project on your local machine.
 4. **Start a Feature Branch**
    Refer to the [Branching Strategy](#-branching-strategy) section to create a new branch.
 
----
-
 ### 🛠️ Sample Scenes
 
 To help you get started quickly, the project includes sample scenes that demonstrate various features. These scenes can be found in the following directory:
@@ -95,8 +87,6 @@ To help you get started quickly, the project includes sample scenes that demonst
 | **Tilemaps** | Includes examples of creating and managing tilemaps. |
 
 Open these scenes in Unity to explore their functionality and use them as a reference for your development.
-
----
 
 ### Ignore Playground Scenes
 
@@ -131,8 +121,6 @@ git checkout -b feature/your-feature-name
 - PRs _should_ be reviewed by **at least 1 team member**.
 - Address feedback before requesting a merge.
 
----
-
 ## 🛠️ Working with Unity and Git
 
 Unity projects require specific version control practices.
@@ -158,8 +146,6 @@ Unity projects require specific version control practices.
   git pull origin develop
   ```
 
----
-
 ## 🤝 Contribution Guidelines
 
 ### Commit Messages
@@ -182,8 +168,6 @@ Use clear, descriptive commit messages.
 | `refactor` | Code restructuring.                                       |
 | `test`     | Adding tests.                                             |
 | `chore`    | Build tasks, config changes (no production code changes). |
-
----
 
 ## 🛠️ Troubleshooting
 
