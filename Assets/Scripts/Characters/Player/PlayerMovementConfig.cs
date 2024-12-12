@@ -16,6 +16,9 @@ public class PlayerMovementConfig : StateMachineConfig<ECharacterState, PlayerMo
     [Range(.1f, 10f)] public float AirAccelerationRate = .8f;
     [Range(.1f, 10f)] public float AirDecelerationRate = .3f;
 
+    [Header("Dash")]
+    [Range(.1f, 10f)] public float DashDistance = 5f;
+
     [Tooltip("The horizontal speed at which the character should turn.")]
     [Range(0f, 3f)] public float TurnThreshold = 1f;
     [Header("Slopes")]
