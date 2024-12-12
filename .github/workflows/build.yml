@@ -7,10 +7,22 @@ on:
     branches:
       - develop
       - main
+    paths:
+      - "Assets/**"
+      - "ProjectSettings/**"
+      - "Packages/**"
+      - ".github/workflows/**"
+      - ".github/actions/**"
   # pull_request:
   #   branches:
   #     - develop
   #     - main
+  #   paths:
+  #     - "Assets/**"
+  #     - "ProjectSettings/**"
+  #     - "Packages/**"
+  #     - ".github/workflows/**"
+  #     - ".github/actions/**"
 
 jobs:
   build-win:
