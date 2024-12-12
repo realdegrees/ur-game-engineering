@@ -57,11 +57,27 @@ jobs:
           name: build-StandaloneWindows
           path: InnoBuild
 
+      - name: Download MacOS Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-StandaloneOSX
+          path: MacBuild
+
       - name: Compile .iss to .exe Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: Inno/inno.iss
           options: /O+
+
+      - name: Create DMG Installer
+        run: |
+          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
+
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: InstallerStandaloneOSX
+          path: GameInstaller.dmg
 
       - name: Upload Installer as Artifact
         uses: actions/upload-artifact@v3
