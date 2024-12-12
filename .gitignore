@@ -7,6 +7,9 @@
 Inno/*.exe
 /[Rr]elease/
 
+# Exclude root level vsconfig
+.vsconfig
+
 ######## Default Unity .gitignore
 
 # This .gitignore file should be placed at the root of your Unity project directory
