@@ -37,12 +37,16 @@ public class CameraManager : Manager<CameraManager>
 
     public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
     {
-        CinemachineConfiner2D confiner = GetCameraData(cameraType).camera.GetComponent<CinemachineConfiner2D>();
+        var camera = GetCameraData(cameraType).camera;
+        if (camera == null) return;
+
+        CinemachineConfiner2D confiner = camera.GetComponent<CinemachineConfiner2D>();
         confiner.m_BoundingShape2D = bounds;
     }
     public Collider2D GetCameraBounds(CameraType cameraType)
     {
-        if (GetCameraData(cameraType).camera.TryGetComponent(out CinemachineConfiner2D confiner))
+        var camera = GetCameraData(cameraType).camera;
+        if (camera != null && camera.TryGetComponent(out CinemachineConfiner2D confiner))
         {
             return confiner.m_BoundingShape2D;
         }
