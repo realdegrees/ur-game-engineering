@@ -10,11 +10,6 @@ public class FallingState : CharacterState
     {
     }
 
-    public bool CoyoteTimeActive()
-    {
-        return Time.time - StartTime < Config.CoyoteTime;
-    }
-
     protected override void OnEnter()
     {
     }

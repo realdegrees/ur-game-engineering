@@ -112,10 +112,32 @@ public class CameraManager : Manager<CameraManager>
             }
         }
 
+        var playerStateMachine = player.GetComponent<CharacterStateMachine>();
         // ! Important to do this after setting up the cameras
-        player.OnLand.AddListener(OnPlayerLand);
-        player.OnStartFalling.AddListener(OnPlayerStartFalling);
-        player.OnFlip.AddListener(OnPlayerFlip);
+        playerStateMachine.OnStateExit += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    if (playerStateMachine.IsStateActive(ECharacterState.Jumping, ECharacterState.JumpApex))
+                    {
+                        OnPlayerLand();
+                    }
+                    break;
+            }
+
+        };
+        playerStateMachine.OnStateEnter += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    OnPlayerStartFalling();
+                    break;
+            }
+
+        };
+        player.OnFlip += OnPlayerFlip;
     }
 
     public void SetCameraType(CameraType type, Transform target = null)

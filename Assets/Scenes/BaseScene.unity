@@ -189,7 +189,7 @@ PrefabInstance:
     - target: {fileID: 4098742807350493022, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 1109757093}
+      objectReference: {fileID: 1283401719}
     - target: {fileID: 7239026390220974228, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_Name
       value: Cameras
@@ -3015,6 +3015,17 @@ MonoBehaviour:
   m_DefaultActionMap: Default
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1283401719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -2780013989880506495, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  m_PrefabInstance: {fileID: 1109757092}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5a7de102476964ea63c066b203bb41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1250182687
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,11 +27,11 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
 
     public void Loop()
     {
-        HandleLoop("OnLoop");
+        HandleLoop(nameof(OnLoop));
     }
     public void PhysicsUpdate()
     {
-        HandleLoop("OnPhysicsUpdate");
+        HandleLoop(nameof(OnPhysicsUpdate));
     }
     private void HandleLoop(string name)
     {
@@ -53,10 +53,10 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
     public void Enter()
     {
         if (enableStateEventLogs) Debug.Log($"Entering {state}");
-        stateMachine.OnBeforeStateEnter(state);
         Progress = 0;
         StartTime = Time.time;
         Active = true;
+        stateMachine.StateEntered(this);
         RunSubclassEventImplementation("OnEnter");
     }
     public void Exit()
@@ -64,7 +64,7 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
         if (enableStateEventLogs) Debug.Log($"Exiting {state}");
         Active = false;
         RunSubclassEventImplementation("OnExit");
-        stateMachine.OnAfterStateExit(state);
+        stateMachine.StateExited(this);
     }
 
     /// <summary>

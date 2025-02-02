@@ -15,6 +15,9 @@ public abstract class StateMachine<EState, SConfig> : MonoBehaviour where EState
     private State<EState, SConfig> DefaultState => config.states[0];
     // private List<EState> queuedStates = new();
 
+    public event Action<State<EState, SConfig>> OnStateExit;
+    public event Action<State<EState, SConfig>> OnStateEnter;
+
     protected virtual void Awake()
     {
         config.states.RemoveAll(state => state == null);
@@ -30,8 +33,36 @@ public abstract class StateMachine<EState, SConfig> : MonoBehaviour where EState
             state.Init(this);
         });
         DefaultState.Enter();
-        //ActiveStates.Add(DefaultState);
     }
+
+
+    internal void StateExited(State<EState, SConfig> state)
+    {
+        OnStateExit?.Invoke(state);
+        if (ActiveStates.Count == 0 && !state.Equals(DefaultState.state))
+        {
+            DefaultState.Enter();
+        }
+    }
+    internal void StateEntered(State<EState, SConfig> state)
+    {
+        OnStateEnter?.Invoke(state);
+        if (state != DefaultState && IsStateActive(DefaultState.state))
+        {
+            DefaultState.Exit();
+        }
+
+        // Exit and remove all non-parallel states from activeStates if the state is not parallel
+        if (!state.runParallel)
+        {
+            foreach (var s in ActiveStates)
+            {
+                if (s != state && !s.runParallel)
+                    s.Exit();
+            }
+        }
+    }
+
 
     protected virtual void Update()
     {
@@ -63,45 +94,10 @@ public abstract class StateMachine<EState, SConfig> : MonoBehaviour where EState
             return;
         }
         stateToExit.Exit();
-        // ActiveStates.Remove(stateToExit);
 
-        // if (queuedStates.Count > 0)
-        // {
-        //     queuedStates.ForEach(s => EnterState(s));
-        //     queuedStates.Clear();
-        // }
-        // if (ActiveStates.Count == 0)
-        // {
-        //     DefaultState.Enter();
-        //     // ActiveStates.Add(DefaultState);
-        // }
     }
 
-    internal void OnAfterStateExit(EState state)
-    {
-        if (ActiveStates.Count == 0 && !state.Equals(DefaultState.state))
-        {
-            DefaultState.Enter();
-        }
-    }
-    internal void OnBeforeStateEnter(EState state)
-    {
-        if (IsStateActive(DefaultState.state))
-        {
-            DefaultState.Exit();
-        }
-        var stateObject = States.Find(s => s.state.Equals(state));
 
-        // Exit and remove all non-parallel states from activeStates if the state is not parallel
-        if (!stateObject.runParallel)
-        {
-            foreach (var s in ActiveStates)
-            {
-                if (!s.runParallel)
-                    s.Exit();
-            }
-        }
-    }
 
 
     /// <param name="state">The state to exit.</param>

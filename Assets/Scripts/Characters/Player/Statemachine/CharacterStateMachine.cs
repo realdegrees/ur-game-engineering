@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,7 @@ public struct PlayerBoundaryElement
     public Vector2 velocity;
     public Vector2 relativeVelocity;
     public Collider2D collider;
+    public float lastConnected;
     public bool connected;
     public float angle;
     public EGroundAngle angleType;
@@ -27,8 +29,8 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
 
     public bool IsFacingRight { get; private set; } = true;
 
-    private Rigidbody2D rb;
-    public Rigidbody2D Rb => rb;
+    [HideInInspector]
+    public Rigidbody2D rb;
     [HideInInspector]
     public int jumpsSinceGrounded = 0;
 
@@ -37,7 +39,8 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     protected override void Awake()
     {
         base.Awake();
-        rb = GetComponent<Rigidbody2D>();
+        TryGetComponent(out rb);
+        Debug.Log(rb);
         States.ForEach(state => ((CharacterState)state).SetRigidbody(rb));
     }
 
@@ -78,6 +81,10 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         {
             ground.hit.normal = transform.up;
         }
+        else
+        {
+            ground.lastConnected = Time.time;
+        }
     }
 
     private void CeilingCheck()
@@ -89,6 +96,10 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         if (!ceiling.connected)
         {
             ceiling.hit.normal = -transform.up;
+        }
+        else
+        {
+            ceiling.lastConnected = Time.time;
         }
     }
 
