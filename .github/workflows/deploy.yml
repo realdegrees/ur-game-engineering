@@ -6,6 +6,8 @@ on:
 
 jobs:
   publish-to-itch:
+    # Temporarily disabled in favor of using GitHub Releases
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
