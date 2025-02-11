@@ -1,1 +1,52 @@
-﻿{"inkVersion":21,"root":[["^What do you think this does? ","#","^speaker:Companion ","/#","#","^portrait:companion","/#","\n","^No clue. Only one way to find out. ","#","^speaker:Player ","/#","#","^portrait:player","/#","\n","^... well, shouldn't have done that. ","#","^speaker:Companion ","/#","#","^portrait:companion","/#","\n","^Yup. Oops. ","#","^speaker:Player ","/#","#","^portrait:player","/#","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
+﻿{
+    "inkVersion": 21,
+    "root": [
+        [
+            "^What do you think this does? ",
+            "#",
+            "^speaker:Companion ",
+            "/#",
+            "#",
+            "^portrait:companion",
+            "/#",
+            "\n",
+            "^No clue. Only one way to find out. ",
+            "#",
+            "^speaker:Player ",
+            "/#",
+            "#",
+            "^portrait:player",
+            "/#",
+            "\n",
+            "^... well, shouldn't have done that. ",
+            "#",
+            "^speaker:Companion ",
+            "/#",
+            "#",
+            "^portrait:companion",
+            "/#",
+            "\n",
+            "^Yup. Oops. ",
+            "#",
+            "^speaker:Player ",
+            "/#",
+            "#",
+            "^portrait:player",
+            "/#",
+            "\n",
+            [
+                "done",
+                {
+                    "#f": 5,
+                    "#n": "g-0"
+                }
+            ],
+            null
+        ],
+        "done",
+        {
+            "#f": 1
+        }
+    ],
+    "listDefs": {}
+}
