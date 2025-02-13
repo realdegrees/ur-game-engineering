@@ -151,7 +151,6 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
                 }
             }
         }
-
     }
 
     private Sprite GetPortrait(string tag)
