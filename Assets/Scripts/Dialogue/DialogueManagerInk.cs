@@ -9,10 +9,17 @@ using UnityEngine.EventSystems;
 public class DialogueManagerInk : MonoBehaviour
 {
     [SerializeField] private GameObject[] choices;
+    //[SerializeField] private TextMeshProUGUI displayNameText;
+    [SerializeField] private Image displayPortrait;
+    [SerializeField] private Sprite playerPortrait;
+    [SerializeField] private Sprite companionPortrait;
+    [SerializeField] private GameObject portraitFrame;
+    [SerializeField] private GameObject nameFrame;
+
+    private Dictionary<string, Sprite> portraits;
+    private TextMeshProUGUI displayNameText;
     private TextMeshProUGUI[] choicesText;
 
-    //public Image characterIcon;
-    //public TMPro.TextMeshProUGUI characterName;
     public TMPro.TextMeshProUGUI dialogueText;
     public Animator animator;
     public float typingSpeed = 0.02f;
@@ -21,6 +28,9 @@ public class DialogueManagerInk : MonoBehaviour
     private bool dialogueIsPlaying;
 
     private static DialogueManagerInk instance;
+
+    private const string SPEAKER_TAG = "speaker";
+    private const string PORTRAIT_TAG = "portrait";
 
     private void Awake()
     {
@@ -34,6 +44,12 @@ public class DialogueManagerInk : MonoBehaviour
     private void Start()
     {
         dialogueIsPlaying = false;
+        displayNameText = nameFrame.transform.Find("DisplayNameText").GetComponent<TextMeshProUGUI>();
+        portraits = new Dictionary<string, Sprite>
+        {
+            { "player", playerPortrait },
+            { "companion", companionPortrait }
+        };
 
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
@@ -62,7 +78,6 @@ public class DialogueManagerInk : MonoBehaviour
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         animator.SetTrigger("Enter");
-       // dialoguePanel.SetActive(true);
 
         ContinueStory();
     }
@@ -70,7 +85,6 @@ public class DialogueManagerInk : MonoBehaviour
     private void ExitDialogueMode()
     {
         dialogueIsPlaying = false;
-        //dialoguePanel.SetActive(false);
         animator.SetTrigger("Exit");
         dialogueText.text = "";
     }
@@ -81,12 +95,66 @@ public class DialogueManagerInk : MonoBehaviour
         {
             dialogueText.text = currentStory.Continue();
             DisplayChoices();
-            //characterIcon.sprite = currentLine.character.icon;
-            //characterName.text = currentLine.character.name;
+            HandleTags(currentStory.currentTags);
         }
         else
         {
             ExitDialogueMode();
+        }
+    }
+
+    private void HandleTags(List<string> currentTags)
+    {
+        Debug.Log(currentTags.Count);
+        if (currentTags.Count == 0)
+        {
+            portraitFrame.SetActive(false);
+            nameFrame.SetActive(false);
+        }
+        else
+        {
+            portraitFrame.SetActive(true);
+            nameFrame.SetActive(true);
+            foreach (string tag in currentTags)
+            {
+                string[] splitTag = tag.Split(':');
+                if (splitTag.Length != 2)
+                {
+                    Debug.LogError("Tag could not be parsed: " + tag);
+                }
+                string tagKey = splitTag[0].Trim();
+                string tagValue = splitTag[1].Trim();
+
+                switch (tagKey)
+                {
+                    case SPEAKER_TAG:
+                        displayNameText.text = tagValue;
+                        break;
+                    case PORTRAIT_TAG:
+                        Debug.Log("portrait=" + tagValue);
+                        displayPortrait.sprite = GetPortrait(tagValue);
+                        break;
+                    default:
+                        Debug.LogWarning("Tag came in but is not currently being handled: " + tag);
+                        break;
+                }
+            }
+        }
+        
+    }
+
+    private Sprite GetPortrait(string tag)
+    {
+        Debug.Log("Tag for the Portrait: " + tag);
+         if (portraits.TryGetValue(tag, out Sprite portrait))
+        {  
+            //portraitFrame.SetActive(true);
+            return portrait;
+        }
+        else
+        {
+            Debug.LogWarning("Tag came in but is not currently being handled: " + tag);
+            return null;
         }
     }
 
