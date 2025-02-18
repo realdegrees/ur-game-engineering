@@ -15,6 +15,7 @@ public class DialogueManagerInk : MonoBehaviour
     [SerializeField] private Sprite companionPortrait;
     [SerializeField] private GameObject portraitFrame;
     [SerializeField] private GameObject nameFrame;
+    [SerializeField] private Button continueBtn;
 
     private Dictionary<string, Sprite> portraits;
     private TextMeshProUGUI displayNameText;
@@ -93,9 +94,17 @@ public class DialogueManagerInk : MonoBehaviour
     {
         if (currentStory.canContinue)
         {
+            if (currentStory.currentChoices.Count > 0)
+            {
+                Debug.Log("Choices");
+            } else{
+                Debug.Log("No Choices can be made here");
+
+            }
             dialogueText.text = currentStory.Continue();
             DisplayChoices();
             HandleTags(currentStory.currentTags);
+            continueBtn.interactable = currentStory.currentChoices.Count == 0;
         }
         else
         {
@@ -145,7 +154,6 @@ public class DialogueManagerInk : MonoBehaviour
 
     private Sprite GetPortrait(string tag)
     {
-        Debug.Log("Tag for the Portrait: " + tag);
          if (portraits.TryGetValue(tag, out Sprite portrait))
         {  
             //portraitFrame.SetActive(true);
@@ -161,6 +169,8 @@ public class DialogueManagerInk : MonoBehaviour
     private void DisplayChoices()
     {
         List<Choice> currentChoices = currentStory.currentChoices;
+
+        continueBtn.interactable = currentChoices.Count == 0;
 
         if (currentChoices.Count > choices.Length)
         {
