@@ -1,18 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class DialogueTrigger : MonoBehaviour
+public class DialogueTrigger : EditorZone<DialogueTrigger>
 {
-    [SerializeField] private TextAsset inkJSON;
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.transform.root.CompareTag("Player"))
-        {
-            Debug.Log("Entered Dialogue Zone");
-            DialogueManagerInk.GetInstance().EnterDialogueMode(inkJSON);
-        }
-    }
 
 }
