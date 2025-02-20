@@ -442,6 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5a7de102476964ea63c066b203bb41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateMachine: {fileID: 0}
 --- !u!114 &3535363739658791604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +459,7 @@ MonoBehaviour:
   groundCheckCollider: {fileID: 4058238303049362350}
   ceilingCheckCollider: {fileID: 1706616017903692556}
   bodyCollider: {fileID: 6756067221394343119}
+  rb: {fileID: 0}
   jumpsSinceGrounded: 0
 --- !u!50 &2856253638579531388
 Rigidbody2D:
@@ -474,7 +476,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2.5
+  m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 148751317c40316408226e07cb27145f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2

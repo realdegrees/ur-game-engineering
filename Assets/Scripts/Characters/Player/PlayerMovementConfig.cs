@@ -15,6 +15,7 @@ public class PlayerMovementConfig : StateMachineConfig<ECharacterState, PlayerMo
     [Range(.1f, 10f)] public float GroundDecelerationRate = 2f;
     [Range(.1f, 10f)] public float AirAccelerationRate = .8f;
     [Range(.1f, 10f)] public float AirDecelerationRate = .3f;
+    [Range(.5f, 5)] public float GravityMultiplier = 2.5f;
 
     [Tooltip("The horizontal speed at which the character should turn.")]
     [Range(0f, 3f)] public float TurnThreshold = 1f;

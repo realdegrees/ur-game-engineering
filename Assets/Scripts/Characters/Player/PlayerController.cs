@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterStateMachine))]
@@ -22,8 +23,17 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        HandleGravity();
         HandleMovement();
         HandleFall();
+    }
+
+    private void HandleGravity()
+    {
+        if (!stateMachine.ground.connected)
+        {
+            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.config.GravityMultiplier);
+        }
     }
 
     private void FlipCheck()
