@@ -24,23 +24,13 @@ public class IdleState : CharacterState
 
     protected override float? OnPhysicsUpdate()
     {
-        // ? Not sure if this should be here or the state machine or a separate component
-        // Sticks to moving ground
         var csm = (CharacterStateMachine)stateMachine;
-        if (csm.ground.collider)
+        if (csm.ground.collider && csm.ground.collider.attachedRigidbody)
         {
-            if (csm.ground.collider.attachedRigidbody)
-                rb.velocity = csm.ground.collider.attachedRigidbody.velocity;
-            if (!csm.ground.angleType.Equals(EGroundAngle.Flat))
-            {
-                rb.velocity = Vector2.zero;
-            }
-
-
+            rb.velocity = csm.ground.collider.attachedRigidbody.velocity;
         }
 
         return null;
-        // maybe apply gravity and/or deceleration here?
     }
 
 
