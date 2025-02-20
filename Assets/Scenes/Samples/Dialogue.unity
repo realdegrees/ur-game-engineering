@@ -4753,7 +4753,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inkJSON: {fileID: 4900000, guid: 6d11d025aa5d36649be993363b92424a, type: 3}
+  numberOfAllowedActivations: 1
+  duration: 0
+  cooldown: 0
+  showZone: 1
+  zoneColor: {r: 0, g: 1, b: 0, a: 1}
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCooldownReset:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDurationPassed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &1551981275
 BoxCollider2D:
   m_ObjectHideFlags: 0
