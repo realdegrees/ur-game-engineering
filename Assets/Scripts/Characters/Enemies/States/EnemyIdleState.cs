@@ -2,10 +2,10 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "IdleState", menuName = "StateMachines/States/Character/IdleState")]
-public class IdleState : CharacterState
+[CreateAssetMenu(fileName = "IdleState", menuName = "StateMachines/States/Enemy/IdleState")]
+public class EnemyIdleState : EnemyState
 {
-    public IdleState() : base(ECharacterState.Idle)
+    public EnemyIdleState() : base(EEnemyState.Idle)
     {
     }
 
@@ -24,7 +24,7 @@ public class IdleState : CharacterState
 
     protected override float? OnPhysicsUpdate()
     {
-        var csm = (CharacterStateMachine)stateMachine;
+        var csm = (EnemyStateMachine)stateMachine;
         if (csm.ground.collider && csm.ground.collider.attachedRigidbody)
         {
             rb.velocity = csm.ground.collider.attachedRigidbody.velocity;

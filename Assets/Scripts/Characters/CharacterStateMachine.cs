@@ -51,7 +51,6 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         // activeStates.ForEach(s => activeStatesLog.Add(s.state.ToString()));
         // Debug.Log(string.Join(", ", activeStatesLog));
 
-        FlipCheck();
         GroundCheck();
         CeilingCheck();
 
@@ -60,15 +59,6 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     }
 
     #region Generic State Checks
-    private void FlipCheck()
-    {
-        if (ground.relativeVelocity.x > config.TurnThreshold && !IsFacingRight || ground.relativeVelocity.x < -config.TurnThreshold && IsFacingRight)
-        {
-            IsFacingRight = !IsFacingRight;
-            transform.Rotate(0f, 180f, 0f);
-            // OnFlip.Invoke(isFacingRight);
-        }
-    }
     private void GroundCheck()
     {
         ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, config.BottomRange, config.GroundLayer);

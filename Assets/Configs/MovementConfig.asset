@@ -27,6 +27,7 @@ MonoBehaviour:
   GroundDecelerationRate: 8
   AirAccelerationRate: 3
   AirDecelerationRate: 4
+  GravityMultiplier: 2.5
   TurnThreshold: 1
   MaxSlopeAngle: 62
   DownSlopeSpeedMultiplier: 0.7
@@ -45,7 +46,7 @@ MonoBehaviour:
   MaxFallSpeed: 35
   JumpHeightCompensationFactor: 1.1
   GravityOnReleaseMultiplier: 1.2
-  NumberOfJumpsAllowed: 1
+  NumberOfJumpsAllowed: 2
   FastFallIntensity: 13.6
   FastFallIntensityApex: 3
   CoyoteTime: 0.08
