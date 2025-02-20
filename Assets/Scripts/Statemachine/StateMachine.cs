@@ -15,8 +15,8 @@ public abstract class StateMachine<EState, SConfig> : MonoBehaviour where EState
     private State<EState, SConfig> DefaultState => config.states[0];
     // private List<EState> queuedStates = new();
 
-    public event Action<State<EState, SConfig>> OnStateExit;
-    public event Action<State<EState, SConfig>> OnStateEnter;
+    public event Action<State<EState, SConfig>> OnStateExit = delegate { };
+    public event Action<State<EState, SConfig>> OnStateEnter = delegate { };
 
     protected virtual void Awake()
     {
