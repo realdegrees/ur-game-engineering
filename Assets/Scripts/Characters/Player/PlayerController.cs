@@ -7,19 +7,39 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public CharacterStateMachine stateMachine;
 
-    public event Action<bool> OnFlip;
+    public event Action OnFlip = delegate { };
+
+    public bool IsFacingRight { get; private set; } = true;
 
     private void Start()
     {
         TryGetComponent(out stateMachine);
         InputManager.Instance.OnJumpPressed += HandleJump;
     }
-
-
+    private void Update()
+    {
+        FlipCheck();
+    }
     private void FixedUpdate()
     {
         HandleMovement();
         HandleFall();
+    }
+
+    private void FlipCheck()
+    {
+        if (InputManager.Instance.Movement < 0 && IsFacingRight)
+        {
+            IsFacingRight = false;
+            transform.rotation = Quaternion.Euler(0f, 0, 0f);
+            OnFlip.Invoke();
+        }
+        else if (InputManager.Instance.Movement > 0 && !IsFacingRight)
+        {
+            IsFacingRight = true;
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            OnFlip.Invoke();
+        }
     }
 
     private void HandleMovement()

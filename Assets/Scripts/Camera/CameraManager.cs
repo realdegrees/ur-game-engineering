@@ -54,7 +54,7 @@ public class CameraManager : Manager<CameraManager>
     }
 
 
-    private void OnPlayerFlip(bool isFacingRight)
+    private void OnPlayerFlip()
     {
         var isFollowCamera = activeCameraData.type == CameraType.Default;
         if (!isFollowCamera)
