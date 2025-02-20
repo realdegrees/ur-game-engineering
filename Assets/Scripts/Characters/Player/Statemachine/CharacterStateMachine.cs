@@ -13,6 +13,7 @@ public struct PlayerBoundaryElement
     public float lastConnected;
     public bool connected;
     public float angle;
+    public Vector2 perpendicular;
     public EGroundAngle angleType;
 }
 public enum EGroundAngle { Flat, Down, Up }
@@ -58,7 +59,6 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         base.Update();
     }
 
-
     #region Generic State Checks
     private void FlipCheck()
     {
@@ -77,6 +77,8 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         ground.relativeVelocity = ground.collider && ground.collider.attachedRigidbody ? rb.velocity - ground.collider.attachedRigidbody.velocity : rb.velocity;
         ground.angle = ground.connected ? Vector2.Angle(transform.up, ground.hit.normal) : 0;
         ground.angleType = ground.angle > .5f ? (Vector2.Dot(ground.hit.normal, transform.up) > 0 ? EGroundAngle.Down : EGroundAngle.Up) : EGroundAngle.Flat;
+        ground.perpendicular = ground.connected ? Vector2.Perpendicular(ground.hit.normal).normalized : Vector2.left;
+
         if (!ground.connected)
         {
             ground.hit.normal = transform.up;
@@ -93,6 +95,8 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         ceiling.collider = ceiling.hit.collider;
         ceiling.angle = Vector2.Angle(transform.up, ceiling.hit.normal);
         ceiling.connected = ceiling.collider != null && ceiling.angle <= config.CeilingAngleThreshold;
+        ceiling.perpendicular = ceiling.connected ? Vector2.Perpendicular(ceiling.hit.normal).normalized : Vector2.left;
+
         if (!ceiling.connected)
         {
             ceiling.hit.normal = -transform.up;
