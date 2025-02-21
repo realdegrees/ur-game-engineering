@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using Pathfinding;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
