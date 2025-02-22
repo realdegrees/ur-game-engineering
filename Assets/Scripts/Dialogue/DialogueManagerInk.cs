@@ -62,6 +62,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         {
             return;
         }
+        Debug.Log(stateMachine.ground.connected);
     }
 
     public void EnterDialogueMode(TextAsset inkJSON)
