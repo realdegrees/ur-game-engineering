@@ -1343,9 +1343,9 @@ Transform:
   m_GameObject: {fileID: 605613547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.06, y: 0.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 18.81, y: 1.13, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1282544242}
   m_Father: {fileID: 1920443495}
@@ -1404,7 +1404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfAllowedActivations: 0
+  numberOfAllowedActivations: 1
   duration: 0
   cooldown: 0
   showZone: 1
@@ -10168,8 +10168,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1551981272}
   - component: {fileID: 1551981275}
-  - component: {fileID: 1551981274}
   - component: {fileID: 1551981273}
+  - component: {fileID: 1551981276}
   m_Layer: 0
   m_Name: DialogueZone3
   m_TagString: Untagged
@@ -10186,9 +10186,9 @@ Transform:
   m_GameObject: {fileID: 1551981271}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 56.36, y: -14.78, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 56.36, y: -13.79, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1742252057}
   m_Father: {fileID: 1920443495}
@@ -10235,35 +10235,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1551981274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551981271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfAllowedActivations: 1
-  duration: 0
-  cooldown: 0
-  showZone: 1
-  zoneColor: {r: 0, g: 1, b: 0, a: 1}
-  OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeactivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCooldownReset:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDurationPassed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!61 &1551981275
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10309,6 +10280,59 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &1551981276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551981271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfAllowedActivations: 0
+  duration: 0
+  cooldown: 0
+  showZone: 1
+  zoneColor: {r: 0, g: 1, b: 0, a: 1}
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 420061487}
+        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
+        m_MethodName: EnterDialogueMode
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 4900000, guid: 6d11d025aa5d36649be993363b92424a, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.TextAsset, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 420061487}
+        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
+        m_MethodName: ExitDialogueMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCooldownReset:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDurationPassed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1657923842
 GameObject:
   m_ObjectHideFlags: 0
@@ -10711,8 +10735,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1738942884}
   - component: {fileID: 1738942886}
-  - component: {fileID: 1738942885}
   - component: {fileID: 1738942887}
+  - component: {fileID: 1738942888}
   m_Layer: 0
   m_Name: DialogueZone1
   m_TagString: Untagged
@@ -10729,42 +10753,13 @@ Transform:
   m_GameObject: {fileID: 1738942883}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 51.49, y: 0.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 49.51, y: 1.26, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1225100358}
   m_Father: {fileID: 1920443495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1738942885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738942883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfAllowedActivations: 1
-  duration: 0
-  cooldown: 0
-  showZone: 1
-  zoneColor: {r: 0, g: 1, b: 0, a: 1}
-  OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeactivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCooldownReset:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDurationPassed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!61 &1738942886
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10852,6 +10847,59 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1738942888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738942883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6377ec0bce7ae4f9adbb40e70513fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfAllowedActivations: 1
+  duration: 0
+  cooldown: 0
+  showZone: 1
+  zoneColor: {r: 0, g: 1, b: 0, a: 1}
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 420061487}
+        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
+        m_MethodName: EnterDialogueMode
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 4900000, guid: 9367759c9bcb5b84cb293aad399fb63a, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.TextAsset, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 420061487}
+        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
+        m_MethodName: ExitDialogueMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCooldownReset:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDurationPassed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1742252056
 GameObject:
   m_ObjectHideFlags: 0

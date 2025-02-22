@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public class DialogueManagerInk : MonoBehaviour
 {
     [SerializeField] private GameObject[] choices;
-    //[SerializeField] private TextMeshProUGUI displayNameText;
     [SerializeField] private Image displayPortrait;
     [SerializeField] private Sprite playerPortrait;
     [SerializeField] private Sprite companionPortrait;
@@ -20,6 +19,8 @@ public class DialogueManagerInk : MonoBehaviour
     private Dictionary<string, Sprite> portraits;
     private TextMeshProUGUI displayNameText;
     private TextMeshProUGUI[] choicesText;
+    private Rigidbody2D rb;
+    private CharacterStateMachine stateMachine;
 
     public TMPro.TextMeshProUGUI dialogueText;
     public Animator animator;
@@ -44,6 +45,8 @@ public class DialogueManagerInk : MonoBehaviour
 
     private void Start()
     {
+        rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
         dialogueIsPlaying = false;
         displayNameText = nameFrame.transform.Find("DisplayNameText").GetComponent<TextMeshProUGUI>();
         portraits = new Dictionary<string, Sprite>
@@ -67,6 +70,7 @@ public class DialogueManagerInk : MonoBehaviour
         {
             return;
         }
+        Debug.Log(stateMachine.ground.connected);
     }
 
     public static DialogueManagerInk GetInstance()
@@ -76,17 +80,27 @@ public class DialogueManagerInk : MonoBehaviour
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
+        StartCoroutine(FreezePlayer());
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
-        animator.SetTrigger("Enter");
+        animator.Play("DialogueIn");
 
         ContinueStory();
     }
 
+    private IEnumerator FreezePlayer()
+    {
+        while (!stateMachine.ground.connected) {
+            yield return null;
+        }
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+    }
+
     private void ExitDialogueMode()
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         dialogueIsPlaying = false;
-        animator.SetTrigger("Exit");
+        animator.Play("DialogueOut");
         dialogueText.text = "";
     }
 
@@ -96,10 +110,7 @@ public class DialogueManagerInk : MonoBehaviour
         {
             if (currentStory.currentChoices.Count > 0)
             {
-                Debug.Log("Choices");
-            } else{
-                Debug.Log("No Choices can be made here");
-
+            } else {
             }
             dialogueText.text = currentStory.Continue();
             DisplayChoices();
@@ -114,7 +125,6 @@ public class DialogueManagerInk : MonoBehaviour
 
     private void HandleTags(List<string> currentTags)
     {
-        Debug.Log(currentTags.Count);
         if (currentTags.Count == 0)
         {
             portraitFrame.SetActive(false);
@@ -140,7 +150,6 @@ public class DialogueManagerInk : MonoBehaviour
                         displayNameText.text = tagValue;
                         break;
                     case PORTRAIT_TAG:
-                        Debug.Log("portrait=" + tagValue);
                         displayPortrait.sprite = GetPortrait(tagValue);
                         break;
                     default:
@@ -156,7 +165,6 @@ public class DialogueManagerInk : MonoBehaviour
     {
          if (portraits.TryGetValue(tag, out Sprite portrait))
         {  
-            //portraitFrame.SetActive(true);
             return portrait;
         }
         else
