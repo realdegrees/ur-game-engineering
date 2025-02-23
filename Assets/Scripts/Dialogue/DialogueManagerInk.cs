@@ -37,10 +37,10 @@ public class DialogueManagerInk : MonoBehaviour
     private void Awake()
     {
         if (instance != null)
-         {
+        {
             Debug.Log("DialogueManager already exists in the scene");
-         }
-         instance = this;
+        }
+        instance = this;
     }
 
     private void Start()
@@ -90,7 +90,8 @@ public class DialogueManagerInk : MonoBehaviour
 
     private IEnumerator FreezePlayer()
     {
-        while (!stateMachine.ground.connected) {
+        while (!stateMachine.ground.connected)
+        {
             yield return null;
         }
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
@@ -98,6 +99,10 @@ public class DialogueManagerInk : MonoBehaviour
 
     private void ExitDialogueMode()
     {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("DialogueInvisible"))
+        {
+            return;
+        }
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         dialogueIsPlaying = false;
         animator.Play("DialogueOut");
@@ -110,7 +115,9 @@ public class DialogueManagerInk : MonoBehaviour
         {
             if (currentStory.currentChoices.Count > 0)
             {
-            } else {
+            }
+            else
+            {
             }
             dialogueText.text = currentStory.Continue();
             DisplayChoices();
@@ -158,13 +165,13 @@ public class DialogueManagerInk : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     private Sprite GetPortrait(string tag)
     {
-         if (portraits.TryGetValue(tag, out Sprite portrait))
-        {  
+        if (portraits.TryGetValue(tag, out Sprite portrait))
+        {
             return portrait;
         }
         else
