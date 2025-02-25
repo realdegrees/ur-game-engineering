@@ -23,6 +23,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     [Min(0)]
     [Tooltip("The cooldown between activations in seconds")]
     public float cooldown = 0;
+    [Tooltip("Determins whether player movement should be frozen OnActivate and unfrozen after cooldown ends")]
+    public bool freezePlayer = false;
 
     [Header("Gizmo Settings")]
     public bool showZone = true;
@@ -38,7 +40,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected int activations = 0;
     protected Collider2D zoneCollider;
 
-
+    private Rigidbody2D rb;
+    private CharacterStateMachine stateMachine;
 
     #region Lifecycle Events
     protected virtual void Awake()
@@ -49,6 +52,12 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
             Debug.LogWarning($"Zone collider on {gameObject.name} is not set to 'Trigger'. Setting it automatically.");
             zoneCollider.isTrigger = true;
         }
+    }
+
+    void Start()
+    {
+        rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
@@ -73,6 +82,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                         currentCooldown -= Time.deltaTime;
                         yield return null;
                     }
+                    if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                     OnCooldownReset.Invoke();
                 }
                 IEnumerator Duration()
@@ -88,12 +98,13 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 }
 
                 OnActivate.Invoke();
+                if (freezePlayer) StartCoroutine(FreezePlayer());
             }
 
         }
     }
     private void OnTriggerExit2D(Collider2D other)
-    {
+    { 
         if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
         {
             if (other == controller.interactionCollider)
@@ -101,6 +112,15 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 OnDeactivate.Invoke();
             }
         }
+    }
+
+    private IEnumerator FreezePlayer()
+    {
+        while (!stateMachine.ground.connected)
+        {
+            yield return null;
+        }
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
     }
 
     #endregion
