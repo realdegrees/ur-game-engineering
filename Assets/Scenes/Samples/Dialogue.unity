@@ -1406,7 +1406,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfAllowedActivations: 1
   duration: 0
-  cooldown: 0
+  cooldown: 3
+  freezePlayer: 1
   showZone: 1
   zoneColor: {r: 0, g: 1, b: 0, a: 1}
   OnActivate:
@@ -1426,19 +1427,7 @@ MonoBehaviour:
         m_CallState: 2
   OnDeactivate:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 420061487}
-        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
-        m_MethodName: ExitDialogueMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnCooldownReset:
     m_PersistentCalls:
       m_Calls: []
@@ -10294,7 +10283,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfAllowedActivations: 0
   duration: 0
-  cooldown: 0
+  cooldown: 3
+  freezePlayer: 1
   showZone: 1
   zoneColor: {r: 0, g: 1, b: 0, a: 1}
   OnActivate:
@@ -10314,19 +10304,7 @@ MonoBehaviour:
         m_CallState: 2
   OnDeactivate:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 420061487}
-        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
-        m_MethodName: ExitDialogueMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnCooldownReset:
     m_PersistentCalls:
       m_Calls: []
@@ -10861,7 +10839,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfAllowedActivations: 1
   duration: 0
-  cooldown: 0
+  cooldown: 3
+  freezePlayer: 0
   showZone: 1
   zoneColor: {r: 0, g: 1, b: 0, a: 1}
   OnActivate:
@@ -10881,19 +10860,7 @@ MonoBehaviour:
         m_CallState: 2
   OnDeactivate:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 420061487}
-        m_TargetAssemblyTypeName: DialogueManagerInk, Assembly-CSharp
-        m_MethodName: ExitDialogueMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnCooldownReset:
     m_PersistentCalls:
       m_Calls: []
