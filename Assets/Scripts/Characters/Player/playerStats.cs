@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+
 public class PlayerStats
 {
 
     private int health;
     private int stamina;
     private int damage;
-    private string[] inventory;
+    private List<Item> inventory;
 
 
     public PlayerStats(int health, int stamina, int damage, string[] inventory)
@@ -13,7 +15,7 @@ public class PlayerStats
         this.health = health;
         this.stamina = stamina;
         this.damage = damage;
-        this.inventory = inventory;
+        this.inventory = new List<Item>();
     }
 
     public int Heal(int heal)
@@ -30,66 +32,68 @@ public class PlayerStats
     public int SetHealth(int newHealthStat)
     {
         this.health = newHealthStat;
-        return this.health;
+        return health;
     }
 
     public int GetStamina()
     {
-        return this.stamina;
+        return stamina;
     }
 
     public int SetStamina(int newStaminaStat)
     {
-        this.stamina = newStaminaStat;
-        return this.stamina;
+        stamina = newStaminaStat;
+        return stamina;
     }
 
     public int TakeDamage(int damageTaken)
     {
-        this.health -= damage;
-        return this.health;
+        health -= damage;
+        return health;
     }
 
     public int GetDamage()
     {
-        return this.damage;
+        return damage;
     }
 
     public int SetDamage(int newDamageStat)
     {
-        this.damage = newDamageStat;
-        return this.damage;
+        damage = newDamageStat;
+        return damage;
     }
 
     public int DealDamage()
     {
-        return this.damage;
+        return damage;
     }
 
-    public bool AddItem(string item)
+    public void AddItem(Item item)
     {
-        for (int i = 0; i < this.inventory.Length; i++)
+        if (inventory.Count < 3)
         {
-            if (this.inventory[i] == null)
-            {
-                this.inventory[i] = item;
-                return true;
-            }
+            inventory.Add(item);
         }
-        return false;
+
     }
 
-    public bool RemoveItem(string item)
+    public void RemoveItem(Item item)
     {
-        for (int i = 0; i < this.inventory.Length; i++)
+        if (inventory.Count > 0)
         {
-            if (this.inventory[i] == item)
-            {
-                this.inventory[i] = null;
-                return true;
-            }
+            inventory.Remove(item);
         }
-        return false;
+
+    }
+
+    public void UseItem(Item item)
+    {
+        if (inventory.Contains(item))
+        {
+            item.Use(this);
+            RemoveItem(item);
+        }
+
     }
 
 }
