@@ -40,6 +40,7 @@ public class PlayerMovementConfig : StateMachineConfig<ECharacterState, PlayerMo
     [Header("Jump")]
     public float MaxJumpHeight = 6.5f;
     public float MinJumpHeight = .5f;
+    [Range(1f, 2f)] public float JumpSpeedMult = 1.2f;
     [Range(0f, 1f)] public float TimeTillJumpApex = 0.35f; // TODO: calculate this from the project gravity instead
     public float MaxFallSpeed = 26f;
     [Range(1f, 1.1f)] public float JumpHeightCompensationFactor = 1.054f;

@@ -38,14 +38,23 @@ public class JumpState : CharacterState
     protected override float? OnPhysicsUpdate()
     {
         bool isPastMinJumpHeight = Vector2.Distance(startPosition, rb.position) > Config.MinJumpHeight;
-        bool hitCeiling = ((CharacterStateMachine)stateMachine).ceiling.connected && Config.CeilingAngleThreshold < ((CharacterStateMachine)stateMachine).ceiling.angle;
+        PlayerBoundaryElement ceiling = ((CharacterStateMachine)stateMachine).ceiling;
 
         // Handle ceiling collisions
         // Handle early jump release (encased in else if to ensure it can't trigger when the player is already at the apex)
-        if (hitCeiling || (earlyRelease && isPastMinJumpHeight))
+        if (Time.time - ceiling.lastConnected < 0.1f)
+        {
+            var outAngle = Vector2.Reflect(rb.velocity, ceiling.hit.normal);
+            outAngle = Vector2.Lerp(outAngle, Vector2.up, 0.3f).normalized;
+            rb.AddForce(outAngle * Config.FastFallIntensity, ForceMode2D.Impulse);
+            return -1;
+        }
+        if (earlyRelease && isPastMinJumpHeight)
         {
             // stateMachine.EnterState(ECharacterState.Falling);
-            // rb.AddForce(Physics2D.gravity.normalized * Config.FastFallIntensity, ForceMode2D.Impulse);
+            var outAngle = Vector2.Reflect(rb.velocity, Vector2.down);
+            outAngle = Vector2.Lerp(outAngle, Vector2.up, 0.1f).normalized;
+            rb.AddForce(outAngle * Config.FastFallIntensity, ForceMode2D.Impulse);
             return -1;
         }
 

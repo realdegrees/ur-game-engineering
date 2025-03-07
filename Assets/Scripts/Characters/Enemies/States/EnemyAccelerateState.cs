@@ -33,7 +33,7 @@ public class EnemyAccelerateState : EnemyState
 
     protected override float? OnPhysicsUpdate()
     {
-        if (InputManager.Instance.Movement == 0)
+        if (!((EnemyStateMachine)stateMachine).IsActive)
         {
             // stateMachine.ExitState(state);
             return -1;

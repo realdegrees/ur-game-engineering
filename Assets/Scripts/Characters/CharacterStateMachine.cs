@@ -11,6 +11,7 @@ public struct PlayerBoundaryElement
     public Vector2 relativeVelocity;
     public Collider2D collider;
     public float lastConnected;
+    public bool connectedOnThisFrame;
     public bool connected;
     public float angle;
     public Vector2 perpendicular;
@@ -61,9 +62,11 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     #region Generic State Checks
     private void GroundCheck()
     {
+        var prev = ground.connected;
         ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, config.BottomRange, config.GroundLayer);
         ground.collider = ground.hit.collider;
         ground.connected = ground.collider != null;
+        ground.connectedOnThisFrame = false;
         ground.relativeVelocity = ground.collider && ground.collider.attachedRigidbody ? rb.velocity - ground.collider.attachedRigidbody.velocity : rb.velocity;
         ground.angle = ground.connected ? Vector2.Angle(transform.up, ground.hit.normal) : 0;
         ground.angleType = ground.angle > .5f ? (Vector2.Dot(ground.hit.normal, transform.up) > 0 ? EGroundAngle.Down : EGroundAngle.Up) : EGroundAngle.Flat;
@@ -75,6 +78,10 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
         }
         else
         {
+            if (!prev)
+            {
+                ground.connectedOnThisFrame = true;
+            }
             ground.lastConnected = Time.time;
         }
     }

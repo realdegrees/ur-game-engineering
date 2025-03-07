@@ -31,4 +31,4 @@ MonoBehaviour:
   OnStateCancelled:
     m_PersistentCalls:
       m_Calls: []
-  enableStateEventLogs: 1
+  enableStateEventLogs: 0

@@ -16,11 +16,15 @@ public class EnemyMovementConfig : StateMachineConfig<EEnemyState, EnemyMovement
     [Range(.1f, 10f)] public float AirAccelerationRate = .8f;
     [Range(.1f, 10f)] public float AirDecelerationRate = .3f;
     [Range(.5f, 5)] public float GravityMultiplier = 2.5f;
-    [HideInInspector] public float nextWaypointDistance = 1f;
+    [Range(1, 10)] public int FollowDistance = 3;
+    [Range(1, 10)] public int ResumeDistance = 5;
+    [Range(1, 10)] public int WayPointLookAhead = 3;
 
     [Header("Jump")]
     public float MaxJumpHeight = 6.5f;
     public float MinJumpHeight = .5f;
+    [Range(1f, 2f)] public float JumpSpeedMult = 1.2f;
+    [Range(0f, 30f)] public float FastFallIntensity = 13f;
 
     public float jumpForce = 30f;
     public float jumpDetectionDistance = 1f;

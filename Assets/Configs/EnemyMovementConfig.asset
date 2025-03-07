@@ -19,24 +19,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 40198bb179df6a14c98372a98503d0ba, type: 2}
   - {fileID: 11400000, guid: bf3bb0303f806f649bd91e9f52a4ac0f, type: 2}
   - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
-  LedgeDepthThreshold: 0.5
+  LedgeDepthThreshold: 2.5
   LedgeDecelerationFactor: 20
-  MaxWalkSpeed: 11
-  GroundAccelerationRate: 1
-  GroundDecelerationRate: 3
-  AirAccelerationRate: 1
-  AirDecelerationRate: 1
+  MaxWalkSpeed: 13.5
+  GroundAccelerationRate: 5
+  GroundDecelerationRate: 8
+  AirAccelerationRate: 9
+  AirDecelerationRate: 6
   GravityMultiplier: 2.5
-  nextWaypointDistance: 1
-  MaxJumpHeight: 13
-  MinJumpHeight: 2
+  FollowDistance: 5
+  ResumeDistance: 10
+  WayPointLookAhead: 5
+  MaxJumpHeight: 12
+  MinJumpHeight: 4
   jumpForce: 30
-  jumpDetectionDistance: 1
-  pathUpdateDelta: 0.8
-  TurnThreshold: 0.11
+  jumpDetectionDistance: 1.5
+  pathUpdateDelta: 0.2
+  TurnThreshold: 0.1
   GroundLayer:
     serializedVersion: 2
     m_Bits: 2048
-  BottomRange: 0.02
+  BottomRange: 0.03
   TopRange: 0.02
   CeilingAngleThreshold: 25

@@ -33,22 +33,30 @@ public class EnemyJumpState : EnemyState
     protected override float? OnPhysicsUpdate()
     {
         bool isPastMinJumpHeight = Vector2.Distance(startPosition, rb.position) > Config.MinJumpHeight;
-        bool hitCeiling = ((EnemyStateMachine)stateMachine).ceiling.connected && Config.CeilingAngleThreshold < ((EnemyStateMachine)stateMachine).ceiling.angle;
-
+        PlayerBoundaryElement ceiling = ((EnemyStateMachine)stateMachine).ceiling;
+        RaycastHit2D jumpDirHit = Physics2D.Raycast(((EnemyStateMachine)stateMachine).ceilingCheckCollider.transform.position, rb.velocity, .5f, Config.GroundLayer);
         // Handle ceiling collisions
         // Handle early jump release (encased in else if to ensure it can't trigger when the player is already at the apex)
-        if (hitCeiling || isPastMinJumpHeight)
+        if (Time.time - ceiling.lastConnected < 0.1f)
         {
-            // stateMachine.EnterState(ECharacterState.Falling);
-            // rb.AddForce(Physics2D.gravity.normalized * Config.FastFallIntensity, ForceMode2D.Impulse);
+            var outAngle = Vector2.Reflect(rb.velocity, ceiling.hit.normal);
+            outAngle = Vector2.Lerp(outAngle, Vector2.up, 0.2f).normalized;
+            rb.AddForce(outAngle * Config.FastFallIntensity * 1.5f, ForceMode2D.Impulse);
+            return -1;
+
+        }
+        if (jumpDirHit.collider != null && isPastMinJumpHeight)
+        {
+            var outAngle = Vector2.Reflect(rb.velocity, Vector2.down);
+            outAngle = Vector2.Lerp(outAngle, Vector2.up, 0.2f).normalized;
+            rb.AddForce(outAngle * Config.FastFallIntensity, ForceMode2D.Impulse);
             return -1;
         }
 
         // Check if vertical velocity (adjusted for gravity direction) is zero and enter falling state
-        bool isFalling = Vector2.Angle(rb.velocity, Physics2D.gravity) < 90;
+        bool isFalling = rb.velocity.y < 0;
         if (isFalling)
         {
-            // stateMachine.EnterState(ECharacterState.JumpApex, new ECharacterState[] { ECharacterState.Falling });
             return 1;
         }
 

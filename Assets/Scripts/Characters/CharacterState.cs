@@ -36,7 +36,9 @@ public abstract class CharacterState : State<ECharacterState, PlayerMovementConf
         var ground = cStateMachine.ground;
         var groundHasRigidbody = ground.collider && ground.collider.attachedRigidbody;
         var offset = groundHasRigidbody ? ground.collider.attachedRigidbody.velocity.x : 0;
-        var desiredVelocity = Config.MaxWalkSpeed * InputManager.Instance.Movement + offset;
+        var isJumping = stateMachine.IsStateActive(ECharacterState.Jumping);
+        var walkSpeed = isJumping ? Config.MaxWalkSpeed * Config.JumpSpeedMult : Config.MaxWalkSpeed;
+        var desiredVelocity = walkSpeed * InputManager.Instance.Movement + offset;
         return desiredVelocity;
     }
 }

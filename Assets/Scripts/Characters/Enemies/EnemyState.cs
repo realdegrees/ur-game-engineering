@@ -12,7 +12,6 @@ public enum EEnemyState
     Jumping,
     Attacking,
     Falling,
-    Landing,
 }
 
 public abstract class EnemyState : State<EEnemyState, EnemyMovementConfig>
@@ -29,16 +28,18 @@ public abstract class EnemyState : State<EEnemyState, EnemyMovementConfig>
         var eStateMachine = (EnemyStateMachine)stateMachine;
 
         var pathDir = Vector2.zero;
-        if (eStateMachine.path != null && eStateMachine.currentWaypoint < eStateMachine.path.vectorPath.Count)
+        if (eStateMachine.IsActive)
         {
-            pathDir = ((Vector2)eStateMachine.path.vectorPath[eStateMachine.currentWaypoint] - rb.position).normalized;
+            pathDir = eStateMachine.pathDir.normalized;
         }
 
         // Add potentiol moving ground offset
         var ground = eStateMachine.ground;
         var groundHasRigidbody = ground.collider && ground.collider.attachedRigidbody;
         var offset = groundHasRigidbody ? ground.collider.attachedRigidbody.velocity.x : 0;
-        var desiredVelocity = Config.MaxWalkSpeed * pathDir.x + offset;
+        var isJumping = stateMachine.IsStateActive(EEnemyState.Jumping);
+        var walkSpeed = isJumping ? Config.MaxWalkSpeed * Config.JumpSpeedMult : Config.MaxWalkSpeed;
+        var desiredVelocity = walkSpeed * pathDir.x + offset;
         return desiredVelocity;
     }
 }

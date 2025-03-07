@@ -37,15 +37,15 @@ public class PlayerController : MonoBehaviour
 
     private void FlipCheck()
     {
-        if (InputManager.Instance.Movement < 0 && IsFacingRight)
+        if (InputManager.Instance.Movement > 0 && !IsFacingRight)
         {
-            IsFacingRight = false;
+            IsFacingRight = true;
             transform.rotation = Quaternion.Euler(0f, 0, 0f);
             OnFlip.Invoke();
         }
-        else if (InputManager.Instance.Movement > 0 && !IsFacingRight)
+        else if (InputManager.Instance.Movement < 0 && IsFacingRight)
         {
-            IsFacingRight = true;
+            IsFacingRight = false;
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             OnFlip.Invoke();
         }
