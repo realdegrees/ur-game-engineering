@@ -1407,7 +1407,7 @@ MonoBehaviour:
   numberOfAllowedActivations: 1
   duration: 0
   cooldown: 3
-  freezePlayer: 1
+  freezePlayer: 0
   showZone: 1
   zoneColor: {r: 0, g: 1, b: 0, a: 1}
   OnActivate:
@@ -10284,7 +10284,7 @@ MonoBehaviour:
   numberOfAllowedActivations: 0
   duration: 0
   cooldown: 3
-  freezePlayer: 1
+  freezePlayer: 0
   showZone: 1
   zoneColor: {r: 0, g: 1, b: 0, a: 1}
   OnActivate:
