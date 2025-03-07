@@ -41,13 +41,14 @@ MonoBehaviour:
   TopRange: 0.05
   CeilingAngleThreshold: 25
   MaxJumpHeight: 12
-  MinJumpHeight: 1
+  MinJumpHeight: 2
+  JumpSpeedMult: 1.3
   TimeTillJumpApex: 0.3
   MaxFallSpeed: 35
   JumpHeightCompensationFactor: 1.1
   GravityOnReleaseMultiplier: 1.2
   NumberOfJumpsAllowed: 2
-  FastFallIntensity: 13.6
+  FastFallIntensity: 8
   FastFallIntensityApex: 3
   CoyoteTime: 0.08
   TimeForUpwardsCancel: 0.0379

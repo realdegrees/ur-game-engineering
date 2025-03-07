@@ -13,7 +13,7 @@ public class EnemyStateMachine : StateMachine<EEnemyState, EnemyMovementConfig>
 {
     // region Pathfinding,
     [HideInInspector] public Seeker seeker;
-    [HideInInspector] private Path path;
+    [HideInInspector] public Path path;
     [HideInInspector] public Transform target;
     [HideInInspector] public Vector2 pathDir = Vector2.down;
     [HideInInspector] public float pathAngle = 0;
@@ -104,7 +104,7 @@ public class EnemyStateMachine : StateMachine<EEnemyState, EnemyMovementConfig>
         if (path == null || currentWaypoint >= path.vectorPath.Count)
             return;
 
-        var earlyPathWeightingFactor = .8f;
+        var earlyPathWeightingFactor = .5f;
         int waypointsToConsider = Mathf.Min(config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
         pathDir = Vector2.zero;
         pathAngle = 0;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Pathfinding;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]
@@ -20,6 +21,9 @@ public class EnemyController : MonoBehaviour
     private Vector2 patrolPointCenter;
     public int maxPlayerFollowDistance = 20;
     public int detectionDistance = 10;
+    public bool forceFollow = false;
+    public int forceFollowThreshold = 40;
+    private bool followModeEngaged = false;
 
     private void Start()
     {
@@ -81,6 +85,7 @@ public class EnemyController : MonoBehaviour
     {
         HandleGravity();
         HandleFall();
+        HandleForceFollow();
 
         if (stateMachine.IsActive)
         {
@@ -89,7 +94,29 @@ public class EnemyController : MonoBehaviour
         }
 
     }
+    private void HandleForceFollow()
+    {
+        if (!stateMachine.target || stateMachine.path == null)
+            return;
 
+        var distance = stateMachine.path.GetTotalLength();
+        if (forceFollow)
+        {
+            if (distance > forceFollowThreshold)
+            {
+                Debug.Log("Force follow");
+                stateMachine.rb.velocity = stateMachine.pathDir * stateMachine.config.MaxWalkSpeed;
+                stateMachine.rb.isKinematic = true;
+                followModeEngaged = true;
+            }
+        }
+
+        if (followModeEngaged && distance <= forceFollowThreshold)
+        {
+            stateMachine.rb.isKinematic = false;
+            followModeEngaged = false;
+        }
+    }
 
     private void HandleGravity()
     {
@@ -169,7 +196,7 @@ public class EnemyController : MonoBehaviour
         Debug.DrawRay(rayOrigin, -rb.transform.up * config.LedgeDepthThreshold, Color.blue);
 
         bool isLedge = !ledgeHit.collider;
-        bool wantsToGoDown = stateMachine.pathAngle >= 110;
+        bool wantsToGoDown = stateMachine.pathAngle >= 100;
         if (!wantsToGoDown && isLedge)
         {
             stateMachine.EnterState(EEnemyState.Jumping);
