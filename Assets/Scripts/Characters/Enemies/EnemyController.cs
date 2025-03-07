@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Pathfinding;
-using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]

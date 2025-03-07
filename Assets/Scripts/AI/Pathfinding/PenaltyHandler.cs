@@ -1,6 +1,4 @@
-using System;
 using Pathfinding;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PenaltyHandler : MonoBehaviour
