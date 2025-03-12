@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     [Range(0f, 1f)] public float backgroundMusicVolume = 1f;
     [Range(0f, 1f)] public float duckingFactor = 0.3f;
 
-    private static AudioManager instance;
+    public static AudioManager instance { get; private set; }
 
     private void Awake()
     {
@@ -25,19 +25,34 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        backgroundMusic.volume = backgroundMusicVolume;
-        PlayMusic();
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.volume = backgroundMusicVolume;
+            PlayMusic();
+        }
     }
 
     public void PlayMusic(bool loop = true)
     {
-        if(backgroundMusic.clip == null)
+        if(backgroundMusic.clip != null)
         {
-            Debug.LogWarning("No audio clip is assigned to backgroundMusic.");
-            return;
+            backgroundMusic.loop = loop;
+            backgroundMusic.Play();
         }
-        backgroundMusic.loop = loop;
-        backgroundMusic.Play();
+    }
+
+    public void ChangeMusic(AudioClip newClip, bool loop = true)
+    {
+        if (backgroundMusic != null)
+        {
+            if (newClip != null)
+            {
+                backgroundMusic.clip = newClip;
+                backgroundMusic.loop = loop;
+                backgroundMusic.volume = backgroundMusicVolume;
+                backgroundMusic.Play();
+            }
+        }
     }
 
     public void SetMusicVolume(float volume)
