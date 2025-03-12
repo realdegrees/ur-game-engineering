@@ -1,28 +1,23 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerStats
+public class PlayerStats : MonoBehaviour
 {
 
     private int health;
-    private int stamina;
+
     private int damage;
-    private List<Item> inventory;
-
-
-    public PlayerStats(int health, int stamina, int damage, string[] inventory)
-    {
-
-        this.health = health;
-        this.stamina = stamina;
-        this.damage = damage;
-        this.inventory = new List<Item>();
-    }
+    private float maxHealthBarWidth;
+    [SerializeField]
+    private int maxHealth = 100;
 
     public int Heal(int heal)
     {
         this.health += heal;
         return this.health;
     }
+
 
     public int GetHealth()
     {
@@ -31,24 +26,34 @@ public class PlayerStats
 
     public int SetHealth(int newHealthStat)
     {
-        this.health = newHealthStat;
+        this.health = Math.Max(Math.Min(newHealthStat, maxHealth), 0);
+        OnHealthChanged();
         return health;
     }
 
-    public int GetStamina()
+    void Start()
     {
-        return stamina;
+        maxHealthBarWidth = UIManager.Instance.healthBarIcon.rectTransform.localScale.x;
+        health = maxHealth;
+
     }
 
-    public int SetStamina(int newStaminaStat)
+    private void OnHealthChanged()
     {
-        stamina = newStaminaStat;
-        return stamina;
+
+        UIManager.Instance.healthBarIcon.rectTransform.localScale = new Vector3(
+            maxHealthBarWidth * ((float)health / (float)maxHealth),
+            UIManager.Instance.healthBarIcon.rectTransform.localScale.y,
+            UIManager.Instance.healthBarIcon.rectTransform.localScale.z
+        );
     }
+
 
     public int TakeDamage(int damageTaken)
     {
-        health -= damage;
+        health -= damageTaken;
+        this.health = Math.Max(Math.Min(health, maxHealth), 0);
+        OnHealthChanged();
         return health;
     }
 
@@ -57,43 +62,5 @@ public class PlayerStats
         return damage;
     }
 
-    public int SetDamage(int newDamageStat)
-    {
-        damage = newDamageStat;
-        return damage;
-    }
-
-    public int DealDamage()
-    {
-        return damage;
-    }
-
-    public void AddItem(Item item)
-    {
-        if (inventory.Count < 3)
-        {
-            inventory.Add(item);
-        }
-
-    }
-
-    public void RemoveItem(Item item)
-    {
-        if (inventory.Count > 0)
-        {
-            inventory.Remove(item);
-        }
-
-    }
-
-    public void UseItem(Item item)
-    {
-        if (inventory.Contains(item))
-        {
-            item.Use(this);
-            RemoveItem(item);
-        }
-
-    }
 
 }
