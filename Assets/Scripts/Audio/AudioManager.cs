@@ -34,24 +34,20 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(bool loop = true)
     {
-        if(backgroundMusic.clip != null)
+        if (backgroundMusic.clip != null)
         {
             backgroundMusic.loop = loop;
             backgroundMusic.Play();
         }
     }
 
-    public void ChangeMusic(AudioClip newClip, bool loop = true)
+    public void ChangeMusic(AudioClip newClip)
     {
-        if (backgroundMusic != null)
+        if (newClip != null)
         {
-            if (newClip != null)
-            {
-                backgroundMusic.clip = newClip;
-                backgroundMusic.loop = loop;
-                backgroundMusic.volume = backgroundMusicVolume;
-                backgroundMusic.Play();
-            }
+            backgroundMusic.clip = newClip;
+            backgroundMusic.volume = backgroundMusicVolume;
+            backgroundMusic.Play();
         }
     }
 

@@ -431,7 +431,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf90901f758a0a34b8c2343a9af4aa15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMusicClip: {fileID: 8300000, guid: 2d3383fe49b97214eb691798a5c6fbce, type: 3}
+  numberOfAllowedActivations: 1
+  duration: 0
+  cooldown: 0
+  freezePlayer: 0
+  showZone: 1
+  zoneColor: {r: 0, g: 1, b: 0, a: 1}
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1013369209}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: ChangeMusic
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 06dd9d9b628a80348811e34fb2a0e03a, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCooldownReset:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDurationPassed:
+    m_PersistentCalls:
+      m_Calls: []
+  newMusicClip: {fileID: 8300000, guid: 06dd9d9b628a80348811e34fb2a0e03a, type: 3}
   loop: 1
 --- !u!61 &264194791
 BoxCollider2D:
@@ -936,7 +966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 1570165673}
-  backgroundMusicVolume: 1
+  backgroundMusicVolume: 0.233
   duckingFactor: 0.3
 --- !u!4 &1013369210
 Transform:
