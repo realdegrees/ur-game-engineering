@@ -5,8 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
+using Manager;
+using Unity.VisualScripting;
 
-public class DialogueManagerInk : MonoBehaviour
+public class DialogueManagerInk : Manager<DialogueManagerInk>
 {
     [SerializeField] private GameObject[] choices;
     [SerializeField] private Image displayPortrait;
@@ -19,8 +21,8 @@ public class DialogueManagerInk : MonoBehaviour
     private Dictionary<string, Sprite> portraits;
     private TextMeshProUGUI displayNameText;
     private TextMeshProUGUI[] choicesText;
-   private Rigidbody2D rb;
-   private CharacterStateMachine stateMachine;
+    private Rigidbody2D rb;
+    private CharacterStateMachine stateMachine;
 
     public TMPro.TextMeshProUGUI dialogueText;
     public Animator animator;
@@ -29,19 +31,9 @@ public class DialogueManagerInk : MonoBehaviour
     private Story currentStory;
     private bool dialogueIsPlaying;
 
-    private static DialogueManagerInk instance;
-
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.Log("DialogueManager already exists in the scene");
-        }
-        instance = this;
-    }
 
     private void Start()
     {
@@ -72,14 +64,9 @@ public class DialogueManagerInk : MonoBehaviour
         }
     }
 
-    public static DialogueManagerInk GetInstance()
-    {
-        return instance;
-    }
-
     public void EnterDialogueMode(TextAsset inkJSON)
     {
-       StartCoroutine(FreezePlayer());
+        StartCoroutine(FreezePlayer());
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         animator.Play("DialogueIn");
@@ -102,7 +89,7 @@ public class DialogueManagerInk : MonoBehaviour
         {
             return;
         }
-       rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         dialogueIsPlaying = false;
         animator.Play("DialogueOut");
         dialogueText.text = "";
