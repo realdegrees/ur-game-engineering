@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -111,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e1f693dbf41149e4088454eb7c70338e
-      internalID: -2014248202
+      spriteID: 778f5373086efbb47ace78d0b02fef85
+      internalID: 1192180099
       vertices: []
       indices: 
       edges: []
@@ -132,8 +132,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dcb90406901674f4587b1f3e16c4a9e9
-      internalID: 362694208
+      spriteID: 7949a0e42986b7b49aa38e6e8eeaa4bf
+      internalID: 2014346548
       vertices: []
       indices: 
       edges: []
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8798af19dc7b4e0418c5aff4d19f90af
-      internalID: 1052832141
+      spriteID: 435a000c03ea65f42bafaa7d6ed78c22
+      internalID: 1509199960
       vertices: []
       indices: 
       edges: []
@@ -174,8 +174,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23c563ed17c2d6e458a3f012225f4ee9
-      internalID: -1608586928
+      spriteID: 6ed59da87fd40e04aa6ffc20effffdb6
+      internalID: 1241183389
       vertices: []
       indices: 
       edges: []
@@ -195,8 +195,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2335234787a8374ea918df2c2073c56
-      internalID: 1467757150
+      spriteID: 88ca6936cea7e84499c1dc938ef5e79a
+      internalID: -420588127
       vertices: []
       indices: 
       edges: []
@@ -212,11 +212,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bat_spritesheet_0: -2014248202
-      bat_spritesheet_1: 362694208
-      bat_spritesheet_2: 1052832141
-      bat_spritesheet_3: -1608586928
-      bat_spritesheet_4: 1467757150
+      bat_spritesheet_0: 1192180099
+      bat_spritesheet_1: 2014346548
+      bat_spritesheet_2: 1509199960
+      bat_spritesheet_3: 1241183389
+      bat_spritesheet_4: -420588127
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
