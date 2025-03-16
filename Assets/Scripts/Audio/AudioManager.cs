@@ -45,11 +45,17 @@ public class AudioManager : MonoBehaviour
     {
         if (newClip != null)
         {
+            if (!newClip.loadState.Equals(AudioDataLoadState.Loaded))
+            {
+                newClip.LoadAudioData();
+            }
+            backgroundMusic.Stop();
             backgroundMusic.clip = newClip;
             backgroundMusic.volume = backgroundMusicVolume;
             backgroundMusic.Play();
         }
     }
+
 
     public void SetMusicVolume(float volume)
     {
