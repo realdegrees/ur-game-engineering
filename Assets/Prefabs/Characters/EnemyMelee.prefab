@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 3128778509072877458}
   - component: {fileID: 1643209632922801475}
   - component: {fileID: 477585814893805630}
-  - component: {fileID: 9187837558373276195}
+  - component: {fileID: 5739133685246257771}
   m_Layer: 3
   m_Name: MeleeWeapon
   m_TagString: Untagged
@@ -198,7 +198,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &9187837558373276195
+--- !u!114 &5739133685246257771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,11 +207,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2874951679999571544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26abf3fce405dd3408c88a4e5eb39c6d, type: 3}
+  m_Script: {fileID: 11500000, guid: c999010e02a31ff4db4a1571703ee32e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
   playerStats: {fileID: 7970643129568210708, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  swordSounds:
+  - {fileID: 8300000, guid: ef36d2dcd7c7a704fba3eef989915543, type: 3}
+  - {fileID: 8300000, guid: 8fa6ac97122812c43b837d4e338bc9f2, type: 3}
+  - {fileID: 8300000, guid: bfd069933748ec6498adbfaf04992a64, type: 3}
+  - {fileID: 8300000, guid: 27ffddcce5ce81043bcde8592ec57686, type: 3}
 --- !u!1 &3604487042861288329
 GameObject:
   m_ObjectHideFlags: 0

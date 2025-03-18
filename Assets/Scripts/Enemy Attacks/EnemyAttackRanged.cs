@@ -10,10 +10,16 @@ public class EnemyAttackRanged : MonoBehaviour
 
     public Transform projectilePos;
     public PlayerStatsOverhaul playerStats;
+    public AudioClip[] arrowSounds;
 
-    private float spawnTimer;
+    private float spawnTimer;  
+    private AudioSource audioSource;
 
-    // Update is called once per frame
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         spawnTimer += Time.deltaTime;
@@ -27,6 +33,15 @@ public class EnemyAttackRanged : MonoBehaviour
     private void Shoot()
     {
         Instantiate(projectile, projectilePos.position, Quaternion.identity);
+        PlayRandomArrowSound();
+    }
 
+    private void PlayRandomArrowSound()
+    {
+        if (arrowSounds.Length > 0)
+        {
+            AudioClip selectedSound = arrowSounds[Random.Range(0, arrowSounds.Length)];
+            audioSource.PlayOneShot(selectedSound);
+        }
     }
 }
