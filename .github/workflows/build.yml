@@ -7,10 +7,22 @@ on:
     branches:
       - develop
       - main
-  # pull_request:
-  #   branches:
-  #     - develop
-  #     - main
+    paths:
+      - "Assets/**"
+      - "ProjectSettings/**"
+      - "Packages/**"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - "Assets/**"
+      - "ProjectSettings/**"
+      - "Packages/**"
+      - ".github/workflows/**"
+      - ".github/actions/**"
 
 jobs:
   build-win:
@@ -41,46 +53,56 @@ jobs:
           unityEmail: ${{ secrets.UNITY_EMAIL }}
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
-  installer-win:
-    name: Build Installer for Windows
-    runs-on: windows-latest
-    continue-on-error: true # Not necessary to merge PRs
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
-    needs: build-win
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # installer-win:
+  #   name: Build Installer for Windows
+  #   runs-on: windows-latest
+  #   continue-on-error: true # Not necessary to merge PRs
+  #   if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+  #   needs: build-win
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-StandaloneWindows
-          path: InnoBuild
+  #     - name: Download Windows Build Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: build-StandaloneWindows
+  #         path: InnoBuild
 
-      - name: Download MacOS Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-StandaloneOSX
-          path: MacBuild
+  #     - name: Compile .iss to .exe Installer
+  #       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+  #       with:
+  #         path: Inno/inno.iss
+  #         options: /O+
 
-      - name: Compile .iss to .exe Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
-        with:
-          path: Inno/inno.iss
-          options: /O+
+  #     - name: Upload Installer as Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: InstallerStandaloneWindows
+  #         path: Inno/InstallerStandaloneWindows.exe
 
-      - name: Create DMG Installer
-        run: |
-          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
+  # installer-mac:
+  #   name: Build Installer for MacOS
+  #   runs-on: macos-latest
+  #   continue-on-error: true # Not necessary to merge PRs
+  #   if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+  #   needs: build-macos
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: InstallerStandaloneOSX
-          path: GameInstaller.dmg
+  #     - name: Download MacOS Build Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: build-StandaloneOSX
+  #         path: MacBuild
 
-      - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: InstallerStandaloneWindows
-          path: Inno/InstallerStandaloneWindows.exe
+  #     - name: Create DMG Installer
+  #       run: |
+  #         hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
+
+  #     - name: Upload Installer as Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: InstallerStandaloneOSX
+  #         path: GameInstaller.dmg
