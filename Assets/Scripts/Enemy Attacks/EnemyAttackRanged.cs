@@ -9,7 +9,6 @@ public class EnemyAttackRanged : MonoBehaviour
     [SerializeField] GameObject projectile;
 
     public Transform projectilePos;
-    public PlayerStatsOverhaul playerStats;
     public AudioClip[] arrowSounds;
 
     private float spawnTimer;  

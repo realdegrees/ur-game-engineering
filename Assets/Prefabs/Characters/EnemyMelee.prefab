@@ -210,8 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c999010e02a31ff4db4a1571703ee32e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  playerStats: {fileID: 7970643129568210708, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  damage: 1
+  player: {fileID: 6962759502354806734, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
   swordSounds:
   - {fileID: 8300000, guid: ef36d2dcd7c7a704fba3eef989915543, type: 3}
   - {fileID: 8300000, guid: 8fa6ac97122812c43b837d4e338bc9f2, type: 3}

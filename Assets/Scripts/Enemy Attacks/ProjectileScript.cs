@@ -5,27 +5,24 @@ using UnityEngine;
 public class ProjectileScript : MonoBehaviour
 {
 
-    public GameObject player;
     [SerializeField] int damage;
-
     public float speed;
 
     private float timer;
     private Rigidbody2D rb;
-    private PlayerStatsOverhaul playerStats;
+    private GameObject player;
+    private PlayerStats playerStats;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player");
-        playerStats = player.GetComponent<PlayerStatsOverhaul>();
+        playerStats = player.GetComponent<PlayerStats>();
 
         Vector3 direction = player.transform.position - transform.position;
         rb.velocity = new Vector2(direction.x, direction.y).normalized * speed;
     }
 
-    // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
@@ -40,7 +37,6 @@ public class ProjectileScript : MonoBehaviour
         if (other.CompareTag("PlayerBody"))
         {
             playerStats.TakeDamage(damage);
-            Debug.Log("attacked");
         }
     }
 }

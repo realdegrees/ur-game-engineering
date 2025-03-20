@@ -147,7 +147,8 @@ MonoBehaviour:
   damage: 5
   projectile: {fileID: 6846088989974114753, guid: fce020ea798a2554fb4251a65eb3569a, type: 3}
   projectilePos: {fileID: 5898451123269532097}
-  playerStats: {fileID: 7970643129568210708, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  playerStats: {fileID: 6327394270404830086, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  arrowSounds: []
 --- !u!1 &2196853152234066679
 GameObject:
   m_ObjectHideFlags: 0

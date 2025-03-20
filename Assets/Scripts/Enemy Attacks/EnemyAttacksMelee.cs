@@ -6,15 +6,17 @@ public class EnemyAttacksMelee : MonoBehaviour
 {
 
     [SerializeField] int damage;
-
-    public PlayerStatsOverhaul playerStats;
     public AudioClip[] swordSounds;
 
     private AudioSource audioSource;
+    private PlayerStats playerStats;
+    private GameObject player;
 
     void Start()
     {
+        player = GameObject.FindWithTag("Player");
         audioSource = GetComponent<AudioSource>();
+        playerStats = player.GetComponent<PlayerStats>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -29,7 +31,6 @@ public class EnemyAttacksMelee : MonoBehaviour
     {
         playerStats.TakeDamage(damage);
         PlayRandomSwordSound();
-        Debug.Log("attacked");
     }
 
     private void PlayRandomSwordSound()
