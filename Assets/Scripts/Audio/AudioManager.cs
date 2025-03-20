@@ -1,30 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Manager;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Manager<AudioManager>
 {
 
     [Header("Background Music")]
-    public AudioSource backgroundMusic;
+    public AudioClip backgroundMusicClip;
+    private AudioSource backgroundMusic;
 
     [Header("Volume Settings")]
-    [Range(0f, 1f)] public float backgroundMusicVolume = 1f;
+    [Range(0f, 1f)] public float backgroundMusicVolume = 0.5f;
     [Range(0f, 1f)] public float duckingFactor = 0.3f;
 
-    public static AudioManager instance { get; private set; }
+    // public static AudioManager instance { get; private set; }
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.Log("AudioManager already exists in the scene");
-        }
-        instance = this;
-    }
+    // private void Awake()
+    // {
+    //     if (instance != null)
+    //     {
+    //         Debug.Log("AudioManager already exists in the scene");
+    //     }
+    //     instance = this;
+    // }
 
     void Start()
     {
+        backgroundMusic = gameObject.AddComponent<AudioSource>();
+        backgroundMusic.clip = backgroundMusicClip;
         if (backgroundMusic != null)
         {
             backgroundMusic.volume = backgroundMusicVolume;
@@ -49,7 +53,9 @@ public class AudioManager : MonoBehaviour
             {
                 newClip.LoadAudioData();
             }
-            backgroundMusic.Stop();
+            if (backgroundMusic.clip != null) {
+                backgroundMusic.Stop();
+            }
             backgroundMusic.clip = newClip;
             backgroundMusic.volume = backgroundMusicVolume;
             backgroundMusic.Play();

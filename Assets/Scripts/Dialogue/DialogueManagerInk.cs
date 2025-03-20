@@ -31,26 +31,6 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     private Story currentStory;
     private bool dialogueIsPlaying;
 
-<<<<<<< HEAD
-    private static DialogueManagerInk instance;
-
-    private const string SPEAKER_TAG = "speaker";
-    private const string PORTRAIT_TAG = "portrait";
-
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.Log("DialogueManager already exists in the scene");
-        }
-        instance = this;
-    }
-
-    private void Start()
-    {
-        //rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
-        //stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
-=======
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
 
@@ -59,7 +39,6 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     {
         rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
         stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
->>>>>>> develop
         dialogueIsPlaying = false;
         displayNameText = nameFrame.transform.Find("DisplayNameText").GetComponent<TextMeshProUGUI>();
         portraits = new Dictionary<string, Sprite>
