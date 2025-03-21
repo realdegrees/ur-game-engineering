@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterStateMachine))]
 public class PlayerController : MonoBehaviour
 {
+    private Animator animator;
     [HideInInspector]
     public CharacterStateMachine stateMachine;
 
@@ -13,11 +14,23 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
         InputManager.Instance.OnJumpPressed += HandleJump;
+
+        // TODO wherever the player attack method is called, also trigger the animation parameter "Attack"
+        stateMachine.OnStateEnter += (state) =>
+        {
+            if (state.state == ECharacterState.Jumping)
+            {
+                animator.SetTrigger("Jump");
+            }
+        };
     }
     private void Update()
     {
+        animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
+        animator.SetBool("Grounded", stateMachine.ground.connected);
         FlipCheck();
     }
     private void FixedUpdate()
