@@ -50,7 +50,7 @@ public class EnemyStateMachine : StateMachine<EEnemyState, EnemyMovementConfig>
         // Vector2 prevPos = rb.position;
         while (true)
         {
-            if (target == null || !seeker.IsDone())
+            if (!rb.isKinematic && (target == null || !seeker.IsDone()))
             {
                 yield return new WaitForSeconds(config.pathUpdateDelta);
                 continue;

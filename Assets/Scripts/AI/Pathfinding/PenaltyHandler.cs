@@ -1,4 +1,6 @@
+using System;
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PenaltyHandler : MonoBehaviour
@@ -6,11 +8,11 @@ public class PenaltyHandler : MonoBehaviour
     public uint PenaltyFactor = 1000000;
     public float CeilingPenaltyDistance = 8;
     public float CeilingPenaltyWidth = 3;
-    public float allowedGapWidth = 10;
-    public float gapClosingOffset = 3;
-    private readonly uint airPenalty = 190;
-    private readonly uint groundPenalty = 15;
-    private readonly uint ceilingPenalty = 210;
+    public float allowedGapWidth = 4;
+    public float softness = 3;
+    private readonly uint airPenalty = 150;
+    private readonly uint groundPenalty = 0;
+    private readonly uint ceilingPenalty = 50;
     public void Scan()
     {
         AstarPath.active.AddWorkItem(new AstarWorkItem(ctx =>
@@ -22,40 +24,62 @@ public class PenaltyHandler : MonoBehaviour
                         {
                             var node = gg.GetNode(x, z);
                             var pos = (Vector2)(Vector3)node.position;
-                            var upCheckBox = CeilingPenaltyWidth * gg.nodeSize * Vector2.one;
-                            var downCheckBox = 0.5f * gg.nodeSize * Vector2.one;
                             var upHitDistance = gg.nodeSize * CeilingPenaltyDistance;
-                            var downHitDistance = upHitDistance / 1.5f;
+                            var downHitDistance = upHitDistance / 2f;
 
-                            Collider2D self = Physics2D.OverlapBox(pos, gg.nodeSize * Vector2.one, 0, LayerMask.GetMask("Ground"));
+                            Collider2D self = Physics2D.OverlapPoint(pos, LayerMask.GetMask("Ground"));
 
                             if (self != null)
                             {
                                 node.Walkable = false;
+                                continue;
                             }
 
-                            RaycastHit2D upHit = Physics2D.BoxCast(pos + new Vector2(0, upCheckBox.y / 2), upCheckBox, 0, Vector2.up, upHitDistance, LayerMask.GetMask("Ground"));
-                            RaycastHit2D downHit = Physics2D.BoxCast(pos, downCheckBox, 0, Vector2.down, downHitDistance, LayerMask.GetMask("Ground"));
-                            RaycastHit2D leftHit = Physics2D.Raycast(pos - new Vector2(0, gapClosingOffset * gg.nodeSize), Vector2.left, allowedGapWidth, LayerMask.GetMask("Ground"));
-                            RaycastHit2D rightHit = Physics2D.Raycast(pos - new Vector2(0, gapClosingOffset * gg.nodeSize), Vector2.right, allowedGapWidth, LayerMask.GetMask("Ground"));
+                            RaycastHit2D upHit = Physics2D.Raycast(pos, Vector2.up, upHitDistance, LayerMask.GetMask("Ground"));
+                            RaycastHit2D downHit = Physics2D.Raycast(pos, Vector2.down, downHitDistance, LayerMask.GetMask("Ground"));
+                            RaycastHit2D leftHit = Physics2D.Raycast(pos, Vector2.left, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
+                            RaycastHit2D rightHit = Physics2D.Raycast(pos, Vector2.right, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
+
 
                             if (upHit.collider != null)
                             {
-                                node.Penalty = ceilingPenalty;
+                                var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(upHit.point, pos) / upHitDistance);
+                                node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(ceilingPenalty, airPenalty, normalizedHitDistance));
                             }
                             if (downHit.collider != null) // Overrides upHit Penalty                      
                             {
                                 var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(downHit.point, pos) / downHitDistance);
-                                node.Penalty = groundPenalty - (uint)(groundPenalty * (1 - normalizedHitDistance));
-                                node.Walkable = true;
+                                node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(groundPenalty, airPenalty, normalizedHitDistance));
                             }
 
-                            if (upHit.collider == null && downHit.collider == null)
+                            if (!downHit.collider && !upHit.collider)
                             {
-                                var isOverGap = leftHit.collider != null && rightHit.collider != null;
-                                node.Penalty = isOverGap ? groundPenalty : airPenalty;
+                                node.Penalty = airPenalty;
                             }
-
+                            if (leftHit.collider != null && rightHit.collider != null)
+                            {
+                                var distance = Vector2.Distance(leftHit.point, rightHit.point);
+                                if (distance < allowedGapWidth)
+                                {
+                                    node.Penalty = (uint)Mathf.RoundToInt(airPenalty * 2f);
+                                }
+                            }
+                            if (leftHit.collider && !rightHit.collider)
+                            {
+                                var hitDistance = Vector2.Distance(leftHit.point, pos);
+                                if (hitDistance <= gg.nodeSize)
+                                {
+                                    node.Walkable = false;
+                                }
+                            }
+                            if (rightHit.collider && !leftHit.collider)
+                            {
+                                var hitDistance = Vector2.Distance(rightHit.point, pos);
+                                if (hitDistance <= gg.nodeSize)
+                                {
+                                    node.Walkable = false;
+                                }
+                            }
                             node.Penalty *= PenaltyFactor;
                         }
                     }
@@ -69,6 +93,7 @@ public class PenaltyHandler : MonoBehaviour
                         {
                             var node = gg.GetNode(x, z);
                             if (node.Penalty == 0) continue;
+                            if (node.Walkable == false) continue;
 
                             int surroundingPenalty = 0;
                             int surroundingCount = 0;
