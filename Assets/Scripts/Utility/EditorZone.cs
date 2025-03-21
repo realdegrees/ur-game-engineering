@@ -66,7 +66,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations) return;
         if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
         {
-            if (other == controller.interactionCollider && currentCooldown <= 0)
+            if (other == controller.stateMachine.bodyCollider && currentCooldown <= 0)
             {
                 // Adjust variables
                 activations++;
@@ -107,7 +107,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     { 
         if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
         {
-            if (other == controller.interactionCollider)
+            if (other == controller.stateMachine.bodyCollider)
             {
                 OnDeactivate.Invoke();
             }
