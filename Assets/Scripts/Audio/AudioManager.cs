@@ -14,6 +14,9 @@ public class AudioManager : Manager<AudioManager>
     [Range(0f, 1f)] public float backgroundMusicVolume = 0.5f;
     [Range(0f, 1f)] public float duckingFactor = 0.3f;
 
+    private AudioSource soundEffect;
+    private float soundEffectVolume = 0.5f;
+
     // public static AudioManager instance { get; private set; }
 
     // private void Awake()
@@ -28,6 +31,7 @@ public class AudioManager : Manager<AudioManager>
     void Start()
     {
         backgroundMusic = gameObject.AddComponent<AudioSource>();
+        soundEffect = gameObject.AddComponent<AudioSource>();
         backgroundMusic.clip = backgroundMusicClip;
         if (backgroundMusic != null)
         {
@@ -62,10 +66,31 @@ public class AudioManager : Manager<AudioManager>
         }
     }
 
+    public void StopMusic()
+    {
+        backgroundMusic.Stop();
+    }
 
     public void SetMusicVolume(float volume)
     {
         backgroundMusicVolume = volume;
         backgroundMusic.volume = volume;
+    }
+
+    public void PlayAudioClip(AudioClip audioClip)
+    {
+        if (audioClip != null)
+        {
+            audioClip.LoadAudioData();
+        }
+        soundEffect.clip = audioClip;
+        soundEffect.volume = soundEffectVolume;
+        soundEffect.Play();
+    }
+
+    public void SetSoundEffectVolume(float volume)
+    {
+        soundEffectVolume = volume;
+        soundEffect.volume = volume;
     }
 }
