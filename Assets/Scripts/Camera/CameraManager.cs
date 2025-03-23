@@ -37,12 +37,16 @@ public class CameraManager : Manager<CameraManager>
 
     public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
     {
-        CinemachineConfiner2D confiner = GetCameraData(cameraType).camera.GetComponent<CinemachineConfiner2D>();
+        var camera = GetCameraData(cameraType).camera;
+        if (camera == null) return;
+
+        CinemachineConfiner2D confiner = camera.GetComponent<CinemachineConfiner2D>();
         confiner.m_BoundingShape2D = bounds;
     }
     public Collider2D GetCameraBounds(CameraType cameraType)
     {
-        if (GetCameraData(cameraType).camera.TryGetComponent(out CinemachineConfiner2D confiner))
+        var camera = GetCameraData(cameraType).camera;
+        if (camera != null && camera.TryGetComponent(out CinemachineConfiner2D confiner))
         {
             return confiner.m_BoundingShape2D;
         }
@@ -50,7 +54,7 @@ public class CameraManager : Manager<CameraManager>
     }
 
 
-    private void OnPlayerFlip(bool isFacingRight)
+    private void OnPlayerFlip()
     {
         var isFollowCamera = activeCameraData.type == CameraType.Default;
         if (!isFollowCamera)
@@ -108,10 +112,32 @@ public class CameraManager : Manager<CameraManager>
             }
         }
 
+        var playerStateMachine = player.GetComponent<CharacterStateMachine>();
         // ! Important to do this after setting up the cameras
-        player.OnLand.AddListener(OnPlayerLand);
-        player.OnStartFalling.AddListener(OnPlayerStartFalling);
-        player.OnFlip.AddListener(OnPlayerFlip);
+        playerStateMachine.OnStateExit += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    if (playerStateMachine.IsStateActive(ECharacterState.Jumping, ECharacterState.JumpApex))
+                    {
+                        OnPlayerLand();
+                    }
+                    break;
+            }
+
+        };
+        playerStateMachine.OnStateEnter += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    OnPlayerStartFalling();
+                    break;
+            }
+
+        };
+        player.OnFlip += OnPlayerFlip;
     }
 
     public void SetCameraType(CameraType type, Transform target = null)
