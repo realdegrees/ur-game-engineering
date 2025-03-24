@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using Pathfinding;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]
 [RequireComponent(typeof(Seeker))]
+[RequireComponent(typeof(AudioSource))]
 public class EnemyController : MonoBehaviour
 {
     [HideInInspector]
@@ -15,6 +17,19 @@ public class EnemyController : MonoBehaviour
     public bool IsFacingRight { get; private set; } = true;
 
     public List<Transform> patrolPoints = new();
+
+    [SerializeField] int damage;
+    public AudioClip[] swordSounds;
+    public float attackCooldown = 1.5f;
+    public bool isRanged;
+    public float attackRange = 2f;
+
+    [SerializeField] GameObject projectile;
+
+    private AudioSource audioSource;
+    private PlayerStats playerStats;
+    private GameObject player;
+
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
     public int maxPlayerFollowDistance = 20;
@@ -22,9 +37,13 @@ public class EnemyController : MonoBehaviour
     public bool forceFollow = false;
     public int forceFollowThreshold = 40;
     private bool followModeEngaged = false;
+    private DateTime lastAttack = DateTime.Now;
 
     private void Start()
     {
+        player = GameObject.FindWithTag("Player");
+        audioSource = GetComponent<AudioSource>();
+        playerStats = player.GetComponent<PlayerStats>();
         stateMachine = GetComponent<EnemyStateMachine>();
 
         if (patrolPoints.Count > 0)
@@ -76,7 +95,6 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-
         if (stateMachine.IsActive) FlipCheck();
     }
     private void FixedUpdate()
@@ -90,8 +108,46 @@ public class EnemyController : MonoBehaviour
             HandleMovement();
             HandleJump();
         }
-
+        if ((DateTime.Now - lastAttack).Seconds > attackCooldown)
+        {
+            HandlePlayerDetection();
+        }
     }
+
+    private void HandlePlayerDetection()
+    {
+        var hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, attackRange, ~(LayerMask.GetMask("Projectile") | LayerMask.GetMask("Hostile")));
+        if (hit.collider?.transform.root.tag == "Player")
+        {
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        Debug.Log("is attacking now");
+
+        if (isRanged)
+        {
+            Instantiate(projectile, transform.position + transform.forward * 0.5f, Quaternion.identity);
+        }
+        else
+        {
+            playerStats.TakeDamage(damage);
+            PlayRandomSwordSound();
+        }
+        lastAttack = DateTime.Now;
+    }
+
+    private void PlayRandomSwordSound()
+    {
+        if (swordSounds.Length > 0)
+        {
+            AudioClip selectedSound = swordSounds[UnityEngine.Random.Range(0, swordSounds.Length)];
+            audioSource.PlayOneShot(selectedSound);
+        }
+    }
+
     private void HandleForceFollow()
     {
         if (!stateMachine.target || stateMachine.path == null)

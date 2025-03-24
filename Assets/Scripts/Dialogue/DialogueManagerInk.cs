@@ -21,8 +21,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     private Dictionary<string, Sprite> portraits;
     private TextMeshProUGUI displayNameText;
     private TextMeshProUGUI[] choicesText;
-    private Rigidbody2D rb;
-    private CharacterStateMachine stateMachine;
+   // private Rigidbody2D rb;
+   // private CharacterStateMachine stateMachine;
 
     public TMPro.TextMeshProUGUI dialogueText;
     public Animator animator;
@@ -37,8 +37,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     private void Start()
     {
-        rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
-        stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
+        //rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        //stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
         dialogueIsPlaying = false;
         displayNameText = nameFrame.transform.Find("DisplayNameText").GetComponent<TextMeshProUGUI>();
         portraits = new Dictionary<string, Sprite>
@@ -66,7 +66,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
-        StartCoroutine(FreezePlayer());
+       // StartCoroutine(FreezePlayer());
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         animator.Play("DialogueIn");
@@ -74,14 +74,14 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         ContinueStory();
     }
 
-    private IEnumerator FreezePlayer()
-    {
-        while (!stateMachine.ground.connected)
-        {
-            yield return null;
-        }
-        rb.constraints = RigidbodyConstraints2D.FreezePosition;
-    }
+    // private IEnumerator FreezePlayer()
+    // {
+    //     while (!stateMachine.ground.connected)
+    //     {
+    //         yield return null;
+    //     }
+    //     rb.constraints = RigidbodyConstraints2D.FreezePosition;
+    // }
 
     public void ExitDialogueMode()
     {
@@ -89,7 +89,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         {
             return;
         }
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+       // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         dialogueIsPlaying = false;
         animator.Play("DialogueOut");
         dialogueText.text = "";
@@ -151,7 +151,6 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
                 }
             }
         }
-
     }
 
     private Sprite GetPortrait(string tag)
