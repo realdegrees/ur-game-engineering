@@ -21,7 +21,8 @@ public class EnemyController : MonoBehaviour
     public AudioClip[] swordSounds;
     public float attackCooldown = 1.5f;
     public bool isRanged;
-    public float attackRange = 2f;
+    public float attackRangeRanged = 2f;
+    public float attackRangeMelee = 0.01f;
 
     [SerializeField] GameObject projectile;
 
@@ -36,10 +37,7 @@ public class EnemyController : MonoBehaviour
     public bool forceFollow = false;
     public int forceFollowThreshold = 40;
     private bool followModeEngaged = false;
-    //private bool isAttacking = false;
-    // private bool isPlayerInRange = false;
     private DateTime lastAttack = DateTime.Now;
-    //private bool isInMeleeRange = false;
 
     private void Start()
     {
@@ -118,6 +116,7 @@ public class EnemyController : MonoBehaviour
 
     private void HandlePlayerDetection()
     {
+        float attackRange = isRanged ? attackRangeRanged : attackRangeMelee;
         var hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, attackRange, ~(LayerMask.GetMask("Projectile") | LayerMask.GetMask("Hostile")));
         if (hit.collider?.transform.root.tag == "Player")
         {
