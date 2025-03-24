@@ -21,8 +21,7 @@ public class EnemyController : MonoBehaviour
     public AudioClip[] swordSounds;
     public float attackCooldown = 1.5f;
     public bool isRanged;
-    public float attackRangeRanged = 2f;
-    public float attackRangeMelee = 0.01f;
+    public float attackRange = 2f;
 
     [SerializeField] GameObject projectile;
 
@@ -116,33 +115,12 @@ public class EnemyController : MonoBehaviour
 
     private void HandlePlayerDetection()
     {
-        float attackRange = isRanged ? attackRangeRanged : attackRangeMelee;
         var hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, attackRange, ~(LayerMask.GetMask("Projectile") | LayerMask.GetMask("Hostile")));
         if (hit.collider?.transform.root.tag == "Player")
         {
             Attack();
         }
     }
-
-    // private void OnTriggerEnter2D(Collider2D other)
-    // {
-    //     if (isRanged || isAttacking) return;
-    //     if (other.CompareTag("PlayerBody"))
-    //     {
-    //         isAttacking = true;
-    //         StartCoroutine(Attack());
-    //     }
-    // }
-
-    // private void OnTriggerExit2D(Collider2D other)
-    // {
-    //     if (isRanged || isAttacking) return;
-    //     if (other.CompareTag("PlayerBody"))
-    //     {
-    //         StopCoroutine(Attack());
-    //         isAttacking = false;
-    //     }
-    // }
 
     private void Attack()
     {

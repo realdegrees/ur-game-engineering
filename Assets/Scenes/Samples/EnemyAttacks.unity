@@ -8523,8 +8523,16 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3270177793342796400, guid: 5de27c63050c7b84099a93bfd18aa2bb, type: 3}
+      propertyPath: isRanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3270177793342796400, guid: 5de27c63050c7b84099a93bfd18aa2bb, type: 3}
+      propertyPath: attackRange
+      value: 0.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3270177793342796400, guid: 5de27c63050c7b84099a93bfd18aa2bb, type: 3}
       propertyPath: attackRangeMelee
-      value: 0.01
+      value: 0.003
       objectReference: {fileID: 0}
     - target: {fileID: 3767186367271092461, guid: 5de27c63050c7b84099a93bfd18aa2bb, type: 3}
       propertyPath: m_Layer
@@ -8576,10 +8584,6 @@ PrefabInstance:
     - target: {fileID: 1512645617981690473, guid: 3e7dde9e87206674f8f4d83b42ee87a4, type: 3}
       propertyPath: m_Name
       value: EnemyRanged
-      objectReference: {fileID: 0}
-    - target: {fileID: 2547346709570462281, guid: 3e7dde9e87206674f8f4d83b42ee87a4, type: 3}
-      propertyPath: attackRange
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8096218100924724951, guid: 3e7dde9e87206674f8f4d83b42ee87a4, type: 3}
       propertyPath: m_LocalPosition.x
