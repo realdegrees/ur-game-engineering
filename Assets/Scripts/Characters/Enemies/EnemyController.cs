@@ -6,6 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemyStateMachine))]
 [RequireComponent(typeof(Seeker))]
+[RequireComponent(typeof(AudioSource))]
 public class EnemyController : MonoBehaviour
 {
     [HideInInspector]
