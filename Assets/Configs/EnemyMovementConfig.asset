@@ -27,13 +27,13 @@ MonoBehaviour:
   AirAccelerationRate: 9
   AirDecelerationRate: 6
   GravityMultiplier: 1
-  FollowDistance: 1
-  ResumeDistance: 3
+  FollowDistance: 3
+  ResumeDistance: 5
   WayPointLookAhead: 3
-  MaxJumpHeight: 1.2
-  MinJumpHeight: 0.2
+  MaxJumpHeight: 1.5
+  MinJumpHeight: 0.5
   JumpSpeedMult: 2
-  FastFallIntensity: 4
+  FastFallIntensity: 2
   jumpForce: 30
   jumpDetectionDistance: 0.2
   pathUpdateDelta: 0.1
