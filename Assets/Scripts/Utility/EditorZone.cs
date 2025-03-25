@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public enum EditorZoneBounds
 {
@@ -56,8 +54,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
 
     void Start()
     {
-        rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
-        stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
+        rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
+        stateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
@@ -76,14 +74,17 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 StartCoroutine(Duration());
                 IEnumerator Cooldown()
                 {
-                    currentCooldown = cooldown;
-                    while (currentCooldown > 0)
+                    if (cooldown != 0)
                     {
-                        currentCooldown -= Time.deltaTime;
-                        yield return null;
+                        currentCooldown = cooldown;
+                        while (currentCooldown > 0)
+                        {
+                            currentCooldown -= Time.deltaTime;
+                            yield return null;
+                        }
+                        if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        OnCooldownReset.Invoke();
                     }
-                    if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    OnCooldownReset.Invoke();
                 }
                 IEnumerator Duration()
                 {
@@ -98,13 +99,13 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 }
 
                 OnActivate.Invoke();
-                if (freezePlayer) StartCoroutine(FreezePlayer());
+                if (freezePlayer && stateMachine) StartCoroutine(FreezePlayer());
             }
 
         }
     }
     private void OnTriggerExit2D(Collider2D other)
-    { 
+    {
         if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
         {
             if (other == controller.stateMachine.bodyCollider)
