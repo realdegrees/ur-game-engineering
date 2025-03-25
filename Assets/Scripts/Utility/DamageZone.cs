@@ -5,8 +5,9 @@ using UnityEngine.Events;
 
 public class DamageZone : EditorZone<DamageZone>
 {
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         OnActivate.AddListener(DealDamage);
 
     }

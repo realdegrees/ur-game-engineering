@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public enum EditorZoneBounds
 {
@@ -41,7 +39,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected Collider2D zoneCollider;
 
     private Rigidbody2D rb;
-    private CharacterStateMachine stateMachine;
+    protected CharacterStateMachine playerStateMachine;
 
     #region Lifecycle Events
     protected virtual void Awake()
@@ -54,10 +52,10 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    void Start()
+    protected virtual void Start()
     {
-        rb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
-        stateMachine = GameObject.Find("Player").GetComponent<CharacterStateMachine>();
+        rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
+        playerStateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
@@ -76,14 +74,17 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 StartCoroutine(Duration());
                 IEnumerator Cooldown()
                 {
-                    currentCooldown = cooldown;
-                    while (currentCooldown > 0)
+                    if (cooldown != 0)
                     {
-                        currentCooldown -= Time.deltaTime;
-                        yield return null;
+                        currentCooldown = cooldown;
+                        while (currentCooldown > 0)
+                        {
+                            currentCooldown -= Time.deltaTime;
+                            yield return null;
+                        }
+
+                        OnCooldownReset.Invoke();
                     }
-                    if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    OnCooldownReset.Invoke();
                 }
                 IEnumerator Duration()
                 {
@@ -94,17 +95,25 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                         currentDuration += Time.deltaTime;
                         yield return null;
                     }
+                    if (freezePlayer && playerStateMachine && duration > 0)
+                    {
+                        playerStateMachine.Unfreeze();
+                    }
+
                     OnDurationPassed.Invoke();
                 }
 
                 OnActivate.Invoke();
-                if (freezePlayer) StartCoroutine(FreezePlayer());
+                if (freezePlayer && playerStateMachine)
+                {
+                    playerStateMachine.Freeze();
+                }
             }
 
         }
     }
     private void OnTriggerExit2D(Collider2D other)
-    { 
+    {
         if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
         {
             if (other == controller.stateMachine.bodyCollider)
@@ -112,15 +121,6 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 OnDeactivate.Invoke();
             }
         }
-    }
-
-    private IEnumerator FreezePlayer()
-    {
-        while (!stateMachine.ground.connected)
-        {
-            yield return null;
-        }
-        rb.constraints = RigidbodyConstraints2D.FreezePosition;
     }
 
     #endregion

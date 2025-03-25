@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public CharacterStateMachine stateMachine;
 
+    private PlayerStats playerStats;
+
     public event Action OnFlip = delegate { };
 
     public bool IsFacingRight { get; private set; } = true;
@@ -16,7 +18,23 @@ public class PlayerController : MonoBehaviour
     {
         TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
+        TryGetComponent(out playerStats);
         InputManager.Instance.OnJumpPressed += HandleJump;
+        InputManager.Instance.OnAttackPressed += () =>
+        {
+            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
+                return;
+
+            // get enemies in range
+            // deal damage to enemies
+            // trigger animation
+            var hit = Physics2D.OverlapCircle(transform.position, 1f, LayerMask.GetMask("Enemy"));
+            if (hit)
+            {
+                hit.GetComponent<CharacterStats>().TakeDamage(playerStats.GetDamage());
+            }
+            animator.SetTrigger("Attack");
+        };
 
         // TODO wherever the player attack method is called, also trigger the animation parameter "Attack"
         stateMachine.OnStateEnter += (state) =>

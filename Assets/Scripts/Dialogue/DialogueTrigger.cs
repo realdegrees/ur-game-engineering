@@ -7,9 +7,14 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
 {
     public TextAsset inkJSON;
 
-    private void Start()
+    protected override void Start()
     {
-        OnActivate.AddListener(() => DialogueManagerInk.Instance.EnterDialogueMode(inkJSON));
+        base.Start();
+        OnActivate.AddListener(() =>
+        {
+            DialogueManagerInk.Instance.EnterDialogueMode(inkJSON);
+        });
         OnDeactivate.AddListener(() => DialogueManagerInk.Instance.ExitDialogueMode());
+        DialogueManagerInk.Instance.OnDialogueEnd += playerStateMachine.Unfreeze;
     }
 }

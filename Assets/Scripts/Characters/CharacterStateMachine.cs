@@ -36,7 +36,25 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     [HideInInspector]
     public int jumpsSinceGrounded = 0;
 
+    private Action OnLand = delegate { };
+
+    private void DoFreeze()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        OnLand -= DoFreeze;
+    }
+    public void Freeze()
+    {
+        OnLand += DoFreeze;
+    }
+    public void Unfreeze()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        OnLand -= DoFreeze;
+    }
+
     // public bool IsFalling() => Vector2.Dot(rb.velocity, Physics2D.gravity.normalized) < 0;
+
 
     protected override void Awake()
     {
@@ -81,6 +99,7 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
             if (!prev)
             {
                 ground.connectedOnThisFrame = true;
+                OnLand.Invoke();
             }
             ground.lastConnected = Time.time;
         }

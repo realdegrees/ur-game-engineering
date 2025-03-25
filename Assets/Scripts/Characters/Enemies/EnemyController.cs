@@ -116,8 +116,10 @@ public class EnemyController : MonoBehaviour
 
     private void HandlePlayerDetection()
     {
+        Physics2D.queriesHitTriggers = false;
         var hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position, attackRange, ~(LayerMask.GetMask("Projectile") | LayerMask.GetMask("Hostile")));
-        if (hit.collider?.transform.root.tag == "Player")
+        Physics2D.queriesHitTriggers = true;
+        if (hit.collider && !hit.collider.isTrigger && hit.collider.transform.root.CompareTag("Player"))
         {
             Attack();
         }
