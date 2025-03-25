@@ -7,8 +7,9 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
 {
     public TextAsset inkJSON;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         OnActivate.AddListener(() => DialogueManagerInk.Instance.EnterDialogueMode(inkJSON));
         OnDeactivate.AddListener(() => DialogueManagerInk.Instance.ExitDialogueMode());
     }

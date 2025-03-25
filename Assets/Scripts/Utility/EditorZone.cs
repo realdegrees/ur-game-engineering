@@ -52,10 +52,14 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    void Start()
+    protected virtual void Start()
     {
         rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
         stateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
+        DialogueManagerInk.OnDialogueEnd += () =>
+        {
+            if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        };
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
@@ -82,7 +86,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                             currentCooldown -= Time.deltaTime;
                             yield return null;
                         }
-                        if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
                         OnCooldownReset.Invoke();
                     }
                 }
@@ -99,7 +103,10 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 }
 
                 OnActivate.Invoke();
-                if (freezePlayer && stateMachine) StartCoroutine(FreezePlayer());
+                if (freezePlayer && stateMachine)
+                {
+                    StartCoroutine(FreezePlayer());
+                }
             }
 
         }
@@ -117,6 +124,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
 
     private IEnumerator FreezePlayer()
     {
+        Debug.Log("Freezing player");
         while (!stateMachine.ground.connected)
         {
             yield return null;
