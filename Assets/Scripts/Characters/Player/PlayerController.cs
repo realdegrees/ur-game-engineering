@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.OnJumpPressed += HandleJump;
         InputManager.Instance.OnAttackPressed += () =>
         {
-            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition)
+            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
                 return;
 
             // get enemies in range
