@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioTrigger : EditorZone<DialogueTrigger>
@@ -13,8 +10,9 @@ public class AudioTrigger : EditorZone<DialogueTrigger>
     public bool stopBgMusic = false;
     public AudioClip audioClip;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         OnActivate.AddListener(OnAudioTriggerActivated);
     }
 
