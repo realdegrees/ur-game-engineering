@@ -32,7 +32,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     private Story currentStory;
     private bool dialogueIsPlaying;
 
-    public static event Action OnDialogueEnd = delegate { };
+    public event Action OnDialogueEnd = delegate { };
 
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
@@ -96,7 +96,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         dialogueIsPlaying = false;
         animator.Play("DialogueOut");
         dialogueText.text = "";
-        DialogueManagerInk.OnDialogueEnd.Invoke();
+        OnDialogueEnd.Invoke();
     }
 
     public void ContinueStory()

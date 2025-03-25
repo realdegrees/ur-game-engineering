@@ -10,7 +10,11 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
     protected override void Start()
     {
         base.Start();
-        OnActivate.AddListener(() => DialogueManagerInk.Instance.EnterDialogueMode(inkJSON));
+        OnActivate.AddListener(() =>
+        {
+            DialogueManagerInk.Instance.EnterDialogueMode(inkJSON);
+        });
         OnDeactivate.AddListener(() => DialogueManagerInk.Instance.ExitDialogueMode());
+        DialogueManagerInk.Instance.OnDialogueEnd += playerStateMachine.Unfreeze;
     }
 }

@@ -39,7 +39,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected Collider2D zoneCollider;
 
     private Rigidbody2D rb;
-    private CharacterStateMachine stateMachine;
+    protected CharacterStateMachine playerStateMachine;
 
     #region Lifecycle Events
     protected virtual void Awake()
@@ -55,11 +55,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Start()
     {
         rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
-        stateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
-        DialogueManagerInk.OnDialogueEnd += () =>
-        {
-            if (freezePlayer) rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        };
+        playerStateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
@@ -99,13 +95,18 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                         currentDuration += Time.deltaTime;
                         yield return null;
                     }
+                    if (freezePlayer && playerStateMachine && duration > 0)
+                    {
+                        playerStateMachine.Unfreeze();
+                    }
+
                     OnDurationPassed.Invoke();
                 }
 
                 OnActivate.Invoke();
-                if (freezePlayer && stateMachine)
+                if (freezePlayer && playerStateMachine)
                 {
-                    StartCoroutine(FreezePlayer());
+                    playerStateMachine.Freeze();
                 }
             }
 
@@ -120,16 +121,6 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 OnDeactivate.Invoke();
             }
         }
-    }
-
-    private IEnumerator FreezePlayer()
-    {
-        Debug.Log("Freezing player");
-        while (!stateMachine.ground.connected)
-        {
-            yield return null;
-        }
-        rb.constraints = RigidbodyConstraints2D.FreezePosition;
     }
 
     #endregion
