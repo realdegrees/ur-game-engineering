@@ -8,52 +8,86 @@ public class DamageZone : EditorZone<DamageZone>
     public int damage;
     public GameObject trap;
 
-    public bool isSpikes;
+    public bool isHiddenSpikes;
     public bool isRocks;
+    public bool isContinuousSpikes;
 
     public float trapSpeed = 0.2f;
+    public float continuousSpikesTime = 1.5f;
     private Vector2 originalTrapPos;
-
     private PlayerStats playerStats;
+
+    private bool spikesShowing = false;
 
     protected override void Start()
     {
         base.Start();
         playerStats = playerStateMachine.GetComponentInParent<PlayerStats>();
         originalTrapPos = trap.transform.position;
+
+        if (isContinuousSpikes)
+        {
+            Vector2 target = new(transform.position.x, transform.position.y + 0.2f);
+            StartCoroutine(MoveSpikes(target));
+        }
+        else if (isHiddenSpikes)
+        {
+            Vector2 target = new(originalTrapPos.x, originalTrapPos.y - 0.2f);
+            OnDeactivate.AddListener(() => StartCoroutine(HideTrap()));
+        }
+
         OnActivate.AddListener(() =>
         {
             DealDamage();
         });
-        if (isSpikes)
-        {
-            Vector2 target = new(originalTrapPos.x, originalTrapPos.y - 0.2f);
-            OnDeactivate.AddListener(() => StartCoroutine(HideTrap(target)));
-        }
     }
 
     public void DealDamage(GameObject go)
     {
-        playerStats.TakeDamage(damage);
-        Vector2 target = originalTrapPos;
-        if (isSpikes)
+        if (isHiddenSpikes || isRocks)
         {
-            target = new Vector2(originalTrapPos.x, originalTrapPos.y + 0.2f);
+            Vector2 target = originalTrapPos;
+            if (isHiddenSpikes)
+            {
+                target = new Vector2(originalTrapPos.x, originalTrapPos.y + 0.2f);
+            }
+            else if (isRocks)
+            {
+                target = new Vector2(originalTrapPos.x, originalTrapPos.y - 5f);
+            }
+            playerStats.TakeDamage(damage);
+            StartCoroutine(ActivateTrap(target));
         }
-        else if (isRocks)
+
+        else if (isContinuousSpikes)
         {
-            target = new Vector2(originalTrapPos.x, originalTrapPos.y - 5f);
+            if (spikesShowing) playerStats.TakeDamage(damage);
         }
-        StartCoroutine(ActivateTrap(target));
+    }
+
+    private IEnumerator MoveSpikes(Vector2 target)
+    {
+        while (true)
+        {
+            yield return StartCoroutine(ActivateTrap(target));
+            yield return new WaitForSeconds(continuousSpikesTime);
+            spikesShowing = true;
+
+            yield return StartCoroutine(HideTrap());
+            yield return new WaitForSeconds(continuousSpikesTime);
+            spikesShowing = false;
+        }
     }
 
     private IEnumerator ActivateTrap(Vector2 target)
     {
+        Vector2 start = originalTrapPos;
+        if (isContinuousSpikes) start = transform.position;
         float timePassed = 0f;
 
         while (timePassed < trapSpeed)
         {
-            trap.transform.position = Vector2.Lerp(originalTrapPos, target, timePassed / trapSpeed);
+            trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
             timePassed += Time.deltaTime;
             yield return null;
         }
@@ -61,49 +95,19 @@ public class DamageZone : EditorZone<DamageZone>
         if (numberOfAllowedActivations > 0) Destroy(trap);
     }
 
-    private IEnumerator HideTrap(Vector2 target)
+    private IEnumerator HideTrap()
     {
-        //Vector2 start = trap.transform.position;
-        // Vector2 target = new(start.x, start.y - 0.2f);
+        Vector2 start = trap.transform.position;
+        if (isContinuousSpikes) start = transform.position;
+        Vector2 target = new(start.x, start.y - 0.2f);
         float timePassed = 0f;
 
         while (timePassed < trapSpeed)
         {
-            trap.transform.position = Vector2.Lerp(trap.transform.position, target, timePassed / trapSpeed);
+            trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
             timePassed += Time.deltaTime;
             yield return null;
         }
         trap.transform.position = target;
     }
-
-    // private IEnumerator DropRock()
-    // {
-    //     Vector2 start = originalTrapPos;
-    //     Vector2 target = new(start.x, start.y - 5f);
-    //     float timePassed = 0f;
-
-    //     while (timePassed < trapSpeed)
-    //     {
-    //         trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
-    //         timePassed += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //     trap.transform.position = target;
-    //     Destroy(trap);
-    // }
-
-    // private IEnumerator ShowSpikes()
-    // {
-    //     Vector2 start = originalTrapPos;
-    //     Vector2 target = new(start.x, start.y + 0.2f);
-    //     float timePassed = 0f;
-
-    //     while (timePassed < trapSpeed)
-    //     {
-    //         trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
-    //         timePassed += Time.deltaTime;
-    //         yield return null;
-    //     }
-    //     trap.transform.position = target;
-    // }
 }

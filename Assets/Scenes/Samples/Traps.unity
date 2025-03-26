@@ -255,9 +255,11 @@ MonoBehaviour:
       m_Calls: []
   damage: 2
   trap: {fileID: 530672237}
-  isSpikes: 1
+  isHiddenSpikes: 0
   isRocks: 0
+  isContinuousSpikes: 1
   trapSpeed: 0.2
+  continuousSpikesTime: 1.5
 --- !u!1 &1071827103
 GameObject:
   m_ObjectHideFlags: 0
@@ -3451,9 +3453,11 @@ MonoBehaviour:
       m_Calls: []
   damage: 2
   trap: {fileID: 1760445932}
-  isSpikes: 0
+  isHiddenSpikes: 0
   isRocks: 1
+  isContinuousSpikes: 0
   trapSpeed: 0.5
+  continuousSpikesTime: 1.5
 --- !u!61 &1741012281
 BoxCollider2D:
   m_ObjectHideFlags: 0
