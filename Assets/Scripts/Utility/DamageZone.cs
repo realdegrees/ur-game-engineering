@@ -24,7 +24,6 @@ public class DamageZone : EditorZone<DamageZone>
         base.Start();
         playerStats = playerStateMachine.GetComponentInParent<PlayerStats>();
         originalTrapPos = trap.transform.position;
-
         if (isContinuousSpikes)
         {
             Vector2 target = new(transform.position.x, transform.position.y + 0.2f);
@@ -36,10 +35,27 @@ public class DamageZone : EditorZone<DamageZone>
             OnDeactivate.AddListener(() => StartCoroutine(HideTrap()));
         }
 
-        OnActivate.AddListener(() =>
+        if (!isContinuousSpikes)
         {
-            DealDamage();
-        });
+            OnActivate.AddListener(() =>
+            {
+                DealDamage();
+            });
+        }
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (isContinuousSpikes)
+        {
+            if (other.transform.root.TryGetComponent(out PlayerController controller))
+            {
+                if (other == controller.stateMachine.bodyCollider)
+                {
+                    DealDamage();
+                }
+            }
+        }
     }
 
     public void DealDamage(GameObject go)
@@ -59,10 +75,10 @@ public class DamageZone : EditorZone<DamageZone>
             StartCoroutine(ActivateTrap(target));
         }
 
-        else if (isContinuousSpikes)
-        {
-            if (spikesShowing) playerStats.TakeDamage(damage);
-        }
+        // else if (isContinuousSpikes)
+        // {
+        //     if (spikesShowing) playerStats.TakeDamage(damage);
+        // }
     }
 
     private IEnumerator MoveSpikes(Vector2 target)
@@ -71,11 +87,13 @@ public class DamageZone : EditorZone<DamageZone>
         {
             yield return StartCoroutine(ActivateTrap(target));
             yield return new WaitForSeconds(continuousSpikesTime);
-            spikesShowing = true;
+            spikesShowing = false;
 
             yield return StartCoroutine(HideTrap());
             yield return new WaitForSeconds(continuousSpikesTime);
-            spikesShowing = false;
+            spikesShowing = true;
+
+            if (spikesShowing) playerStats.TakeDamage(damage);
         }
     }
 

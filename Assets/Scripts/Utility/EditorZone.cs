@@ -34,6 +34,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     public UnityEvent OnDeactivate = new();
     public UnityEvent OnCooldownReset = new();
 
+    public float activationSeconds = 1f;
+
     protected float currentCooldown = 0;
     protected float currentDuration = 0;
     protected int activations = 0;
