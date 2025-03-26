@@ -2,14 +2,15 @@ using UnityEngine;
 using System;
 using Manager;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class UIManager : Manager<UIManager>
 {
     [Header("Inventory UI")]
     public Image inventoryKeysIcon;
-    public Text inventoryKeysText;
+    public TextMeshProUGUI inventoryKeysText;
     public Image inventoryPotionIcon;
-    public Text inventoryPotionText;
+    public TextMeshProUGUI inventoryPotionText;
     public Image healthBarIcon;
 }
