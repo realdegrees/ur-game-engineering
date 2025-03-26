@@ -1,8 +1,10 @@
 using System;
+using Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterStateMachine))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : Manager<PlayerController>
 {
     private Animator animator;
     [HideInInspector]
@@ -14,8 +16,13 @@ public class PlayerController : MonoBehaviour
 
     public bool IsFacingRight { get; private set; } = true;
 
-    private void Start()
+    protected void Start()
     {
+        SceneManager.sceneLoaded += (scene, mode) =>
+        {
+            stateMachine.rb.transform.position = Vector3.zero;
+        };
+
         TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
         TryGetComponent(out playerStats);
@@ -116,8 +123,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         InputManager.Instance.OnJumpPressed -= HandleJump;
     }
 }

@@ -27,15 +27,11 @@ public class SceneLoader : Manager<SceneLoader>
         public List<string> _exclude;
     }
 
-#if UNITY_EDITOR
-    [SerializeField]
-    private SceneAsset menuScene, loadingScene, levels;
-#endif
-    private string _menuScene, _loadingScene, _levels;
+
     [Tooltip("These scenes are additively added every time a new scene loads")]
     [InspectorName("Bootstrap Scenes")]
     public List<SceneLoadInfo> scenes = new();
-    // This loaads all scenes defined in bootstrapScenes and loads them sync or async
+    // This loads all scenes defined in bootstrapScenes and loads them sync or async
     protected override void Awake()
     {
         base.Awake();

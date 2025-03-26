@@ -2,6 +2,7 @@ using System;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PenaltyHandler : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PenaltyHandler : MonoBehaviour
     private readonly uint ceilingPenalty = 50;
     public void Scan()
     {
+        AstarPath.active.Scan();
         AstarPath.active.AddWorkItem(new AstarWorkItem(ctx =>
                 {
                     var gg = AstarPath.active.data.gridGraph;
@@ -135,5 +137,9 @@ public class PenaltyHandler : MonoBehaviour
     void Start()
     {
         Scan();
+        SceneManager.sceneLoaded += (a, b) =>
+        {
+            Scan();
+        };
     }
 }

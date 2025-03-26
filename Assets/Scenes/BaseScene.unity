@@ -3258,6 +3258,75 @@ RectTransform:
   m_AnchoredPosition: {x: -238.21002, y: 106.850006}
   m_SizeDelta: {x: -694.26, y: -371.72}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1402709104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402709106}
+  - component: {fileID: 1402709107}
+  - component: {fileID: 1402709105}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1402709105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402709104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c2000594a79d64782c190cea05d284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseScene:
+    sceneAsset: {fileID: 102900000, guid: b8bc0b5bc2f008a449057a54da4c6adc, type: 3}
+    scenePath: MenuScene
+  endScene:
+    sceneAsset: {fileID: 0}
+    scenePath: 
+  levels:
+  - sceneAsset: {fileID: 102900000, guid: f4ddd5d58f843084abb20e8c48d8a76f, type: 3}
+    scenePath: Level_1
+  - sceneAsset: {fileID: 102900000, guid: 818c7963d45807b459f2e3b1466e212f, type: 3}
+    scenePath: Level_2
+--- !u!4 &1402709106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402709104}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1402709107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402709104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5c5ac15d61bec4438727920b8a975b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenes: []
 --- !u!1 &1412605216
 GameObject:
   m_ObjectHideFlags: 0
@@ -3703,54 +3772,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1799508693
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1799508697}
-  - component: {fileID: 1799508698}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1799508697
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799508693}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1799508698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799508693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5c5ac15d61bec4438727920b8a975b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuScene: {fileID: 0}
-  loadingScene: {fileID: 0}
-  levels: {fileID: 0}
-  scenes: []
 --- !u!1 &1966840507
 GameObject:
   m_ObjectHideFlags: 0
@@ -3985,7 +4006,6 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1799508697}
   - {fileID: 1572878980}
   - {fileID: 1671237024}
   - {fileID: 1182795115}
@@ -3995,3 +4015,4 @@ SceneRoots:
   - {fileID: 1742687574}
   - {fileID: 621336788}
   - {fileID: 987223148}
+  - {fileID: 1402709106}
