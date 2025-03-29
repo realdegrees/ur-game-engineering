@@ -103,13 +103,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     {
         if (currentStory.canContinue)
         {
-            if (currentStory.currentChoices.Count > 0)
-            {
-            }
-            else
-            {
-            }
             dialogueText.text = currentStory.Continue();
+
             DisplayChoices();
             HandleTags(currentStory.currentTags);
             continueBtn.interactable = currentStory.currentChoices.Count == 0;
@@ -206,6 +201,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     public void MakeChoice(int choiceIndex)
     {
+        LogManager.Instance.LogDialogueChoice(currentStory.currentText, currentStory.currentChoices[choiceIndex].text);
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
     }
