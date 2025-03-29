@@ -140,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1107419767457504353, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.21
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 1107419767457504353, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -152,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1361475258499446009, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.21
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 1361475258499446009, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -236,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8087344049949425915, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_TrackedObjectOffset.y
-      value: 0.21
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 8692966641365560251, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_Enabled

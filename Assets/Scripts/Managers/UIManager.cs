@@ -13,4 +13,19 @@ public class UIManager : Manager<UIManager>
     public Image inventoryPotionIcon;
     public TextMeshProUGUI inventoryPotionText;
     public Image healthBarIcon;
+
+    public void Disable()
+    {
+        foreach (var canvas in inventoryKeysIcon.transform.root.GetComponentsInChildren<Canvas>())
+        {
+            canvas.enabled = false;
+        }
+    }
+    public void Enable()
+    {
+        foreach (var canvas in inventoryKeysIcon.transform.root.GetComponentsInChildren<Canvas>())
+        {
+            canvas.enabled = true;
+        }
+    }
 }
