@@ -11,6 +11,11 @@ public class LogData
 {
     public string startTime;
     public string finishTime;
+    public string operatingSystem;
+    public string deviceModel;
+    public string processorType;
+    public int processorCount;
+    public int systemMemorySize; // in MB
     public List<LevelData> levels;
     public List<DialogueChoice> dialogueChoices;
 }
@@ -38,6 +43,7 @@ public class LogManager : Manager<LogManager>
 {
     private string logFilePath;
     private LogData logData;
+
     public void Start()
     {
         // Create log file path (using persistentDataPath ensures it works on all platforms)
@@ -47,16 +53,23 @@ public class LogManager : Manager<LogManager>
         logData = new LogData
         {
             startTime = DateTime.UtcNow.ToString("o"),
+            operatingSystem = SystemInfo.operatingSystem,
+            deviceModel = SystemInfo.deviceModel,
+            processorType = SystemInfo.processorType,
+            processorCount = SystemInfo.processorCount,
+            systemMemorySize = SystemInfo.systemMemorySize,
             levels = new List<LevelData>(),
             dialogueChoices = new List<DialogueChoice>()
         };
     }
+
     private void OnApplicationQuit()
     {
         // Finalize the log when the object is destroyed (e.g., when the game ends)
         FinalizeLog();
         base.OnDestroy();
     }
+
     // Call when a level (scene) starts
     public void LogLevelStart(string levelName)
     {
