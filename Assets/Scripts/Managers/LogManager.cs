@@ -51,7 +51,7 @@ public class LogManager : Manager<LogManager>
             dialogueChoices = new List<DialogueChoice>()
         };
     }
-    protected override void OnDestroy()
+    private void OnApplicationQuit()
     {
         // Finalize the log when the object is destroyed (e.g., when the game ends)
         FinalizeLog();
