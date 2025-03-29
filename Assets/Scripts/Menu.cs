@@ -12,6 +12,7 @@ public class Menu : MonoBehaviour
 
     private void Start()
     {
+        UIManager.Instance.Disable();
         userId.text = SystemInfo.deviceUniqueIdentifier[..6];
         userIdCopyButton.onClick.AddListener(() =>
         {
@@ -38,6 +39,7 @@ public class Menu : MonoBehaviour
 
         startButton.onClick.AddListener(() =>
         {
+            UIManager.Instance.Enable();
             LevelManager.Instance.NextLevel();
         });
     }
