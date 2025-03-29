@@ -131,7 +131,7 @@ public class LogManager : Manager<LogManager>
             File.WriteAllText(logFilePath, json);
             Debug.Log("Log file written to: " + logFilePath);
 
-            var id = "user-id-placeholder";
+            var id = SystemInfo.deviceUniqueIdentifier[..6];
 
             using var webClient = new System.Net.WebClient();
             webClient.Headers[System.Net.HttpRequestHeader.ContentType] = "application/json";
