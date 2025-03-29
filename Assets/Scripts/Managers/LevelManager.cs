@@ -20,12 +20,20 @@ public class LevelManager : Manager<LevelManager>
         if (currentLevel.SceneName == null)
         {
             currentLevel = levels[0];
+            LogManager.Instance.LogLevelStart(currentLevel.SceneName);
         }
         else
         {
             int index = levels.FindIndex(0, levels.Count, (level) => level.SceneName == currentLevel.SceneName);
-            if (index == levels.Count - 1) return;
+            if (index == levels.Count - 1)
+            {
+                LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
+                return;
+            }
+
+            LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
             currentLevel = levels[index + 1];
+            LogManager.Instance.LogLevelStart(currentLevel.SceneName);
         }
 
         SceneManager.LoadScene(currentLevel.SceneName);
