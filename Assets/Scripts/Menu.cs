@@ -36,7 +36,7 @@ public class Menu : MonoBehaviour
             textEditor.SelectAll();
             textEditor.Copy();
             Application.OpenURL(link);
-            StartCoroutine(EnableStartButtonAfterDelay(5f));
+            StartCoroutine(EnableStartButtonAfterDelay(1f));
         });
 
         startButton.onClick.AddListener(() =>

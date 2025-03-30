@@ -14,7 +14,6 @@ public struct SceneReference
 #endif
 
     // This field is serialized at runtime. It should store the scene's path.
-    [HideInInspector]
     [SerializeField]
     private string scenePath;
 
