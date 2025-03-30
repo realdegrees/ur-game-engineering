@@ -1,18 +1,30 @@
 using System.Collections.Generic;
+using System.Collections;
 using Manager;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : Manager<LevelManager>
 {
     public SceneReference baseScene;
     public SceneReference endScene;
-    public List<SceneReference> levels = new();
+    public List<SceneReference> levels_scenario_a = new();
+    public List<SceneReference> levels_scenario_b = new();
+    private List<SceneReference> levels = new();
     private SceneReference currentLevel;
 
     protected override void Awake()
     {
         base.Awake();
         currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
+        StartCoroutine(SetLevelsFromScenario());
+
+    }
+
+    private IEnumerator SetLevelsFromScenario()
+    {
+        yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
+        levels = GameManager.Instance.Scenario == "A" ? levels_scenario_a : levels_scenario_b;
     }
     public void NextLevel()
     {

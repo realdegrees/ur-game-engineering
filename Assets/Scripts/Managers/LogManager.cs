@@ -2,7 +2,6 @@ using Manager;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
 
 // Container for all logging data
@@ -14,6 +13,7 @@ public class LogData
     public string operatingSystem;
     public string deviceModel;
     public string processorType;
+    public string graphicsCard;
     public int processorCount;
     public int systemMemorySize; // in MB
     public List<LevelData> levels;
@@ -41,13 +41,13 @@ public class DialogueChoice
 
 public class LogManager : Manager<LogManager>
 {
-    private string logFilePath;
     private LogData logData;
+    [Header("Debug")]
+    public bool SendLogsToServerInEditor = false; // Set to true to send logs in the editor
 
     public void Start()
     {
         // Create log file path (using persistentDataPath ensures it works on all platforms)
-        logFilePath = Path.Combine(Application.persistentDataPath, "logfile.json");
 
         // Initialize log data and record start time for the project
         logData = new LogData
@@ -58,6 +58,7 @@ public class LogManager : Manager<LogManager>
             processorType = SystemInfo.processorType,
             processorCount = SystemInfo.processorCount,
             systemMemorySize = SystemInfo.systemMemorySize,
+            graphicsCard = SystemInfo.graphicsDeviceName,
             levels = new List<LevelData>(),
             dialogueChoices = new List<DialogueChoice>()
         };
@@ -116,6 +117,22 @@ public class LogManager : Manager<LogManager>
         logData.dialogueChoices.Add(dialogue);
     }
 
+    private void UploadLog(string id, string log)
+    {
+        try
+        {
+            using var webClient = new System.Net.WebClient();
+            webClient.Headers[System.Net.HttpRequestHeader.ContentType] = "application/json";
+            webClient.Headers[System.Net.HttpRequestHeader.Authorization] = "Bearer ur-game-engineering-2025";
+            webClient.UploadString("https://ge-log-api.realdegrees.dev/" + id, "POST", log);
+            Debug.Log("Log file successfully posted to the server.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to send logfile to the server: " + e.Message);
+        }
+    }
+
     // Call at the end of the project (or when you want to finalize the log)
     public void FinalizeLog()
     {
@@ -123,25 +140,21 @@ public class LogManager : Manager<LogManager>
 
         // Serialize the log data to JSON
         string json = JsonUtility.ToJson(logData, true);
-
-#if !UNITY_EDITOR
-        // Write the JSON string to the log file
-        try
+        var fullId = GameManager.Instance.Scenario + "-" + GameManager.Instance.id;
+        var logFilePath = Path.Combine(Application.persistentDataPath, fullId + ".json");
+        File.WriteAllText(logFilePath, json);
+        Debug.Log("Study Log file written to: " + logFilePath);
+        if (SendLogsToServerInEditor)
         {
-            File.WriteAllText(logFilePath, json);
-            Debug.Log("Log file written to: " + logFilePath);
-
-            var id = SystemInfo.deviceUniqueIdentifier[..6];
-
-            using var webClient = new System.Net.WebClient();
-            webClient.Headers[System.Net.HttpRequestHeader.ContentType] = "application/json";
-            webClient.Headers[System.Net.HttpRequestHeader.Authorization] = "Bearer ur-game-engineering-2025";
-            webClient.UploadString("https://ge-log-api.realdegrees.dev/" + id, "POST", json);
-            Debug.Log("Log file successfully posted to the server.");
+            UploadLog(fullId, json);
+            return;
         }
-        catch (Exception e)
+
+#if !UNITY_EDITOR // ? This is used to force the upload in non-editor mode even if the variable is disabled
+        if (!SendLogsToServerInEditor)
         {
-            Debug.LogError("Failed to write log file: " + e.Message);
+            UploadLog(fullId, json);
+            return;
         }
 #endif
     }

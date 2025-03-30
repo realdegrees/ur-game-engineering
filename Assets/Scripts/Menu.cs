@@ -13,7 +13,9 @@ public class Menu : MonoBehaviour
     private void Start()
     {
         UIManager.Instance.Disable();
-        userId.text = SystemInfo.deviceUniqueIdentifier[..6];
+        userId.text = "Generating ID...";
+        StartCoroutine(SetUserIdText());
+
         userIdCopyButton.onClick.AddListener(() =>
         {
             TextEditor textEditor = new()
@@ -43,9 +45,15 @@ public class Menu : MonoBehaviour
             LevelManager.Instance.NextLevel();
         });
     }
+    IEnumerator SetUserIdText()
+    {
+        yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
+        userId.text = GameManager.Instance.Scenario + "-" + GameManager.Instance.id;
+    }
     IEnumerator EnableStartButtonAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
         startButton.gameObject.SetActive(true);
     }
 }
