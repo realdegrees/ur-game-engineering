@@ -29,7 +29,8 @@ public class PlayerController : Manager<PlayerController>
         InputManager.Instance.OnJumpPressed += HandleJump;
         InputManager.Instance.OnAttackPressed += () =>
         {
-            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
+            var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || stateInfo.IsName("Attack_1") || stateInfo.IsName("Attack_2") || stateInfo.IsName("Attack_3"))
                 return;
 
             // get enemies in range
@@ -40,7 +41,8 @@ public class PlayerController : Manager<PlayerController>
             {
                 hit.GetComponent<CharacterStats>().TakeDamage(playerStats.GetDamage());
             }
-            animator.SetTrigger("Attack");
+            int attackNumber = UnityEngine.Random.Range(1, 4); // Generates a random number between 1 and 3 (inclusive)
+            animator.SetTrigger($"Attack_{attackNumber}");
         };
 
         // TODO wherever the player attack method is called, also trigger the animation parameter "Attack"
@@ -50,16 +52,21 @@ public class PlayerController : Manager<PlayerController>
             {
                 animator.SetTrigger("Jump");
             }
+            else if (state.state == ECharacterState.Falling)
+            {
+                animator.SetTrigger("Fall");
+            }
         };
     }
     private void Update()
     {
-        animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
-        animator.SetBool("Grounded", stateMachine.ground.connected);
         FlipCheck();
     }
     private void FixedUpdate()
     {
+        animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
+        animator.SetFloat("YVelocity", Mathf.Abs(stateMachine.rb.velocity.y));
+        animator.SetBool("Grounded", stateMachine.ground.connected);
         HandleGravity();
         HandleMovement();
         HandleFall();

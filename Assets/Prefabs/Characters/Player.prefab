@@ -64,8 +64,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0020449907, y: -0.1656985}
-  m_Size: {x: 0.15203336, y: 0.24019271}
+  m_Offset: {x: 0, y: -0.040000215}
+  m_Size: {x: 0.15203336, y: 0.16787317}
   m_Direction: 0
 --- !u!1 &3765379530046486663
 GameObject:
@@ -166,8 +166,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0070523554, y: 0.00013335135}
-  m_Size: {x: 0.16772602, y: 0.12526236}
+  m_Offset: {x: 0, y: 0.072452925}
+  m_Size: {x: 0.12870653, y: 0.083937176}
   m_Direction: 1
 --- !u!1 &6962759502354806734
 GameObject:
@@ -203,8 +203,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2914267181576602931}
   m_Father: {fileID: 0}
@@ -250,12 +250,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 349467404, guid: 30794134827d33b478025fcf0129ac3f, type: 3}
+  m_Sprite: {fileID: -1010380699, guid: 73f3962cc3358924d9d6b33a774d4cdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.64, y: 0.64}
+  m_Size: {x: 0.5, y: 0.37}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -355,7 +355,7 @@ Animator:
   m_GameObject: {fileID: 6962759502354806734}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ae47b052fbb16a041ac78c450f2adcb9, type: 2}
+  m_Controller: {fileID: 9100000, guid: d6de78fbdde1541498ce915b88adf0f4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -438,9 +438,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
+  m_Offset: {x: 0, y: 0.100000024}
   serializedVersion: 2
-  m_Radius: 0.6618372
+  m_Radius: 0.5240857
 --- !u!1 &8558648589893423112
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +505,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.010609425, y: -0.2906323}
-  m_Size: {x: 0.15367252, y: 0.042844478}
+  m_Offset: {x: 0, y: -0.15115888}
+  m_Size: {x: 0.18403982, y: 0.046288256}
   m_Direction: 1
