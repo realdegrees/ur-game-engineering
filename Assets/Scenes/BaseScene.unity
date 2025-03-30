@@ -2790,8 +2790,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6962759502354806734, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1283401720}
   m_SourcePrefab: {fileID: 100100000, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+--- !u!1 &1109757093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6962759502354806734, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
+  m_PrefabInstance: {fileID: 1109757092}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1109757094 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2353405837647139473, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
@@ -3137,12 +3145,55 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -2780013989880506495, guid: b46abcac0375ac643a9551d1df3a82c8, type: 3}
   m_PrefabInstance: {fileID: 1109757092}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1109757093}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf5a7de102476964ea63c066b203bb41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!66 &1283401720
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109757093}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0
+  m_ColliderPaths: []
+  m_CompositePaths:
+    m_Paths: []
+  m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
+  m_UseDelaunayMesh: 0
+  m_CompositeGameObject: {fileID: 1109757093}
 --- !u!1 &1304359772
 GameObject:
   m_ObjectHideFlags: 0

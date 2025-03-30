@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 8445964360560508619}
   m_Layer: 7
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Hostile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -536,7 +536,7 @@ MonoBehaviour:
   maxPlayerFollowDistance: 20
   detectionDistance: 10
   forceFollow: 0
-  forceFollowThreshold: 40
+  forceFollowThreshold: 15
 --- !u!82 &4971181355030226967
 AudioSource:
   m_ObjectHideFlags: 0

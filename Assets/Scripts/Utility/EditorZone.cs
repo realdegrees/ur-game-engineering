@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,7 @@ public enum EditorZoneBounds
 [RequireComponent(typeof(Collider2D))]
 public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
 {
-
+    public List<string> activateTags = new() { "Player" };
     [Min(0)]
     [Tooltip("The number of times the player can walk in before the modifier is not applied anymore (0 = infinite)")]
     public int numberOfAllowedActivations = 1;
@@ -22,7 +23,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     [Tooltip("The cooldown between activations in seconds")]
     public float cooldown = 0;
     [Tooltip("Determins whether player movement should be frozen OnActivate and unfrozen after cooldown ends")]
-    public bool freezePlayer = false;
+    public List<string> freezeTags = new();
+    public bool deactivateOnExit = true;
 
     [Header("Gizmo Settings")]
     public bool showZone = true;
@@ -31,17 +33,17 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     public UnityEvent OnActivate = new();
     public UnityEvent OnDeactivate = new();
     public UnityEvent OnCooldownReset = new();
-    public UnityEvent OnDurationPassed = new();
 
     protected float currentCooldown = 0;
     protected float currentDuration = 0;
     protected int activations = 0;
     protected Collider2D zoneCollider;
 
-    private Rigidbody2D rb;
-    protected CharacterStateMachine playerStateMachine;
+    private List<string> inZone = new();
+    private List<CharacterStateMachine> frozenCharacters = new();
 
     #region Lifecycle Events
+    protected virtual void Start() { }
     protected virtual void Awake()
     {
         zoneCollider = GetComponent<Collider2D>();
@@ -50,77 +52,73 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
             Debug.LogWarning($"Zone collider on {gameObject.name} is not set to 'Trigger'. Setting it automatically.");
             zoneCollider.isTrigger = true;
         }
-    }
 
-    protected virtual void Start()
-    {
-        rb = GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>();
-        playerStateMachine = GameObject.FindWithTag("Player").GetComponent<CharacterStateMachine>();
+        OnDeactivate.AddListener(() =>
+        {
+            frozenCharacters.ForEach((sm) =>
+            {
+                sm.Unfreeze();
+            });
+            frozenCharacters.Clear();
+        });
+
     }
 
     // Set the camera type to the modifier type when the player enters the trigger
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations) return;
-        if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
+        if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations || other.isTrigger) return;
+        var tag = other.transform.root.tag;
+
+        if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Contains(tag)) return; // Check if the tag is in the list of allowed tags
+        inZone.Add(tag);
+        activations++;
+
+        // Set and reset cooldown
+        StartCoroutine(Cooldown());
+        StartCoroutine(Duration());
+        IEnumerator Cooldown()
         {
-            if (other == controller.stateMachine.bodyCollider && currentCooldown <= 0)
+            if (cooldown != 0)
             {
-                // Adjust variables
-                activations++;
-
-                // Set and reset cooldown
-                StartCoroutine(Cooldown());
-                StartCoroutine(Duration());
-                IEnumerator Cooldown()
+                currentCooldown = cooldown;
+                while (currentCooldown > 0)
                 {
-                    if (cooldown != 0)
-                    {
-                        currentCooldown = cooldown;
-                        while (currentCooldown > 0)
-                        {
-                            currentCooldown -= Time.deltaTime;
-                            yield return null;
-                        }
-
-                        OnCooldownReset.Invoke();
-                    }
-                }
-                IEnumerator Duration()
-                {
-                    currentDuration = 0;
-
-                    while (currentDuration < duration)
-                    {
-                        currentDuration += Time.deltaTime;
-                        yield return null;
-                    }
-                    if (freezePlayer && playerStateMachine && duration > 0)
-                    {
-                        playerStateMachine.Unfreeze();
-                    }
-
-                    OnDurationPassed.Invoke();
+                    currentCooldown -= Time.deltaTime;
+                    yield return null;
                 }
 
-                OnActivate.Invoke();
-                if (freezePlayer && playerStateMachine)
-                {
-                    playerStateMachine.Freeze();
-                }
+                OnCooldownReset.Invoke();
+            }
+        }
+        IEnumerator Duration()
+        {
+            currentDuration = 0;
+
+            while (currentDuration < duration)
+            {
+                currentDuration += Time.deltaTime;
+                yield return null;
             }
 
+            OnDeactivate.Invoke();
+        }
+
+        OnActivate.Invoke();
+        if (freezeTags.Contains(tag) && other.transform.root.TryGetComponent(out CharacterStateMachine sm))
+        {
+            sm.Freeze();
+            frozenCharacters.Add(sm);
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.transform.root.TryGetComponent(out PlayerController controller)) // ! re-use snippet
-        {
-            if (other == controller.stateMachine.bodyCollider)
-            {
-                OnDeactivate.Invoke();
-            }
-        }
+        var tag = other.CompareTag("Untagged") ? other.transform.root.tag : other.tag;
+        if (!activateTags.Contains(tag) || other.isTrigger) return; // Check if the tag is in the list of allowed tags
+        inZone.Remove(tag);
+
+        if (inZone.Count == 0 && deactivateOnExit)
+            OnDeactivate.Invoke();
     }
 
     #endregion

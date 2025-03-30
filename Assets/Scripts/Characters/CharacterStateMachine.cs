@@ -45,7 +45,8 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     }
     public void Freeze()
     {
-        OnLand += DoFreeze;
+        if (ground.connected) DoFreeze();
+        else OnLand += DoFreeze;
     }
     public void Unfreeze()
     {
