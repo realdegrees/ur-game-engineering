@@ -8,7 +8,6 @@ public class DamageZone : EditorZone<DamageZone>
     public int damage;
     public GameObject trap;
 
-    public bool isHiddenSpikes;
     public bool isRocks;
     public bool isContinuousSpikes;
 
@@ -27,22 +26,16 @@ public class DamageZone : EditorZone<DamageZone>
         originalTrapPos = trap.transform.position;
         if (isContinuousSpikes)
         {
-            Vector2 target = new(transform.position.x, transform.position.y + 0.2f);
-            StartCoroutine(MoveSpikes(target));
-        }
-        else if (isHiddenSpikes)
-        {
-            Vector2 target = new(originalTrapPos.x, originalTrapPos.y - 0.2f);
-            OnDeactivate.AddListener(() => StartCoroutine(HideTrap()));
+            StartCoroutine(MoveSpikes());
         }
 
-        if (!isContinuousSpikes)
-        {
-            OnActivate.AddListener(() =>
-            {
-                DealDamage();
-            });
-        }
+        // if (!isContinuousSpikes)
+        // {
+        //     OnActivate.AddListener(() =>
+        //     {
+        //         DealDamage();
+        //     });
+        // }
     }
 
     public void OnTriggerStay2D(Collider2D other)
@@ -53,47 +46,29 @@ public class DamageZone : EditorZone<DamageZone>
             {
                 if (other == controller.stateMachine.bodyCollider)
                 {
-                   // DealDamage();
-                //    if (spikesShowing)
-                //    {
-                //         playerStats.TakeDamage(damage);
-                //         spikesShowing = false;
-                //    }
-                playerStats.TakeDamage(damage);
-                hasDamagedPlayer = true;
+                    playerStats.TakeDamage(damage);
+                    hasDamagedPlayer = true;
                 }
             }
         }
     }
 
-    public void DealDamage(GameObject go)
-    {
-        if (isHiddenSpikes || isRocks)
-        {
-            Vector2 target = originalTrapPos;
-            if (isHiddenSpikes)
-            {
-                target = new Vector2(originalTrapPos.x, originalTrapPos.y + 0.2f);
-            }
-            else if (isRocks)
-            {
-                target = new Vector2(originalTrapPos.x, originalTrapPos.y - 5f);
-            }
-            playerStats.TakeDamage(damage);
-            StartCoroutine(ActivateTrap(target));
-        }
+    // public void DealDamage()
+    // {
+    //     if (isRocks)
+    //     {
+    //         Vector2 target = new (originalTrapPos.x, originalTrapPos.y - 5f);
+    //         playerStats.TakeDamage(damage);
+    //         StartCoroutine(ActivateTrap(target));
+    //     }
+        
+    // }
 
-        // else if (isContinuousSpikes)
-        // {
-        //     if (spikesShowing) playerStats.TakeDamage(damage);
-        // }
-    }
-
-    private IEnumerator MoveSpikes(Vector2 target)
+    private IEnumerator MoveSpikes()
     {
         while (true)
         {
-            yield return StartCoroutine(ActivateTrap(target));
+            yield return StartCoroutine(ActivateTrap());
             yield return new WaitForSeconds(continuousSpikesTime);
             spikesShowing = false;
             hasDamagedPlayer = false;
@@ -104,10 +79,11 @@ public class DamageZone : EditorZone<DamageZone>
         }
     }
 
-    private IEnumerator ActivateTrap(Vector2 target)
+    private IEnumerator ActivateTrap()
     {
         Vector2 start = originalTrapPos;
-        if (isContinuousSpikes) start = transform.position;
+        Vector2 target = new(originalTrapPos.x, originalTrapPos.y + 0.2f);
+        //if (isContinuousSpikes) start = transform.position;
         float timePassed = 0f;
 
         while (timePassed < trapSpeed)
@@ -123,7 +99,7 @@ public class DamageZone : EditorZone<DamageZone>
     private IEnumerator HideTrap()
     {
         Vector2 start = trap.transform.position;
-        if (isContinuousSpikes) start = transform.position;
+        //if (isContinuousSpikes) start = transform.position;
         Vector2 target = new(start.x, start.y - 0.2f);
         float timePassed = 0f;
 
