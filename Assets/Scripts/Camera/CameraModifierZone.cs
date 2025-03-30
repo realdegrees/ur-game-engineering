@@ -23,7 +23,6 @@ public class CameraModifierZone : EditorZone<CameraModifierZone>
         base.Awake();
         OnActivate.AddListener(ApplyModifier);
         OnDeactivate.AddListener(ResetCamera);
-        OnDurationPassed.AddListener(ResetCamera);
     }
     #endregion
 

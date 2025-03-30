@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerBody
+  - Hostile
   layers:
   - Default
   - TransparentFX
