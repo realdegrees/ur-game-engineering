@@ -14,7 +14,6 @@ public class DamageZone : EditorZone<DamageZone>
     public float trapSpeed = 0.2f;
     public float continuousSpikesTime = 1.5f;
     private Vector2 originalTrapPos;
-    private PlayerStats playerStats;
 
     private bool spikesShowing = false;
     private bool hasDamagedPlayer = false;
@@ -22,7 +21,6 @@ public class DamageZone : EditorZone<DamageZone>
     protected override void Start()
     {
         base.Start();
-        playerStats = playerStateMachine.GetComponentInParent<PlayerStats>();
         originalTrapPos = trap.transform.position;
         if (isContinuousSpikes)
         {
@@ -40,16 +38,15 @@ public class DamageZone : EditorZone<DamageZone>
 
     public void OnTriggerStay2D(Collider2D other)
     {
+        var tag = other.transform.root.tag;
+
         if (isContinuousSpikes && spikesShowing && !hasDamagedPlayer)
         {
-            if (other.transform.root.TryGetComponent(out PlayerController controller))
+            inZone.ForEach((go) =>
             {
-                if (other == controller.stateMachine.bodyCollider)
-                {
-                    playerStats.TakeDamage(damage);
-                    hasDamagedPlayer = true;
-                }
-            }
+                if (!TryGetComponent(out PlayerStats playerStats)) return;
+                playerStats.TakeDamage(damage);
+            });
         }
     }
 
@@ -61,7 +58,7 @@ public class DamageZone : EditorZone<DamageZone>
     //         playerStats.TakeDamage(damage);
     //         StartCoroutine(ActivateTrap(target));
     //     }
-        
+
     // }
 
     private IEnumerator MoveSpikes()
