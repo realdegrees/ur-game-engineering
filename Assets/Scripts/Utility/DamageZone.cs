@@ -18,6 +18,7 @@ public class DamageZone : EditorZone<DamageZone>
     private PlayerStats playerStats;
 
     private bool spikesShowing = false;
+    private bool hasDamagedPlayer = false;
 
     protected override void Start()
     {
@@ -46,13 +47,20 @@ public class DamageZone : EditorZone<DamageZone>
 
     public void OnTriggerStay2D(Collider2D other)
     {
-        if (isContinuousSpikes)
+        if (isContinuousSpikes && spikesShowing && !hasDamagedPlayer)
         {
             if (other.transform.root.TryGetComponent(out PlayerController controller))
             {
                 if (other == controller.stateMachine.bodyCollider)
                 {
-                    DealDamage();
+                   // DealDamage();
+                //    if (spikesShowing)
+                //    {
+                //         playerStats.TakeDamage(damage);
+                //         spikesShowing = false;
+                //    }
+                playerStats.TakeDamage(damage);
+                hasDamagedPlayer = true;
                 }
             }
         }
@@ -88,12 +96,11 @@ public class DamageZone : EditorZone<DamageZone>
             yield return StartCoroutine(ActivateTrap(target));
             yield return new WaitForSeconds(continuousSpikesTime);
             spikesShowing = false;
+            hasDamagedPlayer = false;
 
             yield return StartCoroutine(HideTrap());
             yield return new WaitForSeconds(continuousSpikesTime);
             spikesShowing = true;
-
-            if (spikesShowing) playerStats.TakeDamage(damage);
         }
     }
 
