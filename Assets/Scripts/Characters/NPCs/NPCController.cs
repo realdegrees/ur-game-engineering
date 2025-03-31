@@ -76,7 +76,7 @@ public class NPCController : MonoBehaviour
             patrolPointCenter = stateMachine.rb.position;
         }
 
-        var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.config.FollowDistance);
+        var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance);
         var target = hit.FirstOrDefault(h => followsTags.Any((t) => h.transform.root.CompareTag(t)));
         if (stateMachine.Target && maxFollowRangeFromOrigin > 0)
         {
@@ -130,7 +130,7 @@ public class NPCController : MonoBehaviour
             return;
 
         var losCheck = Physics2D.Linecast(transform.position, stateMachine.Target.transform.position, LayerMask.GetMask("Ground"));
-        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > stateMachine.config.ResumeDistance)
+        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > stateMachine.Config.ResumeDistance)
             return;
 
         DoAttack(targetStats);
@@ -176,7 +176,7 @@ public class NPCController : MonoBehaviour
             if (distance > forceFollowThreshold)
             {
                 Debug.Log("Force follow");
-                stateMachine.rb.velocity = stateMachine.pathDir * stateMachine.config.MaxWalkSpeed;
+                stateMachine.rb.velocity = stateMachine.pathDir * stateMachine.Config.MaxWalkSpeed;
                 stateMachine.rb.isKinematic = true;
                 forceFollowActive = true;
             }
@@ -193,7 +193,7 @@ public class NPCController : MonoBehaviour
     {
         if (!stateMachine.ground.connected)
         {
-            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.config.GravityMultiplier);
+            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.Config.GravityMultiplier);
         }
     }
 
@@ -233,7 +233,7 @@ public class NPCController : MonoBehaviour
             return;
 
         Rigidbody2D rb = stateMachine.rb;
-        NPCMovementConfig config = stateMachine.config;
+        NPCMovementConfig config = stateMachine.Config;
         Vector2 forward = new(Mathf.Sign(stateMachine.pathDir.x), 0);
 
         if (stateMachine.pathAngle <= 40)

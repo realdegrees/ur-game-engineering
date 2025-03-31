@@ -82,7 +82,7 @@ public class PlayerController : Manager<PlayerController>
     {
         if (!stateMachine.ground.connected)
         {
-            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.config.GravityMultiplier);
+            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.Config.GravityMultiplier);
         }
     }
 
@@ -116,8 +116,8 @@ public class PlayerController : Manager<PlayerController>
     private void HandleJump()
     {
         // var isGroundedOrFalling = stateMachine.IsStateActive(ECharacterState.Falling, ECharacterState.JumpApex) || stateMachine.ground.connected;
-        var isInCoyoteWindow = Time.time - stateMachine.ground.lastConnected < stateMachine.config.CoyoteTime;
-        var canJump = stateMachine.jumpsSinceGrounded < stateMachine.config.NumberOfJumpsAllowed;
+        var isInCoyoteWindow = Time.time - stateMachine.ground.lastConnected < stateMachine.Config.CoyoteTime;
+        var canJump = stateMachine.jumpsSinceGrounded < stateMachine.Config.NumberOfJumpsAllowed;
 
         if (isInCoyoteWindow || canJump)
         {

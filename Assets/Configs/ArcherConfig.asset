@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45b607dc0b919e340aadb80e2f2bdd6a, type: 3}
-  m_Name: Archer2_Config
+  m_Name: ArcherConfig
   m_EditorClassIdentifier: 
   states:
-  - {fileID: 11400000, guid: 3ddfff97cc2b5d647b41bb82e792de5f, type: 2}
-  - {fileID: 11400000, guid: a44838c002b261e4eaf2bcf6bc3958e5, type: 2}
-  - {fileID: 11400000, guid: e1d7e7eef20c8c243baa18d3945aaaf0, type: 2}
-  - {fileID: 11400000, guid: 315c9d069ea973b4cbf2300d161b808d, type: 2}
-  - {fileID: 11400000, guid: d8099a43da6bc8545b9f3b050847c7b0, type: 2}
-  - {fileID: 11400000, guid: 055a3577411fd1845aa55d3851baf0fa, type: 2}
+  - {fileID: 11400000, guid: 0e4bcd56f0cf28f40ac4ad391ad05d6c, type: 2}
+  - {fileID: 11400000, guid: 5a63a3a8fb849a7498ea31f0bb2f53e0, type: 2}
+  - {fileID: 11400000, guid: 40198bb179df6a14c98372a98503d0ba, type: 2}
+  - {fileID: 11400000, guid: 7909bcc99e86d584e8ebb56ae4b983bf, type: 2}
+  - {fileID: 11400000, guid: bf3bb0303f806f649bd91e9f52a4ac0f, type: 2}
+  - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
   LedgeDepthThreshold: 1
   LedgeDecelerationFactor: 20
   MaxWalkSpeed: 3

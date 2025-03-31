@@ -65,7 +65,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         {
             if (!rb.isKinematic && (Target == null || !seeker.IsDone() || !IsActive))
             {
-                yield return new WaitForSeconds(config.pathUpdateDelta);
+                yield return new WaitForSeconds(Config.pathUpdateDelta);
                 continue;
             }
             // float targetDelta = path == null ? Vector2.Distance(target.position, rb.position) : Vector2.Distance(target.position, path.vectorPath.Last());
@@ -80,7 +80,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
                 }
             });
 
-            yield return new WaitForSeconds(config.pathUpdateDelta);
+            yield return new WaitForSeconds(Config.pathUpdateDelta);
         }
     }
     protected override void Update()
@@ -93,7 +93,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         CeilingCheck();
         CalcPathDir();
 
-        if (Target != null && path != null && config.ResumeDistance <= Vector2.Distance(Target.position, rb.position))
+        if (Target != null && path != null && Config.ResumeDistance <= Vector2.Distance(Target.position, rb.position))
         {
             IsActive = true;
         }
@@ -113,7 +113,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
             return;
 
         var earlyPathWeightingFactor = .5f;
-        int waypointsToConsider = Mathf.Min(config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
+        int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
         pathDir = Vector2.zero;
         pathAngle = 0;
 
@@ -134,7 +134,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     {
         //if (IsStateActive(ENPCState.Jumping)) return; // ! Might need to delete this
 
-        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || Vector2.Distance(rb.position, Target.transform.position) < config.FollowDistance))
+        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance))
         {
             IsActive = false;
             return;
@@ -181,7 +181,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     private void GroundCheck()
     {
         var prev = ground.connected;
-        ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, config.BottomRange, config.GroundLayer);
+        ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, Config.BottomRange, Config.GroundLayer);
         ground.collider = ground.hit.collider;
         ground.connected = ground.collider != null;
         ground.connectedOnThisFrame = false;
@@ -206,10 +206,10 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
 
     private void CeilingCheck()
     {
-        ceiling.hit = Physics2D.CapsuleCast(ceilingCheckCollider.bounds.center, ceilingCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, transform.up, config.TopRange, config.GroundLayer);
+        ceiling.hit = Physics2D.CapsuleCast(ceilingCheckCollider.bounds.center, ceilingCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, transform.up, Config.TopRange, Config.GroundLayer);
         ceiling.collider = ceiling.hit.collider;
         ceiling.angle = Vector2.Angle(transform.up, ceiling.hit.normal);
-        ceiling.connected = ceiling.collider != null && ceiling.angle <= config.CeilingAngleThreshold;
+        ceiling.connected = ceiling.collider != null && ceiling.angle <= Config.CeilingAngleThreshold;
         ceiling.perpendicular = ceiling.connected ? Vector2.Perpendicular(ceiling.hit.normal).normalized : Vector2.left;
 
         if (!ceiling.connected)
