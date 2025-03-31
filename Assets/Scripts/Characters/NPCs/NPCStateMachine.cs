@@ -93,9 +93,10 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         CeilingCheck();
         CalcPathDir();
 
-        if (Target != null && path != null && Config.ResumeDistance <= Vector2.Distance(Target.position, rb.position))
+        if (Target != null && path != null)
         {
-            IsActive = true;
+            var shouldMove = Config.ResumeDistance <= Vector2.Distance(Target.position, rb.position) || Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider != null;
+            IsActive = shouldMove;
         }
         if (Target == null)
         {
@@ -134,7 +135,8 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     {
         //if (IsStateActive(ENPCState.Jumping)) return; // ! Might need to delete this
 
-        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance))
+        var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider == null;
+        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || shouldStop))
         {
             IsActive = false;
             return;
