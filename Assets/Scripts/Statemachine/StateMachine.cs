@@ -21,7 +21,6 @@ public abstract class StateMachine<EState, SConfig> : MonoBehaviour where EState
     protected virtual void Awake()
     {
         config.states.RemoveAll(state => state == null);
-
         if (config.states.Count == 0)
         {
             Debug.LogWarning($"No States found in {config.GetType().Name}.");

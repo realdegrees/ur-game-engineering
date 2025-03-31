@@ -1,33 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
-
-    [SerializeField] int damage;
+    [HideInInspector]
+    public int damage;
     public float speed;
-    public AudioClip[] arrowSounds;
+    public bool spin = false;
+    public int rotationOffset = 90;
+    public bool stickOnImpact = false;
+
+
+    [Tooltip("Tags that the projectile will ignore during collision. The character that fires the projectile is automatically added to this list.")]
+    public List<string> ignoresTags = new() { };
 
     private float timer;
     private Rigidbody2D rb;
-    private GameObject player;
-    private PlayerStats playerStats;
+
 
     private AudioSource audioSource;
 
-    void Start()
+    void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player");
-        playerStats = player.GetComponent<PlayerStats>();
-
-        Vector3 direction = player.transform.position - transform.position;
-        rb.velocity = new Vector2(direction.x, direction.y).normalized * speed;
-        PlayRandomArrowSound();
     }
-
+    public void Init(Vector2 direction)
+    {
+        rb.velocity = direction.normalized * speed;
+    }
     void Update()
     {
         timer += Time.deltaTime;
@@ -35,22 +38,37 @@ public class ProjectileScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (rb.isKinematic) return;
+        if (!spin)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, rb.velocity) * Quaternion.Euler(0, 0, rotationOffset);
+        }
+        else
+        {
+            transform.Rotate(Vector3.forward * 150 * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("PlayerBody"))
+        if (rb.isKinematic) return;
+        Debug.Log(other.transform.root.name);
+        var ignore = ignoresTags.FirstOrDefault((t) => other.transform.root.CompareTag(t));
+        if (ignore != null || other.isTrigger) return;
+        if (other.transform.root.TryGetComponent(out CharacterStats stats))
         {
-            playerStats.TakeDamage(damage);
+            stats.TakeDamage(damage);
         }
-    }
-
-    private void PlayRandomArrowSound()
-    {
-        if (arrowSounds.Length > 0)
+        if (stickOnImpact)
         {
-            AudioClip selectedSound = arrowSounds[Random.Range(0, arrowSounds.Length)];
-            audioSource.PlayOneShot(selectedSound);
+            rb.velocity = Vector2.zero;
+            rb.isKinematic = true;
+            rb.transform.SetParent(other.transform);
+            rb.position += (Vector2)rb.transform.forward * 0.5f;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
