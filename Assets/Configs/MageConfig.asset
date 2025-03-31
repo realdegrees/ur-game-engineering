@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45b607dc0b919e340aadb80e2f2bdd6a, type: 3}
-  m_Name: MeeleEnemyMovementConfig
+  m_Name: MageConfig
   m_EditorClassIdentifier: 
   states:
   - {fileID: 11400000, guid: 0e4bcd56f0cf28f40ac4ad391ad05d6c, type: 2}
@@ -21,15 +21,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
   LedgeDepthThreshold: 1
   LedgeDecelerationFactor: 20
-  MaxWalkSpeed: 3
+  MaxWalkSpeed: 2
   GroundAccelerationRate: 6
   GroundDecelerationRate: 8
   AirAccelerationRate: 9
   AirDecelerationRate: 6
-  GravityMultiplier: 1
-  FollowDistance: 0.7
-  ResumeDistance: 0.8
-  WayPointLookAhead: 3
+  GravityMultiplier: 0.85
+  FollowDistance: 2
+  ResumeDistance: 3
   MaxJumpHeight: 3
   MinJumpHeight: 2
   JumpSpeedMult: 2

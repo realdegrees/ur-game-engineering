@@ -5,6 +5,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Seeker))]
 public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
 {
     // region Pathfinding,
@@ -71,7 +72,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
             // float targetDelta = path == null ? Vector2.Distance(target.position, rb.position) : Vector2.Distance(target.position, path.vectorPath.Last());
             // if (ground.connectedOnThisFrame || targetDelta > config.FollowDistance)
 
-            seeker.StartPath(rb.position, Target.position, p =>
+            seeker.StartPath(groundCheckCollider.bounds.min, Target.position, p =>
             {
                 if (!p.error)
                 {
@@ -95,7 +96,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
 
         if (Target != null && path != null)
         {
-            var shouldMove = Config.ResumeDistance <= Vector2.Distance(Target.position, rb.position) || Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider != null;
+            var shouldMove = Config.ResumeDistance <= Vector2.Distance(Target.position, ceilingCheckCollider.transform.position) || Physics2D.Linecast(ceilingCheckCollider.transform.position, Target.position, Config.GroundLayer).collider != null;
             IsActive = shouldMove;
         }
         if (Target == null)
@@ -114,7 +115,8 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
             return;
 
         var earlyPathWeightingFactor = .5f;
-        int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
+        //int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
+        int waypointsToConsider = Mathf.Min(2, path.vectorPath.Count - currentWaypoint - 1);
         pathDir = Vector2.zero;
         pathAngle = 0;
 

@@ -6,7 +6,6 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(NPCStateMachine))]
-[RequireComponent(typeof(Seeker))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Animator))]
 public class NPCController : MonoBehaviour
@@ -229,7 +228,7 @@ public class NPCController : MonoBehaviour
     }
     private void HandleJump()
     {
-        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ENPCState.Jumping))
+        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ENPCState.Jumping) || !stateMachine.IsActive)
             return;
 
         Rigidbody2D rb = stateMachine.rb;

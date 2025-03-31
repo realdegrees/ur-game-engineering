@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1479885813901572312}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1082254, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -64,8 +64,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06973433, y: -0.14868344}
-  m_Size: {x: 0.16053136, y: 0.21257189}
+  m_Offset: {x: 0, y: -0.16307865}
+  m_Size: {x: 0.13209885, y: 0.21908382}
   m_Direction: 0
 --- !u!1 &3765379530046486663
 GameObject:
@@ -128,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 5320876403266637840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1193512, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -166,8 +166,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.057244796, y: 0.02345516}
-  m_Size: {x: 0.17551123, y: 0.1640716}
+  m_Offset: {x: 0, y: 0.023455167}
+  m_Size: {x: 0.22122201, y: 0.16407172}
   m_Direction: 1
 --- !u!1 &6962759502354806734
 GameObject:
@@ -181,13 +181,13 @@ GameObject:
   - component: {fileID: 1156118234567648672}
   - component: {fileID: 2856253638579531388}
   - component: {fileID: 3866680915400891130}
-  - component: {fileID: 2798153695191604663}
   - component: {fileID: 1741982274874318099}
   - component: {fileID: 4971181355030226967}
   - component: {fileID: 8445964360560508619}
   - component: {fileID: 3169233029227511642}
+  - component: {fileID: 7104764355508546011}
   m_Layer: 0
-  m_Name: '[Enemy] Mage'
+  m_Name: '[Enemy] Knight'
   m_TagString: Hostile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,7 +250,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2133784981, guid: cc1fa8d81908ae549ae71d9a480e00f1, type: 3}
+  m_Sprite: {fileID: 1593668586, guid: 5448635839fc18a4494a022812366f09, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe534bfb0e3b4d143abf5dae9cf7b93e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 6d0dd940c81ea4e419aa8c9e55e1bf45, type: 2}
+  config: {fileID: 11400000, guid: 4d9dc384662f10b468e474307d92dbdd, type: 2}
   seeker: {fileID: 0}
   pathDir: {x: 0, y: -1}
   pathAngle: 0
@@ -310,34 +310,6 @@ MonoBehaviour:
   bodyCollider: {fileID: 6756067221394343119}
   rb: {fileID: 0}
   jumpsSinceGrounded: 0
---- !u!114 &2798153695191604663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962759502354806734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  drawGizmos: 1
-  detailedGizmos: 0
-  startEndModifier:
-    addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
-    useRaycasting: 0
-    mask:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    useGraphRaycasting: 0
-  traversableTags: -1
-  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  graphMask:
-    value: -1
 --- !u!114 &1741982274874318099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,10 +326,13 @@ MonoBehaviour:
   patrolPoints: []
   damage: 1
   attackSounds:
-  - {fileID: 8300000, guid: 54ae247a37889e34b96c3b2b3f44d966, type: 3}
-  attackCooldown: 3
-  isRanged: 1
-  projectile: {fileID: 6846088989974114753, guid: 16a1c7c9e69d11a45b09a2ba373e9898, type: 3}
+  - {fileID: 8300000, guid: ef36d2dcd7c7a704fba3eef989915543, type: 3}
+  - {fileID: 8300000, guid: 8fa6ac97122812c43b837d4e338bc9f2, type: 3}
+  - {fileID: 8300000, guid: bfd069933748ec6498adbfaf04992a64, type: 3}
+  - {fileID: 8300000, guid: 27ffddcce5ce81043bcde8592ec57686, type: 3}
+  attackCooldown: 0.8
+  isRanged: 0
+  projectile: {fileID: 0}
   attacksTags:
   - Player
   - Companion
@@ -486,7 +461,7 @@ Animator:
   m_GameObject: {fileID: 6962759502354806734}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d72e17fa885407144bd1605392e88085, type: 2}
+  m_Controller: {fileID: 9100000, guid: b30dfb01eda5f7b48948f498db638ad2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -497,6 +472,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7104764355508546011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962759502354806734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 0
+    exactEndPoint: 0
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +593,7 @@ Transform:
   m_GameObject: {fileID: 8558648589893423112}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1112597, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -628,6 +631,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06765279, y: -0.28738007}
-  m_Size: {x: 0.16967441, y: 0.062731154}
+  m_Offset: {x: 0, y: -0.28738007}
+  m_Size: {x: 0.13839714, y: 0.062731154}
   m_Direction: 1

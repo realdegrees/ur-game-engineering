@@ -71,7 +71,7 @@ public class PenaltyHandler : MonoBehaviour
                                 var hitDistance = Vector2.Distance(leftHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
                                 {
-                                    node.Walkable = false;
+                                    //node.Walkable = false;
                                 }
                             }
                             if (rightHit.collider && !leftHit.collider)
@@ -79,7 +79,7 @@ public class PenaltyHandler : MonoBehaviour
                                 var hitDistance = Vector2.Distance(rightHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
                                 {
-                                    node.Walkable = false;
+                                    //node.Walkable = false;
                                 }
                             }
                             node.Penalty *= PenaltyFactor;
