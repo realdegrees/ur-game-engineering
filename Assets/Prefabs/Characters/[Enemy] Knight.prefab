@@ -324,7 +324,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   patrolPoints: []
-  damage: 1
   attackSounds:
   - {fileID: 8300000, guid: ef36d2dcd7c7a704fba3eef989915543, type: 3}
   - {fileID: 8300000, guid: 8fa6ac97122812c43b837d4e338bc9f2, type: 3}
@@ -333,10 +332,10 @@ MonoBehaviour:
   attackCooldown: 0.8
   isRanged: 0
   projectile: {fileID: 0}
-  attacksTags:
+  followsTags:
   - Player
   - Companion
-  followsTags:
+  attacksTags:
   - Player
   - Companion
   maxFollowRangeFromOrigin: 8
@@ -450,6 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cce03a1fbe2784999a0999ee049f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
   maxHealth: 40
 --- !u!95 &3169233029227511642
 Animator:

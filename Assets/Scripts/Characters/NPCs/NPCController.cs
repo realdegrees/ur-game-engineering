@@ -8,6 +8,7 @@ using System.Linq;
 [RequireComponent(typeof(NPCStateMachine))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CharacterStats))]
 public class NPCController : MonoBehaviour
 {
     [HideInInspector]
@@ -19,7 +20,6 @@ public class NPCController : MonoBehaviour
 
     public List<Transform> patrolPoints = new();
 
-    [SerializeField] int damage;
     public AudioClip[] attackSounds;
     public float attackCooldown = 1.5f;
     public bool isRanged;
@@ -28,10 +28,11 @@ public class NPCController : MonoBehaviour
 
     private AudioSource audioSource;
     private Animator animator;
+    private CharacterStats characterStats;
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
-    public List<string> attacksTags = new() { };
     public List<string> followsTags = new() { };
+    public List<string> attacksTags = new() { };
     public int maxFollowRangeFromOrigin = 0;
     public bool forceFollow = false;
     public int forceFollowThreshold = 4;
@@ -43,6 +44,7 @@ public class NPCController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         stateMachine = GetComponent<NPCStateMachine>();
         animator = GetComponent<Animator>();
+        characterStats = GetComponent<CharacterStats>();
 
         if (patrolPoints.Count > 0)
         {
@@ -77,6 +79,7 @@ public class NPCController : MonoBehaviour
 
         var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance);
         var target = hit.FirstOrDefault(h => followsTags.Any((t) => h.transform.root.CompareTag(t)));
+
         if (stateMachine.Target && maxFollowRangeFromOrigin > 0)
         {
             var distanceFromOrigin = Vector2.Distance(stateMachine.Target.position, patrolPointCenter);
@@ -87,7 +90,8 @@ public class NPCController : MonoBehaviour
         }
         else if (target)
         {
-            stateMachine.SetTarget(target.transform.root);
+            var hasLos = Physics2D.Linecast(stateMachine.rb.position, target.transform.position, LayerMask.GetMask("Ground")).collider == null;
+            if (hasLos) stateMachine.SetTarget(target.transform.root);
         }
         else if (patrolPoints.Count > 0)
         {
@@ -124,6 +128,7 @@ public class NPCController : MonoBehaviour
 
     private void HandleAttack()
     {
+        if (!attacksTags.Any((t) => stateMachine.Target.CompareTag(t))) return;
         var targetStats = stateMachine.Target.GetComponent<CharacterStats>();
         if (!targetStats || targetStats.GetHealth() <= 0)
             return;
@@ -142,13 +147,13 @@ public class NPCController : MonoBehaviour
         {
             var projectileGo = Instantiate(projectile, transform.position + transform.forward * 0.5f, Quaternion.identity);
             var projectileScript = projectileGo.GetComponent<ProjectileScript>();
-            projectileScript.damage = damage;
+            projectileScript.damage = characterStats.damage;
             projectileScript.ignoresTags.Add(transform.root.tag);
             projectileScript.Init(stateMachine.Target.position - transform.position);
         }
         else
         {
-            targetStats.TakeDamage(damage);
+            targetStats.TakeDamage(characterStats.damage);
 
         }
         PlayRandomAttackSound();

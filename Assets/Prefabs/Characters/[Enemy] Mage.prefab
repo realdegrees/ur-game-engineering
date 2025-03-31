@@ -327,8 +327,8 @@ MonoBehaviour:
   detailedGizmos: 0
   startEndModifier:
     addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
+    exactStartPoint: 0
+    exactEndPoint: 0
     useRaycasting: 0
     mask:
       serializedVersion: 2
@@ -352,16 +352,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateMachine: {fileID: 0}
   patrolPoints: []
-  damage: 1
   attackSounds:
   - {fileID: 8300000, guid: 54ae247a37889e34b96c3b2b3f44d966, type: 3}
   attackCooldown: 3
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: 16a1c7c9e69d11a45b09a2ba373e9898, type: 3}
-  attacksTags:
+  followsTags:
   - Player
   - Companion
-  followsTags:
+  attacksTags:
   - Player
   - Companion
   maxFollowRangeFromOrigin: 8
@@ -475,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cce03a1fbe2784999a0999ee049f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
   maxHealth: 40
 --- !u!95 &3169233029227511642
 Animator:

@@ -96,13 +96,14 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
 
         if (Target != null && path != null)
         {
-            var shouldMove = Config.ResumeDistance <= Vector2.Distance(Target.position, ceilingCheckCollider.transform.position) || Physics2D.Linecast(ceilingCheckCollider.transform.position, Target.position, Config.GroundLayer).collider != null;
-            IsActive = shouldMove;
+            var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > Config.ResumeDistance || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
+            if (shouldMove) IsActive = true;
         }
         if (Target == null)
         {
             path = null;
             IsActive = false;
+            OnTargetChanged?.Invoke(null);
         }
         if (IsActive && path != null) HandlePathTraversion();
 
@@ -116,7 +117,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
 
         var earlyPathWeightingFactor = .5f;
         //int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
-        int waypointsToConsider = Mathf.Min(2, path.vectorPath.Count - currentWaypoint - 1);
+        int waypointsToConsider = Mathf.Min(3, path.vectorPath.Count - currentWaypoint - 1);
         pathDir = Vector2.zero;
         pathAngle = 0;
 
@@ -137,8 +138,9 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     {
         //if (IsStateActive(ENPCState.Jumping)) return; // ! Might need to delete this
 
-        var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider == null;
-        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || shouldStop))
+        var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider == null;
+        Debug.Log($"Should stop: {shouldStop}");
+        if ((shouldStop && ground.connected) || (currentWaypoint >= path.vectorPath.Count))
         {
             IsActive = false;
             return;
