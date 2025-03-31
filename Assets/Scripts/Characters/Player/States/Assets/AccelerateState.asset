@@ -13,34 +13,6 @@ MonoBehaviour:
   m_Name: AccelerateState
   m_EditorClassIdentifier: 
   runParallel: 1
-  OnStateComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 3573a0e0077e00c4d81c8e666d77775a, type: 2}
-        m_TargetAssemblyTypeName: State`2[[ECharacterState, Assembly-CSharp
-        m_MethodName: Enter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnStateCancelled:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 460b3e734eb51454894af2cf53cf24ab, type: 2}
-        m_TargetAssemblyTypeName: State`2[[ECharacterState, Assembly-CSharp
-        m_MethodName: Enter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   enableStateEventLogs: 0
+  enterOnComplete: {fileID: 11400000, guid: 3573a0e0077e00c4d81c8e666d77775a, type: 2}
+  enterOnCancel: {fileID: 11400000, guid: 460b3e734eb51454894af2cf53cf24ab, type: 2}

@@ -15,8 +15,6 @@ public class BaseState : ScriptableObject
     public bool Active { get; protected set; } = false;
 
     public bool runParallel = false;
-    public UnityEvent OnStateComplete = new();
-    public UnityEvent OnStateCancelled = new();
 
     [Header("Debug")]
     public bool enableStateEventLogs = false;

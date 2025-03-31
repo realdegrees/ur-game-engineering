@@ -82,7 +82,7 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     private void GroundCheck()
     {
         var prev = ground.connected;
-        ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, config.BottomRange, config.GroundLayer);
+        ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, Config.BottomRange, Config.GroundLayer);
         ground.collider = ground.hit.collider;
         ground.connected = ground.collider != null;
         ground.connectedOnThisFrame = false;
@@ -108,10 +108,10 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
 
     private void CeilingCheck()
     {
-        ceiling.hit = Physics2D.CapsuleCast(ceilingCheckCollider.bounds.center, ceilingCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, transform.up, config.TopRange, config.GroundLayer);
+        ceiling.hit = Physics2D.CapsuleCast(ceilingCheckCollider.bounds.center, ceilingCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, transform.up, Config.TopRange, Config.GroundLayer);
         ceiling.collider = ceiling.hit.collider;
         ceiling.angle = Vector2.Angle(transform.up, ceiling.hit.normal);
-        ceiling.connected = ceiling.collider != null && ceiling.angle <= config.CeilingAngleThreshold;
+        ceiling.connected = ceiling.collider != null && ceiling.angle <= Config.CeilingAngleThreshold;
         ceiling.perpendicular = ceiling.connected ? Vector2.Perpendicular(ceiling.hit.normal).normalized : Vector2.left;
 
         if (!ceiling.connected)

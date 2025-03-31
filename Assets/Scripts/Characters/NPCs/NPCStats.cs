@@ -1,0 +1,10 @@
+public class NPCStats : CharacterStats
+{
+    protected override void OnHealthChanged()
+    {
+        // if (health <= 0)
+        // {
+        //     Destroy(gameObject);
+        // }
+    }
+}

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,8 +14,10 @@ public class PlayerController : Manager<PlayerController>
     private PlayerStats playerStats;
 
     public event Action OnFlip = delegate { };
-
+    public float attackRange = 1f;
     public bool IsFacingRight { get; private set; } = true;
+    public float attackCooldown = 1f;
+    private DateTime lastAttack = DateTime.Now;
 
     protected void Start()
     {
@@ -29,18 +32,28 @@ public class PlayerController : Manager<PlayerController>
         InputManager.Instance.OnJumpPressed += HandleJump;
         InputManager.Instance.OnAttackPressed += () =>
         {
-            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
+            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).Seconds > attackCooldown)
                 return;
 
             // get enemies in range
             // deal damage to enemies
             // trigger animation
-            var hit = Physics2D.OverlapCircle(transform.position, 1f, LayerMask.GetMask("Enemy"));
-            if (hit)
+            var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
+            var hostileHitObj = hit.FirstOrDefault((h) => h.transform.root.CompareTag("Hostile"));
+            var enemy = hostileHitObj != null ? hostileHitObj.transform.root : null;
+            if (enemy)
             {
-                hit.GetComponent<CharacterStats>().TakeDamage(playerStats.GetDamage());
+                var losCheck = Physics2D.Linecast(transform.position, enemy.transform.position, LayerMask.GetMask("Ground"));
+                if (losCheck.collider != null)
+                    return;
+
+                if (enemy.CompareTag("Hostile") && enemy.TryGetComponent(out CharacterStats stats))
+                {
+                    stats.TakeDamage(playerStats.GetDamage());
+                }
             }
             animator.SetTrigger("Attack");
+            lastAttack = DateTime.Now;
         };
 
         // TODO wherever the player attack method is called, also trigger the animation parameter "Attack"
@@ -69,7 +82,7 @@ public class PlayerController : Manager<PlayerController>
     {
         if (!stateMachine.ground.connected)
         {
-            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.config.GravityMultiplier);
+            stateMachine.rb.AddForce(Physics2D.gravity * stateMachine.Config.GravityMultiplier);
         }
     }
 
@@ -103,8 +116,8 @@ public class PlayerController : Manager<PlayerController>
     private void HandleJump()
     {
         // var isGroundedOrFalling = stateMachine.IsStateActive(ECharacterState.Falling, ECharacterState.JumpApex) || stateMachine.ground.connected;
-        var isInCoyoteWindow = Time.time - stateMachine.ground.lastConnected < stateMachine.config.CoyoteTime;
-        var canJump = stateMachine.jumpsSinceGrounded < stateMachine.config.NumberOfJumpsAllowed;
+        var isInCoyoteWindow = Time.time - stateMachine.ground.lastConnected < stateMachine.Config.CoyoteTime;
+        var canJump = stateMachine.jumpsSinceGrounded < stateMachine.Config.NumberOfJumpsAllowed;
 
         if (isInCoyoteWindow || canJump)
         {
