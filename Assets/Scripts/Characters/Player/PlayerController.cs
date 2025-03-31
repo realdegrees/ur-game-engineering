@@ -49,7 +49,7 @@ public class PlayerController : Manager<PlayerController>
 
                 if (enemy.CompareTag("Hostile") && enemy.TryGetComponent(out CharacterStats stats))
                 {
-                    stats.TakeDamage(playerStats.GetDamage());
+                    stats.TakeDamage(playerStats.damage);
                 }
             }
             animator.SetTrigger("Attack");

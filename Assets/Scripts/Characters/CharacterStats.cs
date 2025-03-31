@@ -6,7 +6,7 @@ public abstract class CharacterStats : MonoBehaviour
 
     protected int health;
 
-    protected int damage;
+    public int damage;
     [SerializeField]
     protected int maxHealth = 100;
 
@@ -46,11 +46,4 @@ public abstract class CharacterStats : MonoBehaviour
         OnHealthChanged();
         return health;
     }
-
-    public int GetDamage()
-    {
-        return damage;
-    }
-
-
 }
