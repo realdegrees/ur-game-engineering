@@ -44,8 +44,9 @@ public class DamageZone : EditorZone<DamageZone>
         {
             inZone.ForEach((go) =>
             {
-                if (!TryGetComponent(out PlayerStats playerStats)) return;
+                if (!other.transform.root.TryGetComponent(out PlayerStats playerStats)) return;
                 playerStats.TakeDamage(damage);
+                hasDamagedPlayer = true;
             });
         }
     }
