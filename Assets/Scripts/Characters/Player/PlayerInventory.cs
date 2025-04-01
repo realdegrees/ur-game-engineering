@@ -29,4 +29,16 @@ public class PlayerInventory : MonoBehaviour
         UIManager.Instance.inventoryPotionText.text = items.Where(item => item.type == EItemType.POTION).ToArray().Length.ToString();
 
     }
+    public List<Item> GetItems(EItemType type)
+    {
+        return items.Where(item => item.type == type).ToList();
+    }
+    public void RemoveItems(EItemType type, int amount)
+    {
+        var itemsToRemove = items.Where(item => item.type == type).Take(amount).ToList();
+        foreach (var item in itemsToRemove)
+        {
+            items.Remove(item);
+        }
+    }
 }

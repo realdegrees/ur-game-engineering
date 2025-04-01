@@ -12,7 +12,7 @@ public class DamageZone : EditorZone<DamageZone>
 
     }
 
-    public void DealDamage()
+    public void DealDamage(GameObject go)
     {
         var player = GameObject.FindWithTag("Player");
         player.GetComponent<PlayerStats>().TakeDamage(5);

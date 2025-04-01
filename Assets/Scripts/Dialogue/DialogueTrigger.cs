@@ -16,7 +16,7 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
     protected override void Start()
     {
         base.Start();
-        OnActivate.AddListener(() =>
+        OnActivate.AddListener((go) =>
         {
             DialogueManagerInk.Instance.EnterDialogueMode(inkJSON);
             DialogueManagerInk.Instance.OnDialogueEnd += Deactivate;
