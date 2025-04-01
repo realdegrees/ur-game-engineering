@@ -2,22 +2,27 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 
-public class BrokenFloorZone : EditorZone<BrokenFloorZone>
+public class BrokenFloor : MonoBehaviour
 {
 
     public Sprite[] breakStages;
     public float breakTime = 1.5f;
 
     private SpriteRenderer spriteRenderer;
+    private bool isActivated = false;
 
-    protected override void Start()
+    public void Start()
     {
-        base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        OnActivate.AddListener(() =>
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!isActivated)
         {
             StartCoroutine(BreakFloor());
-        });
+            isActivated = true;
+        }
     }
     
     private IEnumerator BreakFloor()
