@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Seeker))]
 public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
 {
+    public bool canFly = false;
     // region Pathfinding,
     [HideInInspector] public Seeker seeker;
     [HideInInspector] public Path path;
