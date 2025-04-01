@@ -179,7 +179,6 @@ public class NPCController : MonoBehaviour
         {
             if (distance > forceFollowThreshold)
             {
-                Debug.Log("Force follow");
                 stateMachine.rb.velocity = stateMachine.pathDir * stateMachine.Config.MaxWalkSpeed;
                 stateMachine.rb.isKinematic = true;
                 forceFollowActive = true;
