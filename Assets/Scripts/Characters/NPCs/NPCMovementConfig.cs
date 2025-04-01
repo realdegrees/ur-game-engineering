@@ -15,7 +15,7 @@ public class NPCMovementConfig : StateMachineConfig<ECharacterState, NPCMovement
     [Range(.1f, 10f)] public float GroundDecelerationRate = 2f;
     [Range(.1f, 10f)] public float AirAccelerationRate = .8f;
     [Range(.1f, 10f)] public float AirDecelerationRate = .3f;
-    [Range(.5f, 5)] public float GravityMultiplier = 2.5f;
+    [Range(0f, 5)] public float GravityMultiplier = 2.5f;
     [Range(.1f, 10)] public float FollowDistance = 3;
     [Range(.1f, 10)] public float ResumeDistance = 5;
     //[Range(1, 10)] public int WayPointLookAhead = 3;

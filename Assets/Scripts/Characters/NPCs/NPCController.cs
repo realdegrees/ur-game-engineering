@@ -64,14 +64,14 @@ public class NPCController : MonoBehaviour
         {
             if (state.state == ECharacterState.Jumping)
             {
-                animator.SetTrigger("Jump");
+                if (animator.parameters.FirstOrDefault((p) => p.name == "Jump") != null) animator.SetTrigger("Jump");
             }
         };
     }
     protected virtual void Update()
     {
-        animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
-        animator.SetBool("Grounded", stateMachine.ground.connected);
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Speed") != null) animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Grounded") != null) animator.SetBool("Grounded", stateMachine.ground.connected);
         if (patrolPoints.Count == 0)
         {
             patrolPointCenter = stateMachine.rb.position;
@@ -107,13 +107,12 @@ public class NPCController : MonoBehaviour
             }
         }
 
-        if (stateMachine.IsActive) FlipCheck();
+        FlipCheck();
     }
     private void FixedUpdate()
     {
         HandleGravity();
         HandleFall();
-        HandleForceFollow();
 
         if (stateMachine.IsActive)
         {
@@ -124,6 +123,7 @@ public class NPCController : MonoBehaviour
         {
             HandleAttack();
         }
+        HandleForceFollow();
     }
 
     private void HandleAttack()
@@ -142,7 +142,7 @@ public class NPCController : MonoBehaviour
 
     private void DoAttack(CharacterStats targetStats)
     {
-        animator.SetTrigger("Attack");
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Attack") != null) animator.SetTrigger("Attack");
         if (isRanged)
         {
             var projectileGo = Instantiate(projectile, transform.position + transform.forward * 0.5f, Quaternion.identity);
@@ -203,17 +203,35 @@ public class NPCController : MonoBehaviour
 
     private void FlipCheck()
     {
-        if (stateMachine.pathDir.x > 0 && !IsFacingRight)
+        if (stateMachine.IsActive)
         {
-            IsFacingRight = true;
-            transform.rotation = Quaternion.Euler(0f, 0, 0f);
-            OnFlip.Invoke();
+            if (stateMachine.pathDir.x > 0 && !IsFacingRight)
+            {
+                IsFacingRight = true;
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                OnFlip.Invoke();
+            }
+            else if (stateMachine.pathDir.x < 0 && IsFacingRight)
+            {
+                IsFacingRight = false;
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                OnFlip.Invoke();
+            }
         }
-        else if (stateMachine.pathDir.x < 0 && IsFacingRight)
+        else if (stateMachine.Target)
         {
-            IsFacingRight = false;
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            OnFlip.Invoke();
+            if (stateMachine.Target.position.x > transform.position.x && !IsFacingRight)
+            {
+                IsFacingRight = true;
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                OnFlip.Invoke();
+            }
+            else if (stateMachine.Target.position.x < transform.position.x && IsFacingRight)
+            {
+                IsFacingRight = false;
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                OnFlip.Invoke();
+            }
         }
     }
 

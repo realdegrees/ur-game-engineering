@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 4d9dc384662f10b468e474307d92dbdd, type: 2}
+  canFly: 0
   seeker: {fileID: 0}
   pathDir: {x: 0, y: -1}
   pathAngle: 0
@@ -449,7 +450,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cce03a1fbe2784999a0999ee049f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  takeDamageAudios:
+  - {fileID: 8300000, guid: 03c60b6c6932e314aa4d7d5d94893fd8, type: 3}
+  - {fileID: 8300000, guid: ac364605ed6a9f741a2e88cc0418ad67, type: 3}
+  - {fileID: 8300000, guid: d63ba96732bf9b047aa9ab2685cba300, type: 3}
+  - {fileID: 8300000, guid: bcbc96a722705244392e63d23ae5fdfb, type: 3}
+  - {fileID: 8300000, guid: 67ab6496c78c5f7429c98070421bc173, type: 3}
+  - {fileID: 8300000, guid: a20f25bf8b4a88d45bc76ec81e648166, type: 3}
+  deathAudios:
+  - {fileID: 8300000, guid: 9f730ecc8bf837b4a83c9c68d995e2b0, type: 3}
+  - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
+  damage: 5
   maxHealth: 40
 --- !u!95 &3169233029227511642
 Animator:
