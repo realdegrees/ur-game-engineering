@@ -39,7 +39,7 @@ public class PlayerController : Manager<PlayerController>
             // deal damage to enemies
             // trigger animation
             var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            var hostileHitObj = hit.FirstOrDefault((h) => h.transform.root.CompareTag("Hostile"));
+            var hostileHitObj = hit.FirstOrDefault((h) => !h.isTrigger && h.transform.root.CompareTag("Hostile"));
             var enemy = hostileHitObj != null ? hostileHitObj.transform.root : null;
             if (enemy)
             {

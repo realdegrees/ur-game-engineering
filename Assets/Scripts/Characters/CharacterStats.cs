@@ -14,9 +14,10 @@ public abstract class CharacterStats : MonoBehaviour
     [SerializeField]
     protected List<AudioClip> deathAudios;
 
+    public event Action<int> OnHealthChanged = delegate { };
+
     public int damage;
-    [SerializeField]
-    protected int maxHealth = 100;
+    public int maxHealth = 100;
 
     private float pitch = 1f;
 
@@ -31,7 +32,7 @@ public abstract class CharacterStats : MonoBehaviour
     public void Heal(uint heal)
     {
         health = Mathf.Min(health + (int)heal, maxHealth);
-        OnHealthChanged();
+        OnHealthChanged?.Invoke(health);
     }
 
 
@@ -41,17 +42,13 @@ public abstract class CharacterStats : MonoBehaviour
     }
 
 
-    protected abstract void OnHealthChanged();
-
-
-
 
     public void TakeDamage(int damageTaken)
     {
         if (health <= 0) return;
         health -= damageTaken;
         health = Math.Max(Math.Min(health, maxHealth), 0);
-        OnHealthChanged();
+        OnHealthChanged?.Invoke(health);
         if (health <= 0)
         {
             audioSource.PlayOneShot(deathAudios[UnityEngine.Random.Range(0, deathAudios.Count)]);

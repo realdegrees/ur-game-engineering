@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class NPCStats : CharacterStats
 {
-    protected override void OnHealthChanged()
+    protected override void Start()
+    {
+        base.Start();
+        OnHealthChanged += OnChangeHealthInvoked;
+    }
+    private void OnChangeHealthInvoked(int health)
     {
         if (health <= 0)
         {
