@@ -26,7 +26,7 @@ public class CameraModifierZone : EditorZone<CameraModifierZone>
     }
     #endregion
 
-    private void ApplyModifier()
+    private void ApplyModifier(GameObject go)
     {
         cachedType = CameraManager.Instance.GetCameraType();
         cachedTarget = CameraManager.Instance.GetTarget();

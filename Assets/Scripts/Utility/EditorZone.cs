@@ -30,7 +30,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     public bool showZone = true;
     public Color zoneColor = Color.green;
 
-    public UnityEvent OnActivate = new();
+    public UnityEvent<GameObject> OnActivate = new();
     public UnityEvent OnDeactivate = new();
     public UnityEvent OnCooldownReset = new();
 
@@ -39,7 +39,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected int activations = 0;
     protected Collider2D zoneCollider;
 
-    private List<string> inZone = new();
+    protected List<string> inZone = new();
     private List<CharacterStateMachine> frozenCharacters = new();
 
     #region Lifecycle Events
@@ -104,7 +104,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
             OnDeactivate.Invoke();
         }
 
-        OnActivate.Invoke();
+        OnActivate.Invoke(other.transform.root.gameObject);
         if (freezeTags.Contains(tag) && other.transform.root.TryGetComponent(out CharacterStateMachine sm))
         {
             sm.Freeze();

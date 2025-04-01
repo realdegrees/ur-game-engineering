@@ -14,7 +14,7 @@ public class TeleportZone : EditorZone<TeleportZone>
     protected override void Awake()
     {
         base.Awake();
-        OnActivate.AddListener(() =>
+        OnActivate.AddListener((go) =>
         {
             if (target != null)
             {

@@ -53,7 +53,7 @@ public class CameraBounds : EditorZone<CameraBounds>
 
     private void InitListeners()
     {
-        OnActivate.AddListener(() =>
+        OnActivate.AddListener((go) =>
         {
             switch (activationType)
             {

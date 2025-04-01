@@ -16,7 +16,7 @@ public class AudioTrigger : EditorZone<DialogueTrigger>
         OnActivate.AddListener(OnAudioTriggerActivated);
     }
 
-    private void OnAudioTriggerActivated()
+    private void OnAudioTriggerActivated(GameObject go)
     {
         if (changeBgMusic)
         {
