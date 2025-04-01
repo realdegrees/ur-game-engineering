@@ -28,10 +28,10 @@ public abstract class CharacterStats : MonoBehaviour
         audioSource.pitch = pitch;
     }
 
-    public int Heal(int heal)
+    public void Heal(uint heal)
     {
-        health += heal;
-        return health;
+        health = Mathf.Min(health + (int)heal, maxHealth);
+        OnHealthChanged();
     }
 
 
@@ -40,22 +40,15 @@ public abstract class CharacterStats : MonoBehaviour
         return health;
     }
 
-    public int SetHealth(int newHealthStat)
-    {
-        health = Math.Max(Math.Min(newHealthStat, maxHealth), 0);
-        OnHealthChanged();
-        return health;
-    }
-
-
 
     protected abstract void OnHealthChanged();
 
 
 
 
-    public int TakeDamage(int damageTaken)
+    public void TakeDamage(int damageTaken)
     {
+        if (health <= 0) return;
         health -= damageTaken;
         health = Math.Max(Math.Min(health, maxHealth), 0);
         OnHealthChanged();
@@ -67,6 +60,5 @@ public abstract class CharacterStats : MonoBehaviour
         {
             audioSource.PlayOneShot(takeDamageAudios[UnityEngine.Random.Range(0, takeDamageAudios.Count)]);
         }
-        return health;
     }
 }

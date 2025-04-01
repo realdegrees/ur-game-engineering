@@ -44,7 +44,8 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
     public void SetTarget(Transform newTarget)
     {
         Target = newTarget;
-        IsActive = true;
+        path = Target != null ? path : null;
+        IsActive = Target != null;
         NotifyTargetChanged(newTarget);
     }
 
@@ -95,6 +96,13 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         CeilingCheck();
         CalcPathDir();
 
+        if (Target != null && Target.TryGetComponent(out CharacterStats stats))
+        {
+            if (stats.GetHealth() <= 0)
+            {
+                SetTarget(null);
+            }
+        }
         if (Target != null && path != null)
         {
             var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > Config.ResumeDistance || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
@@ -102,9 +110,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         }
         if (Target == null)
         {
-            path = null;
-            IsActive = false;
-            OnTargetChanged?.Invoke(null);
+            SetTarget(null);
         }
         if (IsActive && path != null) HandlePathTraversion();
 
@@ -140,7 +146,6 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         //if (IsStateActive(ECharacterState.Jumping)) return; // ! Might need to delete this
 
         var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider == null;
-        Debug.Log($"Should stop: {shouldStop}");
         if ((shouldStop && ground.connected) || (currentWaypoint >= path.vectorPath.Count))
         {
             IsActive = false;
