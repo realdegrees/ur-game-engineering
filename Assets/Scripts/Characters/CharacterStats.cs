@@ -18,6 +18,16 @@ public abstract class CharacterStats : MonoBehaviour
     [SerializeField]
     protected int maxHealth = 100;
 
+    private float pitch = 1f;
+
+    protected virtual void Start()
+    {
+        health = maxHealth;
+        TryGetComponent(out audioSource);
+        pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        audioSource.pitch = pitch;
+    }
+
     public int Heal(int heal)
     {
         health += heal;
@@ -37,11 +47,7 @@ public abstract class CharacterStats : MonoBehaviour
         return health;
     }
 
-    protected virtual void Start()
-    {
-        health = maxHealth;
-        TryGetComponent(out audioSource);
-    }
+
 
     protected abstract void OnHealthChanged();
 
