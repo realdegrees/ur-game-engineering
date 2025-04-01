@@ -74,6 +74,12 @@ public class LogManager : Manager<LogManager>
     // Call when a level (scene) starts
     public void LogLevelStart(string levelName)
     {
+        // Check if the level already exists in the log
+        if (logData.levels.Exists(l => l.levelName == levelName))
+        {
+            return;
+        }
+
         // Create a new LevelData object with start time
         LevelData level = new()
         {
