@@ -5,8 +5,6 @@ using System.Diagnostics;
 public class DamageZone : EditorZone<DamageZone>
 {
     public int damage;
-
-    public bool isRocks;
     public bool isContinuousSpikes;
 
     public float trapSpeed = 0.2f;
@@ -49,12 +47,15 @@ public class DamageZone : EditorZone<DamageZone>
         while (true)
         {
             animator.Play("Up");
+            spikesShowing = true;
             yield return new WaitForSeconds(movementDuration);
 
             animator.Play("IdleUp");
             yield return new WaitForSeconds(idleDuration);
 
             animator.Play("Down");
+            spikesShowing = false;
+            hasDamagedPlayer = false;
             yield return new WaitForSeconds(movementDuration);
 
             animator.Play("IdleDown");
