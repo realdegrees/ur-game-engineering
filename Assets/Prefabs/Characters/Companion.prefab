@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3539786520740354139}
   - component: {fileID: 6756067221394343119}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2914267181576602931}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8106807810025195045}
   - component: {fileID: 1706616017903692556}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 8445964360560508619}
   - component: {fileID: 3169233029227511642}
   - component: {fileID: 8653677273696570150}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Companion
   m_TagString: Companion
   m_Icon: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8069981488390023460}
   - component: {fileID: 5239874615934193930}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3605430601047233077}
   - component: {fileID: 4058238303049362350}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

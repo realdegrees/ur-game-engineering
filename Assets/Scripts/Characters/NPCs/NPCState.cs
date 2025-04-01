@@ -1,24 +1,10 @@
 using UnityEngine;
-using System;
-using System.Collections;
 
-[Serializable]
-public enum ENPCState
-{
-    Idle,
-    Moving,
-    Accelerating,
-    Decelerating,
-    Jumping,
-    Attacking,
-    Falling,
-}
-
-public abstract class NPCState : State<ENPCState, NPCMovementConfig>
+public abstract class NPCState : State<ECharacterState, NPCMovementConfig>
 {
     protected Rigidbody2D rb;
 
-    public NPCState(ENPCState state = ENPCState.Idle) : base(state) { }
+    public NPCState(ECharacterState state = ECharacterState.Idle) : base(state) { }
     public void SetRigidbody(Rigidbody2D rb) { this.rb = rb; }
 
     // TODO calculate desired velocity from path direction
@@ -37,7 +23,7 @@ public abstract class NPCState : State<ENPCState, NPCMovementConfig>
         var ground = npcStateMachine.ground;
         var groundHasRigidbody = ground.collider && ground.collider.attachedRigidbody;
         var offset = groundHasRigidbody ? ground.collider.attachedRigidbody.velocity.x : 0;
-        var isJumping = stateMachine.IsStateActive(ENPCState.Jumping);
+        var isJumping = stateMachine.IsStateActive(ECharacterState.Jumping);
         var walkSpeed = isJumping ? Config.MaxWalkSpeed * Config.JumpSpeedMult : Config.MaxWalkSpeed;
         var desiredVelocity = walkSpeed * pathDir.x + offset;
         return desiredVelocity;

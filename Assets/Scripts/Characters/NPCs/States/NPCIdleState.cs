@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IdleState", menuName = "StateMachines/States/NPC/IdleState")]
 public class NPCIdleState : NPCState
 {
-    public NPCIdleState() : base(ENPCState.Idle)
+    public NPCIdleState() : base(ECharacterState.Idle)
     {
     }
 

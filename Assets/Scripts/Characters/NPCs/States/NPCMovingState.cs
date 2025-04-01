@@ -4,7 +4,7 @@ using UnityEngine.Windows;
 [CreateAssetMenu(fileName = "MovingState", menuName = "StateMachines/States/NPC/MovingState")]
 public class NPCMovingState : NPCState
 {
-    public NPCMovingState() : base(ENPCState.Moving)
+    public NPCMovingState() : base(ECharacterState.Moving)
     {
     }
 

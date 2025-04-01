@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NPCMovementConfig", menuName = "StateMachines/NPCMovementConfig")]
-public class NPCMovementConfig : StateMachineConfig<ENPCState, NPCMovementConfig>
+public class NPCMovementConfig : StateMachineConfig<ECharacterState, NPCMovementConfig>
 {
     [Header("Ledge Detection")]
     [Range(.1f, 20)]

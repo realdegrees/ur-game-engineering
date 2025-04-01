@@ -7,7 +7,7 @@ public class NPCAccelerateState : NPCState
 {
     private float startVelocity;
     private float accelerationRate;
-    public NPCAccelerateState() : base(ENPCState.Accelerating)
+    public NPCAccelerateState() : base(ECharacterState.Accelerating)
     {
     }
 

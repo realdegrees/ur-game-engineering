@@ -6,7 +6,7 @@ using UnityEngine.Video;
 [CreateAssetMenu(fileName = "FallingState", menuName = "StateMachines/States/NPC/FallingState")]
 public class NPCFallingState : NPCState
 {
-    public NPCFallingState() : base(ENPCState.Falling)
+    public NPCFallingState() : base(ECharacterState.Falling)
     {
     }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Seeker))]
-public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
+public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
 {
     // region Pathfinding,
     [HideInInspector] public Seeker seeker;
@@ -136,7 +136,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     }
     private void HandlePathTraversion()
     {
-        //if (IsStateActive(ENPCState.Jumping)) return; // ! Might need to delete this
+        //if (IsStateActive(ECharacterState.Jumping)) return; // ! Might need to delete this
 
         var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider == null;
         Debug.Log($"Should stop: {shouldStop}");
@@ -204,7 +204,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         {
             if (!prev)
             {
-                ground.connectedOnThisFrame = base.IsStateActive(ENPCState.Falling);
+                ground.connectedOnThisFrame = base.IsStateActive(ECharacterState.Falling);
             }
             ground.lastConnected = Time.time;
         }

@@ -27,7 +27,7 @@ public class NPCController : MonoBehaviour
     [SerializeField] GameObject projectile;
 
     private AudioSource audioSource;
-    private Animator animator;
+    protected Animator animator;
     private CharacterStats characterStats;
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
@@ -62,13 +62,13 @@ public class NPCController : MonoBehaviour
 
         stateMachine.OnStateEnter += (state) =>
         {
-            if (state.state == ENPCState.Jumping)
+            if (state.state == ECharacterState.Jumping)
             {
                 animator.SetTrigger("Jump");
             }
         };
     }
-    private void Update()
+    protected virtual void Update()
     {
         animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
         animator.SetBool("Grounded", stateMachine.ground.connected);
@@ -220,43 +220,43 @@ public class NPCController : MonoBehaviour
     private void HandleMovement()
     {
 
-        if (stateMachine.IsStateActive(ENPCState.Moving, ENPCState.Accelerating))
+        if (stateMachine.IsStateActive(ECharacterState.Moving, ECharacterState.Accelerating))
             return;
 
-        stateMachine.EnterState(ENPCState.Accelerating);
-        if (stateMachine.IsStateActive(ENPCState.Moving, ENPCState.Accelerating))
+        stateMachine.EnterState(ECharacterState.Accelerating);
+        if (stateMachine.IsStateActive(ECharacterState.Moving, ECharacterState.Accelerating))
         {
-            stateMachine.EnterState(ENPCState.Decelerating);
+            stateMachine.EnterState(ECharacterState.Decelerating);
         }
 
 
     }
     private void HandleJump()
     {
-        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ENPCState.Jumping) || !stateMachine.IsActive)
+        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ECharacterState.Jumping) || !stateMachine.IsActive || !stateMachine.Target)
             return;
 
         Rigidbody2D rb = stateMachine.rb;
         NPCMovementConfig config = stateMachine.Config;
         Vector2 forward = new(Mathf.Sign(stateMachine.pathDir.x), 0);
-
-        if (stateMachine.pathAngle <= 40)
+        var targetStateMachine = stateMachine.Target.GetComponent<CharacterStateMachine>();
+        if (stateMachine.pathAngle <= 40 && (!targetStateMachine || !targetStateMachine.IsStateActive(ECharacterState.Jumping)))
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
             return;
         }
 
         RaycastHit2D wallHit = Physics2D.Raycast(
-            stateMachine.groundCheckCollider.transform.position,
+            stateMachine.groundCheckCollider.bounds.center,
             forward,
             config.jumpDetectionDistance,
             config.GroundLayer
         );
-        bool isWall = !!wallHit.collider && wallHit.normal.y < 0.3f; // ! swap 0.3f with config.WallAngleThreshold
+        bool isWall = !!wallHit.collider; // ! swap 0.3f with config.WallAngleThreshold
 
         if (isWall)
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
             return;
         }
 
@@ -274,16 +274,16 @@ public class NPCController : MonoBehaviour
         bool wantsToGoDown = stateMachine.pathAngle >= 100;
         if (!wantsToGoDown && isLedge)
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
         }
 
     }
     private void HandleFall()
     {
         // TODO: might have to replace with or add a check for the fall state being active
-        if (stateMachine.rb.velocity.y < 0 && !stateMachine.ground.connected && !stateMachine.IsStateActive(ENPCState.Jumping, ENPCState.Falling))
+        if (stateMachine.rb.velocity.y < 0 && !stateMachine.ground.connected && !stateMachine.IsStateActive(ECharacterState.Jumping, ECharacterState.Falling))
         {
-            stateMachine.EnterState(ENPCState.Falling);
+            stateMachine.EnterState(ECharacterState.Falling);
         }
     }
 }

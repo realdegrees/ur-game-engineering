@@ -10,7 +10,7 @@ public class NPCDecelerateState : NPCState
     [Header("Debug")]
     public bool debugLedgeDetection = false;
 
-    public NPCDecelerateState() : base(ENPCState.Decelerating)
+    public NPCDecelerateState() : base(ECharacterState.Decelerating)
     {
     }
 

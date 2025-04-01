@@ -13,7 +13,7 @@ public class PenaltyHandler : MonoBehaviour
     public float softness = 3;
     private readonly uint airPenalty = 150;
     private readonly uint groundPenalty = 0;
-    private readonly uint ceilingPenalty = 50;
+    private readonly uint ceilingPenalty = 190;
     public void Scan()
     {
         AstarPath.active.Scan();
