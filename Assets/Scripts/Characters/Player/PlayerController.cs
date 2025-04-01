@@ -32,14 +32,14 @@ public class PlayerController : Manager<PlayerController>
         InputManager.Instance.OnJumpPressed += HandleJump;
         InputManager.Instance.OnAttackPressed += () =>
         {
-            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).Seconds > attackCooldown)
+            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).TotalMilliseconds <= attackCooldown * 1000)
                 return;
 
             // get enemies in range
             // deal damage to enemies
             // trigger animation
             var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            var hostileHitObj = hit.FirstOrDefault((h) => h.transform.root.CompareTag("Hostile"));
+            var hostileHitObj = hit.FirstOrDefault((h) => !h.isTrigger && h.transform.root.CompareTag("Hostile"));
             var enemy = hostileHitObj != null ? hostileHitObj.transform.root : null;
             if (enemy)
             {
@@ -49,7 +49,7 @@ public class PlayerController : Manager<PlayerController>
 
                 if (enemy.CompareTag("Hostile") && enemy.TryGetComponent(out CharacterStats stats))
                 {
-                    stats.TakeDamage(playerStats.GetDamage());
+                    stats.TakeDamage(playerStats.damage);
                 }
             }
             animator.SetTrigger("Attack");

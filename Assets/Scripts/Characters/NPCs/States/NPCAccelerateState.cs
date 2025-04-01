@@ -5,16 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AccelerateState", menuName = "StateMachines/States/NPC/AccelerateState")]
 public class NPCAccelerateState : NPCState
 {
-    private float startVelocity;
+    private Vector2 startVelocity;
     private float accelerationRate;
-    public NPCAccelerateState() : base(ENPCState.Accelerating)
+    public NPCAccelerateState() : base(ECharacterState.Accelerating)
     {
     }
 
     protected override void OnEnter()
     {
         // Debug.Log(rb.velocity);
-        startVelocity = rb.velocity.x;
+        startVelocity = rb.velocity;
         // Debug.Log(initialSpeed);
     }
 
@@ -27,8 +27,7 @@ public class NPCAccelerateState : NPCState
     {
         if (Progress < 1) return;
 
-        var targetVelocity = GetDesiredHorizontalVelocity(); // Target velocity we want to hold
-        rb.velocity = new Vector2(targetVelocity, rb.velocity.y);
+        rb.velocity = GetDesiredVelocity();
     }
 
     protected override float? OnPhysicsUpdate()
@@ -40,15 +39,11 @@ public class NPCAccelerateState : NPCState
         }
 
         var ground = ((NPCStateMachine)stateMachine).ground;
-        var targetVelocity = GetDesiredHorizontalVelocity(); // Target velocity we want to achieve
+        var targetVelocity = GetDesiredVelocity(); // Target velocity we want to achieve
         accelerationRate = ground.connected ? Config.GroundAccelerationRate : Config.AirAccelerationRate;
 
-        var target = Mathf.Lerp(rb.velocity.x, targetVelocity, accelerationRate * Time.fixedDeltaTime);
-        rb.velocity = new Vector2(
-            target,
-            rb.velocity.y
-        );
-        var currentProgress = Mathf.InverseLerp(startVelocity, targetVelocity, ground.relativeVelocity.x);
+        rb.velocity = Vector2.Lerp(rb.velocity, targetVelocity, accelerationRate * Time.fixedDeltaTime);
+        var currentProgress = Mathf.InverseLerp(startVelocity.magnitude, targetVelocity.magnitude, ground.relativeVelocity.magnitude);
         var progressDelta = currentProgress - Progress;
         return progressDelta < 0 ? -1 : currentProgress;
     }

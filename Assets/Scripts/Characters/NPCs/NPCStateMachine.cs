@@ -5,8 +5,10 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
+[RequireComponent(typeof(Seeker))]
+public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
 {
+    public bool canFly = false;
     // region Pathfinding,
     [HideInInspector] public Seeker seeker;
     [HideInInspector] public Path path;
@@ -42,7 +44,8 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     public void SetTarget(Transform newTarget)
     {
         Target = newTarget;
-        IsActive = true;
+        path = Target != null ? path : null;
+        IsActive = Target != null;
         NotifyTargetChanged(newTarget);
     }
 
@@ -71,7 +74,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
             // float targetDelta = path == null ? Vector2.Distance(target.position, rb.position) : Vector2.Distance(target.position, path.vectorPath.Last());
             // if (ground.connectedOnThisFrame || targetDelta > config.FollowDistance)
 
-            seeker.StartPath(rb.position, Target.position, p =>
+            seeker.StartPath(groundCheckCollider.bounds.min, Target.position, p =>
             {
                 if (!p.error)
                 {
@@ -93,15 +96,21 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         CeilingCheck();
         CalcPathDir();
 
+        if (Target != null && Target.TryGetComponent(out CharacterStats stats))
+        {
+            if (stats.GetHealth() <= 0)
+            {
+                SetTarget(null);
+            }
+        }
         if (Target != null && path != null)
         {
-            var shouldMove = Config.ResumeDistance <= Vector2.Distance(Target.position, rb.position) || Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider != null;
-            IsActive = shouldMove;
+            var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > Config.ResumeDistance || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
+            if (shouldMove) IsActive = true;
         }
         if (Target == null)
         {
-            path = null;
-            IsActive = false;
+            SetTarget(null);
         }
         if (IsActive && path != null) HandlePathTraversion();
 
@@ -114,7 +123,8 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
             return;
 
         var earlyPathWeightingFactor = .5f;
-        int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
+        //int waypointsToConsider = Mathf.Min(Config.WayPointLookAhead, path.vectorPath.Count - currentWaypoint - 1);
+        int waypointsToConsider = Mathf.Min(3, path.vectorPath.Count - currentWaypoint - 1);
         pathDir = Vector2.zero;
         pathAngle = 0;
 
@@ -133,10 +143,10 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
     }
     private void HandlePathTraversion()
     {
-        //if (IsStateActive(ENPCState.Jumping)) return; // ! Might need to delete this
+        //if (IsStateActive(ECharacterState.Jumping)) return; // ! Might need to delete this
 
-        var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(rb.position, Target.position, Config.GroundLayer).collider == null;
-        if (ground.connected && (currentWaypoint >= path.vectorPath.Count || shouldStop))
+        var shouldStop = Vector2.Distance(rb.position, Target.transform.position) < Config.FollowDistance && Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider == null;
+        if ((shouldStop && ground.connected) || (currentWaypoint >= path.vectorPath.Count))
         {
             IsActive = false;
             return;
@@ -200,7 +210,7 @@ public class NPCStateMachine : StateMachine<ENPCState, NPCMovementConfig>
         {
             if (!prev)
             {
-                ground.connectedOnThisFrame = base.IsStateActive(ENPCState.Falling);
+                ground.connectedOnThisFrame = base.IsStateActive(ECharacterState.Falling);
             }
             ground.lastConnected = Time.time;
         }

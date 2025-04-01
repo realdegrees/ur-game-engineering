@@ -9,7 +9,7 @@ public class NPCJumpState : NPCState
 {
     private Vector2 startPosition;
 
-    public NPCJumpState() : base(ENPCState.Jumping)
+    public NPCJumpState() : base(ECharacterState.Jumping)
     {
     }
 

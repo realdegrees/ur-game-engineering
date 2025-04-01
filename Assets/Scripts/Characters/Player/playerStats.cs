@@ -9,14 +9,13 @@ public class PlayerStats : CharacterStats
     {
         base.Start();
         maxHealthBarWidth = UIManager.Instance.healthBarIcon.rectTransform.localScale.x;
-    }
-
-    protected override void OnHealthChanged()
-    {
-        UIManager.Instance.healthBarIcon.rectTransform.localScale = new Vector3(
-            maxHealthBarWidth * ((float)health / (float)maxHealth),
-            UIManager.Instance.healthBarIcon.rectTransform.localScale.y,
-            UIManager.Instance.healthBarIcon.rectTransform.localScale.z
-        );
+        OnHealthChanged += health =>
+        {
+            UIManager.Instance.healthBarIcon.rectTransform.localScale = new Vector3(
+                maxHealthBarWidth * ((float)health / (float)maxHealth),
+                UIManager.Instance.healthBarIcon.rectTransform.localScale.y,
+                UIManager.Instance.healthBarIcon.rectTransform.localScale.z
+            );
+        };
     }
 }

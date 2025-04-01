@@ -6,9 +6,9 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(NPCStateMachine))]
-[RequireComponent(typeof(Seeker))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CharacterStats))]
 public class NPCController : MonoBehaviour
 {
     [HideInInspector]
@@ -20,7 +20,6 @@ public class NPCController : MonoBehaviour
 
     public List<Transform> patrolPoints = new();
 
-    [SerializeField] int damage;
     public AudioClip[] attackSounds;
     public float attackCooldown = 1.5f;
     public bool isRanged;
@@ -28,11 +27,12 @@ public class NPCController : MonoBehaviour
     [SerializeField] GameObject projectile;
 
     private AudioSource audioSource;
-    private Animator animator;
+    protected Animator animator;
+    private CharacterStats characterStats;
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
-    public List<string> attacksTags = new() { };
     public List<string> followsTags = new() { };
+    public List<string> attacksTags = new() { };
     public int maxFollowRangeFromOrigin = 0;
     public bool forceFollow = false;
     public int forceFollowThreshold = 4;
@@ -44,6 +44,7 @@ public class NPCController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         stateMachine = GetComponent<NPCStateMachine>();
         animator = GetComponent<Animator>();
+        characterStats = GetComponent<CharacterStats>();
 
         if (patrolPoints.Count > 0)
         {
@@ -61,16 +62,16 @@ public class NPCController : MonoBehaviour
 
         stateMachine.OnStateEnter += (state) =>
         {
-            if (state.state == ENPCState.Jumping)
+            if (state.state == ECharacterState.Jumping)
             {
-                animator.SetTrigger("Jump");
+                if (animator.parameters.FirstOrDefault((p) => p.name == "Jump") != null) animator.SetTrigger("Jump");
             }
         };
     }
-    private void Update()
+    protected virtual void Update()
     {
-        animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
-        animator.SetBool("Grounded", stateMachine.ground.connected);
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Speed") != null) animator.SetFloat("Speed", Mathf.Abs(stateMachine.rb.velocity.x));
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Grounded") != null) animator.SetBool("Grounded", stateMachine.ground.connected);
         if (patrolPoints.Count == 0)
         {
             patrolPointCenter = stateMachine.rb.position;
@@ -78,6 +79,7 @@ public class NPCController : MonoBehaviour
 
         var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance);
         var target = hit.FirstOrDefault(h => followsTags.Any((t) => h.transform.root.CompareTag(t)));
+
         if (stateMachine.Target && maxFollowRangeFromOrigin > 0)
         {
             var distanceFromOrigin = Vector2.Distance(stateMachine.Target.position, patrolPointCenter);
@@ -88,7 +90,8 @@ public class NPCController : MonoBehaviour
         }
         else if (target)
         {
-            stateMachine.SetTarget(target.transform.root);
+            var hasLos = Physics2D.Linecast(stateMachine.rb.position, target.transform.position, LayerMask.GetMask("Ground")).collider == null;
+            if (hasLos) stateMachine.SetTarget(target.transform.root);
         }
         else if (patrolPoints.Count > 0)
         {
@@ -104,13 +107,12 @@ public class NPCController : MonoBehaviour
             }
         }
 
-        if (stateMachine.IsActive) FlipCheck();
+        FlipCheck();
     }
     private void FixedUpdate()
     {
         HandleGravity();
         HandleFall();
-        HandleForceFollow();
 
         if (stateMachine.IsActive)
         {
@@ -121,10 +123,12 @@ public class NPCController : MonoBehaviour
         {
             HandleAttack();
         }
+        HandleForceFollow();
     }
 
     private void HandleAttack()
     {
+        if (!attacksTags.Any((t) => stateMachine.Target.CompareTag(t))) return;
         var targetStats = stateMachine.Target.GetComponent<CharacterStats>();
         if (!targetStats || targetStats.GetHealth() <= 0)
             return;
@@ -138,18 +142,18 @@ public class NPCController : MonoBehaviour
 
     private void DoAttack(CharacterStats targetStats)
     {
-        animator.SetTrigger("Attack");
+        if (animator.parameters.FirstOrDefault((p) => p.name == "Attack") != null) animator.SetTrigger("Attack");
         if (isRanged)
         {
             var projectileGo = Instantiate(projectile, transform.position + transform.forward * 0.5f, Quaternion.identity);
             var projectileScript = projectileGo.GetComponent<ProjectileScript>();
-            projectileScript.damage = damage;
+            projectileScript.damage = characterStats.damage;
             projectileScript.ignoresTags.Add(transform.root.tag);
             projectileScript.Init(stateMachine.Target.position - transform.position);
         }
         else
         {
-            targetStats.TakeDamage(damage);
+            targetStats.TakeDamage(characterStats.damage);
 
         }
         PlayRandomAttackSound();
@@ -175,7 +179,6 @@ public class NPCController : MonoBehaviour
         {
             if (distance > forceFollowThreshold)
             {
-                Debug.Log("Force follow");
                 stateMachine.rb.velocity = stateMachine.pathDir * stateMachine.Config.MaxWalkSpeed;
                 stateMachine.rb.isKinematic = true;
                 forceFollowActive = true;
@@ -199,60 +202,78 @@ public class NPCController : MonoBehaviour
 
     private void FlipCheck()
     {
-        if (stateMachine.pathDir.x > 0 && !IsFacingRight)
+        if (stateMachine.IsActive)
         {
-            IsFacingRight = true;
-            transform.rotation = Quaternion.Euler(0f, 0, 0f);
-            OnFlip.Invoke();
+            if (stateMachine.pathDir.x > 0 && !IsFacingRight)
+            {
+                IsFacingRight = true;
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                OnFlip.Invoke();
+            }
+            else if (stateMachine.pathDir.x < 0 && IsFacingRight)
+            {
+                IsFacingRight = false;
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                OnFlip.Invoke();
+            }
         }
-        else if (stateMachine.pathDir.x < 0 && IsFacingRight)
+        else if (stateMachine.Target)
         {
-            IsFacingRight = false;
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            OnFlip.Invoke();
+            if (stateMachine.Target.position.x > transform.position.x && !IsFacingRight)
+            {
+                IsFacingRight = true;
+                transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                OnFlip.Invoke();
+            }
+            else if (stateMachine.Target.position.x < transform.position.x && IsFacingRight)
+            {
+                IsFacingRight = false;
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                OnFlip.Invoke();
+            }
         }
     }
 
     private void HandleMovement()
     {
 
-        if (stateMachine.IsStateActive(ENPCState.Moving, ENPCState.Accelerating))
+        if (stateMachine.IsStateActive(ECharacterState.Moving, ECharacterState.Accelerating))
             return;
 
-        stateMachine.EnterState(ENPCState.Accelerating);
-        if (stateMachine.IsStateActive(ENPCState.Moving, ENPCState.Accelerating))
+        stateMachine.EnterState(ECharacterState.Accelerating);
+        if (stateMachine.IsStateActive(ECharacterState.Moving, ECharacterState.Accelerating))
         {
-            stateMachine.EnterState(ENPCState.Decelerating);
+            stateMachine.EnterState(ECharacterState.Decelerating);
         }
 
 
     }
     private void HandleJump()
     {
-        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ENPCState.Jumping))
+        if (!stateMachine.ground.connected || stateMachine.IsStateActive(ECharacterState.Jumping) || !stateMachine.IsActive || !stateMachine.Target)
             return;
 
         Rigidbody2D rb = stateMachine.rb;
         NPCMovementConfig config = stateMachine.Config;
         Vector2 forward = new(Mathf.Sign(stateMachine.pathDir.x), 0);
-
-        if (stateMachine.pathAngle <= 40)
+        var targetStateMachine = stateMachine.Target.GetComponent<CharacterStateMachine>();
+        if (stateMachine.pathAngle <= 40 && (!targetStateMachine || !targetStateMachine.IsStateActive(ECharacterState.Jumping)))
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
             return;
         }
 
         RaycastHit2D wallHit = Physics2D.Raycast(
-            stateMachine.groundCheckCollider.transform.position,
+            stateMachine.groundCheckCollider.bounds.center,
             forward,
             config.jumpDetectionDistance,
             config.GroundLayer
         );
-        bool isWall = !!wallHit.collider && wallHit.normal.y < 0.3f; // ! swap 0.3f with config.WallAngleThreshold
+        bool isWall = !!wallHit.collider; // ! swap 0.3f with config.WallAngleThreshold
 
         if (isWall)
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
             return;
         }
 
@@ -270,16 +291,16 @@ public class NPCController : MonoBehaviour
         bool wantsToGoDown = stateMachine.pathAngle >= 100;
         if (!wantsToGoDown && isLedge)
         {
-            stateMachine.EnterState(ENPCState.Jumping);
+            stateMachine.EnterState(ECharacterState.Jumping);
         }
 
     }
     private void HandleFall()
     {
         // TODO: might have to replace with or add a check for the fall state being active
-        if (stateMachine.rb.velocity.y < 0 && !stateMachine.ground.connected && !stateMachine.IsStateActive(ENPCState.Jumping, ENPCState.Falling))
+        if (stateMachine.rb.velocity.y < 0 && !stateMachine.ground.connected && !stateMachine.IsStateActive(ECharacterState.Jumping, ECharacterState.Falling))
         {
-            stateMachine.EnterState(ENPCState.Falling);
+            stateMachine.EnterState(ECharacterState.Falling);
         }
     }
 }

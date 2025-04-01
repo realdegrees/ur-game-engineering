@@ -15,8 +15,6 @@ public enum ECharacterState
     Falling,
     Landing,
     Crouching,
-    Dashing,
-    WallSliding,
 }
 
 public abstract class CharacterState : State<ECharacterState, PlayerMovementConfig>

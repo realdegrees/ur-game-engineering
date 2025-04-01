@@ -1,19 +1,38 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public abstract class CharacterStats : MonoBehaviour
 {
 
     protected int health;
+    protected AudioSource audioSource;
 
-    protected int damage;
     [SerializeField]
-    protected int maxHealth = 100;
+    protected List<AudioClip> takeDamageAudios;
+    [SerializeField]
+    protected List<AudioClip> deathAudios;
 
-    public int Heal(int heal)
+    public event Action<int> OnHealthChanged = delegate { };
+
+    public int damage;
+    public int maxHealth = 100;
+
+    private float pitch = 1f;
+
+    protected virtual void Start()
     {
-        health += heal;
-        return health;
+        health = maxHealth;
+        TryGetComponent(out audioSource);
+        pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+        audioSource.pitch = pitch;
+    }
+
+    public void Heal(uint heal)
+    {
+        health = Mathf.Min(health + (int)heal, maxHealth);
+        OnHealthChanged?.Invoke(health);
     }
 
 
@@ -22,35 +41,21 @@ public abstract class CharacterStats : MonoBehaviour
         return health;
     }
 
-    public int SetHealth(int newHealthStat)
+
+
+    public void TakeDamage(int damageTaken)
     {
-        health = Math.Max(Math.Min(newHealthStat, maxHealth), 0);
-        OnHealthChanged();
-        return health;
-    }
-
-    protected virtual void Start()
-    {
-        health = maxHealth;
-    }
-
-    protected abstract void OnHealthChanged();
-
-
-
-
-    public int TakeDamage(int damageTaken)
-    {
+        if (health <= 0) return;
         health -= damageTaken;
         health = Math.Max(Math.Min(health, maxHealth), 0);
-        OnHealthChanged();
-        return health;
+        OnHealthChanged?.Invoke(health);
+        if (health <= 0)
+        {
+            audioSource.PlayOneShot(deathAudios[UnityEngine.Random.Range(0, deathAudios.Count)]);
+        }
+        else
+        {
+            audioSource.PlayOneShot(takeDamageAudios[UnityEngine.Random.Range(0, takeDamageAudios.Count)]);
+        }
     }
-
-    public int GetDamage()
-    {
-        return damage;
-    }
-
-
 }

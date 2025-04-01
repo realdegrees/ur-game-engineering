@@ -5,18 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DecelerateState", menuName = "StateMachines/States/NPC/DecelerateState")]
 public class NPCDecelerateState : NPCState
 {
-    private float startVelocity;
+    private Vector2 startVelocity;
     private float decelerationRate;
     [Header("Debug")]
     public bool debugLedgeDetection = false;
 
-    public NPCDecelerateState() : base(ENPCState.Decelerating)
+    public NPCDecelerateState() : base(ECharacterState.Decelerating)
     {
     }
 
     protected override void OnEnter()
     {
-        startVelocity = rb.velocity.x;
+        startVelocity = rb.velocity;
     }
 
     protected override float? OnLoop()
@@ -32,16 +32,12 @@ public class NPCDecelerateState : NPCState
     {
         var ground = ((NPCStateMachine)stateMachine).ground;
         var ledgeDecelerationFactor = CalculateLedgeDecelerationFactor(ground);
-        var targetVelocity = GetDesiredHorizontalVelocity(); // Target velocity we want to achieve (0 when not on moving ground)
+        var targetVelocity = GetDesiredVelocity(); // Target velocity we want to achieve (0 when not on moving ground)
         decelerationRate = ground.connected ? Config.GroundDecelerationRate : Config.AirDecelerationRate;
 
 
-        var target = Mathf.Lerp(rb.velocity.x, targetVelocity, ledgeDecelerationFactor * decelerationRate * Time.fixedDeltaTime);
-        rb.velocity = new Vector2(
-            target,
-            rb.velocity.y
-        );
-        var currentProgress = Mathf.InverseLerp(startVelocity, targetVelocity, ground.relativeVelocity.x);
+        rb.velocity = Vector2.Lerp(rb.velocity, targetVelocity, ledgeDecelerationFactor * decelerationRate * Time.fixedDeltaTime);
+        var currentProgress = Mathf.InverseLerp(startVelocity.magnitude, targetVelocity.magnitude, ground.relativeVelocity.magnitude);
         var progressDelta = currentProgress - Progress;
         return progressDelta < 0 ? -1 : currentProgress;
     }

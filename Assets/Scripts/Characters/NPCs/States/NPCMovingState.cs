@@ -4,7 +4,7 @@ using UnityEngine.Windows;
 [CreateAssetMenu(fileName = "MovingState", menuName = "StateMachines/States/NPC/MovingState")]
 public class NPCMovingState : NPCState
 {
-    public NPCMovingState() : base(ENPCState.Moving)
+    public NPCMovingState() : base(ECharacterState.Moving)
     {
     }
 
@@ -32,8 +32,8 @@ public class NPCMovingState : NPCState
         }
         else
         {
-            var targetVelocity = GetDesiredHorizontalVelocity(); // Target velocity we want to hold
-            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(targetVelocity, rb.velocity.y), Config.MaxWalkSpeed * Time.fixedDeltaTime);
+            var targetVelocity = GetDesiredVelocity(); // Target velocity we want to hold
+            rb.velocity = Vector2.Lerp(rb.velocity, targetVelocity, Config.MaxWalkSpeed * Time.fixedDeltaTime);
             return null;
         }
     }

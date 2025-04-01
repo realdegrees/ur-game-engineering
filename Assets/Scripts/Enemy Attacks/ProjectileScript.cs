@@ -19,12 +19,8 @@ public class ProjectileScript : MonoBehaviour
     private float timer;
     private Rigidbody2D rb;
 
-
-    private AudioSource audioSource;
-
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
     }
     public void Init(Vector2 direction)
