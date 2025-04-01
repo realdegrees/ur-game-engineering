@@ -4,36 +4,29 @@ using System.Diagnostics;
 
 public class DamageZone : EditorZone<DamageZone>
 {
-
     public int damage;
-    public GameObject trap;
 
     public bool isRocks;
     public bool isContinuousSpikes;
 
     public float trapSpeed = 0.2f;
-    public float continuousSpikesTime = 1.5f;
-    private Vector2 originalTrapPos;
+    public float movementDuration = 0.5f;
+    public float idleDuration = 1.5f;
 
     private bool spikesShowing = false;
     private bool hasDamagedPlayer = false;
 
+    private Animator animator;
+
     protected override void Start()
     {
         base.Start();
-        originalTrapPos = trap.transform.position;
+        animator = GetComponentInChildren<Animator>();
+
         if (isContinuousSpikes)
         {
-            StartCoroutine(MoveSpikes());
+            StartCoroutine(SpikeCycle());
         }
-
-        // if (!isContinuousSpikes)
-        // {
-        //     OnActivate.AddListener(() =>
-        //     {
-        //         DealDamage();
-        //     });
-        // }
     }
 
     public void OnTriggerStay2D(Collider2D other)
@@ -51,62 +44,21 @@ public class DamageZone : EditorZone<DamageZone>
         }
     }
 
-    // public void DealDamage()
-    // {
-    //     if (isRocks)
-    //     {
-    //         Vector2 target = new (originalTrapPos.x, originalTrapPos.y - 5f);
-    //         playerStats.TakeDamage(damage);
-    //         StartCoroutine(ActivateTrap(target));
-    //     }
-
-    // }
-
-    private IEnumerator MoveSpikes()
+    private IEnumerator SpikeCycle()
     {
         while (true)
         {
-            yield return StartCoroutine(ActivateTrap());
-            yield return new WaitForSeconds(continuousSpikesTime);
-            spikesShowing = false;
-            hasDamagedPlayer = false;
+            animator.Play("Up");
+            yield return new WaitForSeconds(movementDuration);
 
-            yield return StartCoroutine(HideTrap());
-            yield return new WaitForSeconds(continuousSpikesTime);
-            spikesShowing = true;
+            animator.Play("IdleUp");
+            yield return new WaitForSeconds(idleDuration);
+
+            animator.Play("Down");
+            yield return new WaitForSeconds(movementDuration);
+
+            animator.Play("IdleDown");
+            yield return new WaitForSeconds(idleDuration);
         }
-    }
-
-    private IEnumerator ActivateTrap()
-    {
-        Vector2 start = originalTrapPos;
-        Vector2 target = new(originalTrapPos.x, originalTrapPos.y + 0.2f);
-        //if (isContinuousSpikes) start = transform.position;
-        float timePassed = 0f;
-
-        while (timePassed < trapSpeed)
-        {
-            trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
-            timePassed += Time.deltaTime;
-            yield return null;
-        }
-        trap.transform.position = target;
-        if (numberOfAllowedActivations > 0) Destroy(trap);
-    }
-
-    private IEnumerator HideTrap()
-    {
-        Vector2 start = trap.transform.position;
-        //if (isContinuousSpikes) start = transform.position;
-        Vector2 target = new(start.x, start.y - 0.2f);
-        float timePassed = 0f;
-
-        while (timePassed < trapSpeed)
-        {
-            trap.transform.position = Vector2.Lerp(start, target, timePassed / trapSpeed);
-            timePassed += Time.deltaTime;
-            yield return null;
-        }
-        trap.transform.position = target;
     }
 }
