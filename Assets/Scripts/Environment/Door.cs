@@ -16,6 +16,7 @@ public class Door : EditorZone<Door>
         TryGetComponent(out animator);
         OnActivate.AddListener((go) =>
         {
+            if (IsOpen) return;
             if (requiredKeys > 0 && go.TryGetComponent<PlayerInventory>(out var inventory))
             {
                 if (inventory.GetItems(EItemType.KEY).Count < requiredKeys)
@@ -23,6 +24,7 @@ public class Door : EditorZone<Door>
                     return;
                 }
                 inventory.RemoveItems(EItemType.KEY, requiredKeys);
+                requiredKeys = 0;
             }
             else if (requiredKeys > 0)
             {

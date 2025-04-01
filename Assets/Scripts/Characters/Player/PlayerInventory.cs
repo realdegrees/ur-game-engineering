@@ -19,7 +19,7 @@ public class PlayerInventory : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
         var item = collision.GetComponent<PickupableItem>();
-        if (item == null)
+        if (item == null || item.isPickupable == false)
         {
             return;
         }
