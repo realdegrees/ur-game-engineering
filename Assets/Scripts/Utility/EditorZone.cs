@@ -34,12 +34,14 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     public UnityEvent OnDeactivate = new();
     public UnityEvent OnCooldownReset = new();
 
+    public float activationSeconds = 1f;
+
     protected float currentCooldown = 0;
     protected float currentDuration = 0;
     protected int activations = 0;
     protected Collider2D zoneCollider;
 
-    protected List<string> inZone = new();
+    protected List<GameObject> inZone = new();
     private List<CharacterStateMachine> frozenCharacters = new();
 
     #region Lifecycle Events
@@ -110,14 +112,14 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     {
         if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations || other.isTrigger) return;
         var tag = other.transform.root.tag;
-        inZone.Add(tag);
+        inZone.Add(other.transform.root.gameObject);
         if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
         OnActivate.Invoke(other.transform.root.gameObject);
     }
     private void OnTriggerExit2D(Collider2D other)
     {
         var tag = other.transform.root.tag;
-        inZone.Remove(tag);
+        inZone.Remove(other.transform.root.gameObject);
         if (!activateTags.Contains(tag) || other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
 
         OnDeactivate.Invoke();
