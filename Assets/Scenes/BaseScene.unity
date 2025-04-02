@@ -3410,11 +3410,15 @@ MonoBehaviour:
     scenePath: IntroScene
   - sceneAsset: {fileID: 102900000, guid: 21a6d47348393e443ad03415dae93528, type: 3}
     scenePath: TrainingScene
+  - sceneAsset: {fileID: 102900000, guid: 79b0cbf286d0d084196f445ec5d7b346, type: 3}
+    scenePath: BossScene
   levels_scenario_b:
   - sceneAsset: {fileID: 102900000, guid: 1ccc1df52b6463640ab8e2fd54d30ca7, type: 3}
     scenePath: IntroScene
   - sceneAsset: {fileID: 102900000, guid: 21a6d47348393e443ad03415dae93528, type: 3}
     scenePath: TrainingScene
+  - sceneAsset: {fileID: 102900000, guid: 79b0cbf286d0d084196f445ec5d7b346, type: 3}
+    scenePath: BossScene
 --- !u!4 &1402709106
 Transform:
   m_ObjectHideFlags: 0
