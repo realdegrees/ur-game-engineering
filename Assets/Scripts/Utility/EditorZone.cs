@@ -98,6 +98,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 OnDeactivate.Invoke();
             }
 
+            // TODO get all objects with this tag in the scene and freeze them
             if (freezeTags.Contains(tag) && go.TryGetComponent(out CharacterStateMachine sm))
             {
                 sm.Freeze();

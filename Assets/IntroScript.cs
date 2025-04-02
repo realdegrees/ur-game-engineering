@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class IntroScript : MonoBehaviour
@@ -9,7 +10,7 @@ public class IntroScript : MonoBehaviour
 
         childDialogue.OnDeactivate.AddListener(() =>
         {
-            LevelManager.Instance.NextLevel();
+            StartCoroutine(NextLevel());
         });
     }
 
@@ -17,5 +18,10 @@ public class IntroScript : MonoBehaviour
     void Update()
     {
 
+    }
+    IEnumerator NextLevel()
+    {
+        yield return new WaitForSeconds(1f);
+        LevelManager.Instance.NextLevel();
     }
 }
