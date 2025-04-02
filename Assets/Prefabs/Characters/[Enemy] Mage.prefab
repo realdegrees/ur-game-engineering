@@ -557,8 +557,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6efffd0b28c7c8f45a31d643a0aeb8b1, type: 3}
   deathAudios:
   - {fileID: 8300000, guid: 4707cb64da4152d4da20e66b07805366, type: 3}
-  damage: 20
-  maxHealth: 30
+  damage: 15
+  maxHealth: 50
 --- !u!95 &3169233029227511642
 Animator:
   serializedVersion: 5

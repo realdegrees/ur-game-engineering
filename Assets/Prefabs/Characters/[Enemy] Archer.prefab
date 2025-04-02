@@ -641,7 +641,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
   - {fileID: 8300000, guid: 12ae17b52883a8d4ba963cc7ee2c9d54, type: 3}
   - {fileID: 8300000, guid: d771b89f4f72bcf40b64774a86e31ea9, type: 3}
-  damage: 15
+  damage: 10
   maxHealth: 50
 --- !u!95 &3169233029227511642
 Animator:
