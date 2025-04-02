@@ -39,15 +39,18 @@ public class PlayerController : Manager<PlayerController>
             // deal damage to enemies
             // trigger animation
             var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            var hostileHitObj = hit.FirstOrDefault((h) => !h.isTrigger && h.transform.root.CompareTag("Hostile"));
-            var enemy = hostileHitObj != null ? hostileHitObj.transform.root : null;
-            if (enemy)
+            var hostileHits = hit
+                .Where(h => !h.isTrigger && h.transform.root.CompareTag("Hostile"))
+                .Select(h => h.transform.root.gameObject)
+                .Distinct();
+            foreach (var hostileHit in hostileHits)
             {
+                var enemy = hostileHit;
                 var losCheck = Physics2D.Linecast(transform.position, enemy.transform.position, LayerMask.GetMask("Ground"));
                 if (losCheck.collider != null)
-                    return;
+                    continue;
 
-                if (enemy.CompareTag("Hostile") && enemy.TryGetComponent(out CharacterStats stats))
+                if (enemy.TryGetComponent(out CharacterStats stats))
                 {
                     stats.TakeDamage(playerStats.damage);
                 }

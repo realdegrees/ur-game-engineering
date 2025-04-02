@@ -25,6 +25,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
     // [SerializeField] private Collider2D interactionCollider;
     public PlayerBoundaryElement ground = new();
     public PlayerBoundaryElement ceiling = new();
+    private Action OnLand = delegate { };
 
     public bool IsFacingRight { get; private set; } = true;
 
@@ -49,6 +50,26 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         NotifyTargetChanged(newTarget);
     }
 
+    private void DoFreeze()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        OnLand -= DoFreeze;
+    }
+    public void Freeze()
+    {
+        if (canFly)
+        {
+            DoFreeze();
+            return;
+        }
+        if (ground.connected) DoFreeze();
+        else OnLand += DoFreeze;
+    }
+    public void Unfreeze()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        OnLand -= DoFreeze;
+    }
     // public bool IsFalling() => Vector2.Dot(rb.velocity, Physics2D.gravity.normalized) < 0;
 
     protected override void Awake()
@@ -211,6 +232,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
             if (!prev)
             {
                 ground.connectedOnThisFrame = base.IsStateActive(ECharacterState.Falling);
+                OnLand.Invoke();
             }
             ground.lastConnected = Time.time;
         }

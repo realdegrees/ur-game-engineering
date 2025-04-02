@@ -42,7 +42,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected Collider2D zoneCollider;
 
     protected List<GameObject> inZone = new();
-    private List<CharacterStateMachine> frozenCharacters = new();
+    private List<MonoBehaviour> frozenCharacters = new();
 
     #region Lifecycle Events
     protected virtual void Start() { }
@@ -59,7 +59,14 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         {
             frozenCharacters.ForEach((sm) =>
             {
-                sm.Unfreeze();
+                if (sm is CharacterStateMachine characterStateMachine)
+                {
+                    characterStateMachine.Unfreeze();
+                }
+                else if (sm is NPCStateMachine npcStateMachine)
+                {
+                    npcStateMachine.Unfreeze();
+                }
             });
             frozenCharacters.Clear();
         });
@@ -98,10 +105,25 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                 OnDeactivate.Invoke();
             }
 
-            if (freezeTags.Contains(tag) && go.TryGetComponent(out CharacterStateMachine sm))
+            // TODO get all objects with this tag in the scene and freeze them
+            foreach (var tag in freezeTags)
             {
-                sm.Freeze();
-                frozenCharacters.Add(sm);
+                foreach (var freezeGo in GameObject.FindGameObjectsWithTag(tag))
+                {
+                    var csm = freezeGo.GetComponent<CharacterStateMachine>();
+                    if (csm == null)
+                    {
+                        var npcsm = freezeGo.GetComponent<NPCStateMachine>();
+                        npcsm.Freeze();
+                        frozenCharacters.Add(npcsm);
+                    }
+                    else
+                    {
+                        csm.Freeze();
+                        frozenCharacters.Add(csm);
+                    }
+
+                }
             }
         });
 
