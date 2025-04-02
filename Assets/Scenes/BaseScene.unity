@@ -212,15 +212,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3206723615953453787, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.028301895
+      value: 0.7924528
       objectReference: {fileID: 0}
     - target: {fileID: 3206723615953453787, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_BackGroundColor.g
-      value: 0.028301895
+      value: 0.68417335
       objectReference: {fileID: 0}
     - target: {fileID: 3206723615953453787, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.028301895
+      value: 0.5008899
       objectReference: {fileID: 0}
     - target: {fileID: 4098742807350493022, guid: e3dfe821400a9e14486eb7977ae64fe6, type: 3}
       propertyPath: player
@@ -3406,15 +3406,15 @@ MonoBehaviour:
     sceneAsset: {fileID: 0}
     scenePath: 
   levels_scenario_a:
-  - sceneAsset: {fileID: 102900000, guid: 95c31f7265433824a81fdd4b5e04252f, type: 3}
-    scenePath: A_Level_1
-  - sceneAsset: {fileID: 102900000, guid: 818c7963d45807b459f2e3b1466e212f, type: 3}
-    scenePath: A_Level_2
+  - sceneAsset: {fileID: 102900000, guid: 1ccc1df52b6463640ab8e2fd54d30ca7, type: 3}
+    scenePath: IntroScene
+  - sceneAsset: {fileID: 102900000, guid: 21a6d47348393e443ad03415dae93528, type: 3}
+    scenePath: TrainingScene
   levels_scenario_b:
-  - sceneAsset: {fileID: 102900000, guid: 61fa0f24b05d9fb47bc49401c1754d90, type: 3}
-    scenePath: B_Level_1
-  - sceneAsset: {fileID: 102900000, guid: f4ddd5d58f843084abb20e8c48d8a76f, type: 3}
-    scenePath: B_Level_2
+  - sceneAsset: {fileID: 102900000, guid: 1ccc1df52b6463640ab8e2fd54d30ca7, type: 3}
+    scenePath: IntroScene
+  - sceneAsset: {fileID: 102900000, guid: 21a6d47348393e443ad03415dae93528, type: 3}
+    scenePath: TrainingScene
 --- !u!4 &1402709106
 Transform:
   m_ObjectHideFlags: 0

@@ -8,7 +8,6 @@ public class Door : EditorZone<Door>
 
     public int requiredKeys = 0;
 
-    public bool IsOpen => animator.GetCurrentAnimatorStateInfo(0).IsName("Open");
     protected override void Start()
     {
         base.Start();
@@ -16,7 +15,6 @@ public class Door : EditorZone<Door>
         TryGetComponent(out animator);
         OnActivate.AddListener((go) =>
         {
-            if (IsOpen) return;
             if (requiredKeys > 0 && go.TryGetComponent<PlayerInventory>(out var inventory))
             {
                 if (inventory.GetItems(EItemType.KEY).Count < requiredKeys)
