@@ -22,7 +22,6 @@ public class FloatingUI : MonoBehaviour
             Debug.Log("FloatingHealthbar: No health bar icon set");
             return;
         }
-        healthBarIcon.rectTransform.pivot = new Vector2(0, healthBarIcon.rectTransform.pivot.y);
         var maxHealthBarWidth = healthBarIcon.rectTransform.localScale.x;
         linkToStats.OnHealthChanged += health =>
         {
@@ -43,5 +42,13 @@ public class FloatingUI : MonoBehaviour
     {
         // always keep the canvas rotate upwards in world space
         canvas.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        if (transform.root.rotation.eulerAngles.y == 180)
+        {
+            canvas.transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else
+        {
+            canvas.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 }
