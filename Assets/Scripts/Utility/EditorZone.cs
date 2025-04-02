@@ -69,9 +69,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     {
         if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations || other.isTrigger) return;
         var tag = other.transform.root.tag;
-
-        if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Contains(tag)) return; // Check if the tag is in the list of allowed tags
         inZone.Add(tag);
+        if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
         activations++;
 
         // Set and reset cooldown
@@ -113,12 +112,11 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        var tag = other.CompareTag("Untagged") ? other.transform.root.tag : other.tag;
-        if (!activateTags.Contains(tag) || other.isTrigger) return; // Check if the tag is in the list of allowed tags
+        var tag = other.transform.root.tag;
         inZone.Remove(tag);
+        if (!activateTags.Contains(tag) || other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
 
-        if (inZone.Count == 0 && deactivateOnExit)
-            OnDeactivate.Invoke();
+        OnDeactivate.Invoke();
     }
 
     #endregion
