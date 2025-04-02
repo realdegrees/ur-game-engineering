@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 
+[RequireComponent(typeof(AudioSource))]
 public class DamageZone : EditorZone<DamageZone>
 {
     public int damage;
     public bool isContinuousSpikes;
+    public AudioClip trapAudio;
 
     public float trapSpeed = 0.2f;
     public float movementDuration = 0.5f;
@@ -15,11 +17,13 @@ public class DamageZone : EditorZone<DamageZone>
     private bool hasDamagedPlayer = false;
 
     private Animator animator;
+    private AudioSource audioSource;
 
     protected override void Start()
     {
         base.Start();
         animator = GetComponentInChildren<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         if (isContinuousSpikes)
         {
@@ -27,16 +31,14 @@ public class DamageZone : EditorZone<DamageZone>
         }
     }
 
-    public void OnTriggerStay2D(Collider2D other)
+    void Update()
     {
-        var tag = other.transform.root.tag;
-
         if (isContinuousSpikes && spikesShowing && !hasDamagedPlayer)
         {
             inZone.ForEach((go) =>
             {
-                if (!other.transform.root.TryGetComponent(out PlayerStats playerStats)) return;
-                playerStats.TakeDamage(damage);
+                if (!go.TryGetComponent(out CharacterStats characterStats)) return;
+                characterStats.TakeDamage(damage);
                 hasDamagedPlayer = true;
             });
         }
@@ -47,6 +49,7 @@ public class DamageZone : EditorZone<DamageZone>
         while (true)
         {
             animator.Play("Up");
+            audioSource.PlayOneShot(trapAudio);
             spikesShowing = true;
             yield return new WaitForSeconds(movementDuration);
 
