@@ -134,8 +134,9 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         var stats = other.GetComponentInParent<CharacterStats>();
         if (stats == null) return; // Check if the other object has a CharacterStats component
         var tag = stats.tag;
+        if (!activateTags.Contains(tag)) return; // Check if the tag is in the list of allowed tags
         inZone.Add(stats.gameObject);
-        if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
+        if (currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
         OnActivate.Invoke(stats.gameObject);
     }
     private void OnTriggerExit2D(Collider2D other)
@@ -143,9 +144,9 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
         var stats = other.GetComponentInParent<CharacterStats>();
         if (stats == null) return; // Check if the other object has a CharacterStats component
         var tag = stats.tag;
+        if (!activateTags.Contains(tag)) return; // Check if the tag is in the list of allowed tags
         inZone.Remove(stats.gameObject);
-        if (!activateTags.Contains(tag) || other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
-
+        if (other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
         OnDeactivate.Invoke();
     }
 
