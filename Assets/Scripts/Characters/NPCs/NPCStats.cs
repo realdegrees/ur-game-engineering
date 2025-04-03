@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class NPCStats : CharacterStats
 {
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         OnHealthChanged += OnChangeHealthInvoked;
     }
     private void OnChangeHealthInvoked(int health)

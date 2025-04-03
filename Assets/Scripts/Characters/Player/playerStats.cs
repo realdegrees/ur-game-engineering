@@ -6,9 +6,8 @@ public class PlayerStats : CharacterStats
 {
     private readonly List<Item> items = new();
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         UIManager.Instance.healthBar.maxValue = maxHealth;
         UIManager.Instance.healthBar.minValue = 0;
         UIManager.Instance.healthBar.value = maxHealth;

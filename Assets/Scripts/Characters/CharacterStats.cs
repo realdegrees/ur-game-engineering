@@ -21,7 +21,7 @@ public abstract class CharacterStats : MonoBehaviour
 
     private float pitch = 1f;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         health = maxHealth;
         TryGetComponent(out audioSource);
