@@ -177,6 +177,7 @@ public class NPCController : MonoBehaviour
         {
             AudioClip selectedSound = attackSounds[UnityEngine.Random.Range(0, attackSounds.Length)];
             audioSource.PlayOneShot(selectedSound);
+            Debug.Log(selectedSound);
         }
     }
 

@@ -727,8 +727,8 @@ MonoBehaviour:
   stateMachine: {fileID: 0}
   patrolPoints: []
   attackSounds:
-  - {fileID: 8300000, guid: 39ea2c9e6ceec174eb1892d2d2af2de2, type: 3}
-  - {fileID: 8300000, guid: 5a81a03c2c5a26b41b6f7232e732e7c6, type: 3}
+  - {fileID: 8300000, guid: 8e350f8de874d0c41bde85cd8a355d0a, type: 3}
+  - {fileID: 8300000, guid: 8e65cd493411dda4da7b0c87a70a3a16, type: 3}
   attackCooldown: 1.5
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: 34d1533eedf76c74c80f6e7d67ee4baf, type: 3}

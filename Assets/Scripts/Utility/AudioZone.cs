@@ -28,12 +28,12 @@ public class AudioZone : EditorZone<AudioZone>
         OnActivate.AddListener((go) =>
         {
             StartTransition(audioSource.volume, defaultVolume);
-            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.StopMusic(this);
         });
         OnDeactivate.AddListener(() =>
         {
             StartTransition(audioSource.volume, 0);
-            AudioManager.Instance.StartMusic();
+            AudioManager.Instance.StartMusic(this);
         });
     }
     private void StartTransition(float from, float to)

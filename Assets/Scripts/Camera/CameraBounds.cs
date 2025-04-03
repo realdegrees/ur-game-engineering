@@ -1,10 +1,9 @@
-using Cinemachine;
 using UnityEngine;
 
 
 public enum CameraBoundsActivationType
 {
-    Awake,
+    Start,
     Enter,
     Stay,
     Toggle,
@@ -19,9 +18,9 @@ public class CameraBounds : EditorZone<CameraBounds>
     public CompositeCollider2D boundsCollider;
     private CompositeCollider2D cachedBounds;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         CheckRequirements();
         InitListeners();
     }
@@ -45,7 +44,7 @@ public class CameraBounds : EditorZone<CameraBounds>
             boundsCollider.geometryType = CompositeCollider2D.GeometryType.Polygons;
         }
 
-        if (activationType == CameraBoundsActivationType.Awake)
+        if (activationType == CameraBoundsActivationType.Start)
         {
             SetBounds();
         }
@@ -57,7 +56,7 @@ public class CameraBounds : EditorZone<CameraBounds>
         {
             switch (activationType)
             {
-                case CameraBoundsActivationType.Awake:
+                case CameraBoundsActivationType.Start:
                     break;
                 case CameraBoundsActivationType.Enter:
                     SetBounds();
@@ -78,12 +77,8 @@ public class CameraBounds : EditorZone<CameraBounds>
         });
         OnDeactivate.AddListener(() =>
         {
-            if (activationType == CameraBoundsActivationType.Stay)
-            {
-                ResetBounds();
-            }
+            ResetBounds();
         });
-        OnCooldownReset.AddListener(ResetBounds);
     }
 
     private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Follow);
