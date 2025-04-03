@@ -216,7 +216,6 @@ MonoBehaviour:
   OnCooldownReset:
     m_PersistentCalls:
       m_Calls: []
-  activationSeconds: 1
   damage: 2
   isContinuousSpikes: 1
   trapAudio: {fileID: 8300000, guid: bc651de891dad6840bdc490a624954a6, type: 3}
@@ -279,7 +278,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
