@@ -18,10 +18,9 @@ public class TeleportZone : EditorZone<TeleportZone>
         {
             if (target != null)
             {
-                var player = PlayerController.Instance.gameObject;
-                if (keepXPosition) player.transform.position = new Vector3(target.position.x, player.transform.position.y, player.transform.position.z);
-                if (keepYPosition) player.transform.position = new Vector3(player.transform.position.x, target.position.y, player.transform.position.z);
-                else player.transform.position = target.position;
+                if (keepXPosition) go.transform.position = new Vector3(target.position.x, go.transform.position.y, go.transform.position.z);
+                if (keepYPosition) go.transform.position = new Vector3(go.transform.position.x, target.position.y, go.transform.position.z);
+                else go.transform.position = target.position;
             }
         });
     }

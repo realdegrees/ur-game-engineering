@@ -86,19 +86,19 @@ public class CameraBounds : EditorZone<CameraBounds>
         OnCooldownReset.AddListener(ResetBounds);
     }
 
-    private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Default);
+    private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Follow);
 
     private void SetBounds()
     {
         cachedBounds = GetBounds() as CompositeCollider2D;
-        CameraManager.Instance.SetCameraBounds(boundsCollider, CameraType.Default);
+        CameraManager.Instance.SetCameraBounds(boundsCollider, CameraType.Follow);
     }
     private void ResetBounds()
     {
         var currentCameraBounds = GetBounds();
         if (currentCameraBounds == boundsCollider)
         {
-            CameraManager.Instance.SetCameraBounds(cachedBounds, CameraType.Default);
+            CameraManager.Instance.SetCameraBounds(cachedBounds, CameraType.Follow);
             cachedBounds = null;
         }
     }

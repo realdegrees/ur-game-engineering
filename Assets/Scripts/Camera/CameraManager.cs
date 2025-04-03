@@ -6,7 +6,7 @@ using UnityEngine;
 
 public enum CameraType
 {
-    Default,
+    Follow,
     Fixed
 }
 [Serializable]
@@ -24,15 +24,21 @@ public class CameraData
 
 public class CameraManager : Manager<CameraManager>
 {
-    public PlayerController player;
     public CameraConfig config;
     [SerializeField]
     private CameraData[] cameraData;
     private CameraData activeCameraData;
+    private AudioListener audioListener;
 
 
     private Coroutine verticalSnapCoroutine;
     private Coroutine flipCoroutine;
+
+    public void Update()
+    {
+        var player = FindFirstObjectByType<PlayerController>();
+        audioListener.enabled = player == null;
+    }
 
 
     public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
@@ -56,7 +62,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerFlip()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -69,7 +75,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerStartFalling()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -81,7 +87,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerLand()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -92,10 +98,9 @@ public class CameraManager : Manager<CameraManager>
     }
 
     // Start is called before the first frame update
-    protected override void Awake()
+    public void Start()
     {
-        base.Awake();
-
+        audioListener = GetComponentInChildren<AudioListener>();
         foreach (CameraData details in cameraData)
         {
             // set transposer
@@ -112,7 +117,9 @@ public class CameraManager : Manager<CameraManager>
             }
         }
 
-        var playerStateMachine = player.GetComponent<CharacterStateMachine>();
+        var playerStateMachine = FindFirstObjectByType<CharacterStateMachine>();
+        if (playerStateMachine == null) return;
+
         // ! Important to do this after setting up the cameras
         playerStateMachine.OnStateExit += (state) =>
         {
@@ -137,7 +144,7 @@ public class CameraManager : Manager<CameraManager>
             }
 
         };
-        player.OnFlip += OnPlayerFlip;
+        playerStateMachine.GetComponent<PlayerController>().OnFlip += OnPlayerFlip;
     }
 
     public void SetCameraType(CameraType type, Transform target = null)

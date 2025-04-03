@@ -31,6 +31,7 @@ public class NPCController : MonoBehaviour
     private CharacterStats characterStats;
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
+    public Transform fallbackFollowTarget = null;
     public List<string> followsTags = new() { };
     public List<string> attacksTags = new() { };
     public int maxFollowRangeFromOrigin = 0;
@@ -85,7 +86,7 @@ public class NPCController : MonoBehaviour
             var distanceFromOrigin = Vector2.Distance(stateMachine.Target.position, patrolPointCenter);
             if (distanceFromOrigin > maxFollowRangeFromOrigin)
             {
-                stateMachine.SetTarget(null);
+                stateMachine.SetTarget(fallbackFollowTarget);
             }
         }
         else if (target)
@@ -134,7 +135,7 @@ public class NPCController : MonoBehaviour
             return;
 
         var losCheck = Physics2D.Linecast(transform.position, stateMachine.Target.transform.position, LayerMask.GetMask("Ground"));
-        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > stateMachine.Config.ResumeDistance)
+        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > stateMachine.Config.ResumeDistance || stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition)
             return;
 
         DoAttack(targetStats);

@@ -183,7 +183,6 @@ GameObject:
   - component: {fileID: 3535363739658791604}
   - component: {fileID: 2856253638579531388}
   - component: {fileID: 6327394270404830086}
-  - component: {fileID: 797699075834519704}
   - component: {fileID: 2448326226791570300}
   - component: {fileID: 5621203361860116621}
   - component: {fileID: 119605267860252882}
@@ -346,19 +345,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
   damage: 30
   maxHealth: 200
---- !u!114 &797699075834519704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962759502354806734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d33722f6312034bad384524dd5cf3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  items: []
 --- !u!95 &2448326226791570300
 Animator:
   serializedVersion: 5
