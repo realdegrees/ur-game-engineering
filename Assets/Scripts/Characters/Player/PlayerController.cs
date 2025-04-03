@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterStateMachine))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     private Animator animator;
@@ -13,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public CharacterStateMachine stateMachine;
     public static PlayerController Instance { get; protected set; } = null;
     private PlayerStats playerStats;
+    public AudioClip[] attackSounds;
+    private AudioSource audioSource;
 
     public event Action OnFlip = delegate { };
     public float attackRange = 1f;
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
         TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
         TryGetComponent(out playerStats);
+        TryGetComponent(out audioSource);
 
         CameraManager.Instance.SetCameraType(CameraType.Follow, transform);
         InputManager.Instance.OnJumpPressed += HandleJump;
@@ -57,6 +61,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             animator.SetTrigger("Attack");
+            PlayRandomAttackSound();
             lastAttack = DateTime.Now;
         };
 
@@ -68,6 +73,14 @@ public class PlayerController : MonoBehaviour
                 animator.SetTrigger("Jump");
             }
         };
+    }
+    private void PlayRandomAttackSound()
+    {
+        if (attackSounds.Length > 0)
+        {
+            AudioClip selectedSound = attackSounds[UnityEngine.Random.Range(0, attackSounds.Length)];
+            audioSource.PlayOneShot(selectedSound);
+        }
     }
     private void Update()
     {
