@@ -40,25 +40,25 @@ public class PenaltyHandler : MonoBehaviour
                             RaycastHit2D upHit = Physics2D.Raycast(pos, Vector2.up, upHitDistance, LayerMask.GetMask("Ground"));
                             RaycastHit2D downHit = Physics2D.Raycast(pos, Vector2.down, downHitDistance, LayerMask.GetMask("Ground"));
                             RaycastHit2D leftHit = Physics2D.Raycast(pos, Vector2.left, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
-                            RaycastHit2D rightHit = Physics2D.Raycast(pos, Vector2.right, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
+                            RaycastHit2D rightHit = Physics2D.Raycast(pos, Vector2.right, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"), -Mathf.Infinity, Mathf.Infinity);
 
 
-                            if (upHit.collider != null)
+                            if (upHit.collider != null && !upHit.collider.isTrigger)
                             {
                                 var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(upHit.point, pos) / upHitDistance);
                                 node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(ceilingPenalty, airPenalty, normalizedHitDistance));
                             }
-                            if (downHit.collider != null) // Overrides upHit Penalty                      
+                            if (downHit.collider != null && !downHit.collider.isTrigger) // Overrides upHit Penalty                      
                             {
                                 var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(downHit.point, pos) / downHitDistance);
                                 node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(groundPenalty, airPenalty, normalizedHitDistance));
                             }
 
-                            if (!downHit.collider && !upHit.collider)
+                            if ((!downHit.collider || downHit.collider.isTrigger) && (!upHit.collider || upHit.collider.isTrigger))
                             {
                                 node.Penalty = airPenalty;
                             }
-                            if (leftHit.collider != null && rightHit.collider != null)
+                            if (leftHit.collider != null && rightHit.collider != null && !leftHit.collider.isTrigger && !rightHit.collider.isTrigger)
                             {
                                 var distance = Vector2.Distance(leftHit.point, rightHit.point);
                                 if (distance < allowedGapWidth)
@@ -66,7 +66,7 @@ public class PenaltyHandler : MonoBehaviour
                                     node.Penalty = (uint)Mathf.RoundToInt(airPenalty * 2f);
                                 }
                             }
-                            if (leftHit.collider && !rightHit.collider)
+                            if (leftHit.collider && !rightHit.collider && !leftHit.collider.isTrigger)
                             {
                                 var hitDistance = Vector2.Distance(leftHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
@@ -74,7 +74,7 @@ public class PenaltyHandler : MonoBehaviour
                                     //node.Walkable = false;
                                 }
                             }
-                            if (rightHit.collider && !leftHit.collider)
+                            if (rightHit.collider && !leftHit.collider && !rightHit.collider.isTrigger)
                             {
                                 var hitDistance = Vector2.Distance(rightHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
