@@ -460,6 +460,7 @@ MonoBehaviour:
   groundCheckCollider: {fileID: 4058238303049362350}
   ceilingCheckCollider: {fileID: 1706616017903692556}
   bodyCollider: {fileID: 6756067221394343119}
+  fallbackFollowTarget: {fileID: 0}
   rb: {fileID: 0}
   jumpsSinceGrounded: 0
 --- !u!114 &2798153695191604663
@@ -510,6 +511,7 @@ MonoBehaviour:
   attackCooldown: 2
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: fce020ea798a2554fb4251a65eb3569a, type: 3}
+  fallbackFollowTarget: {fileID: 0}
   followsTags:
   - Player
   - Companion
@@ -575,7 +577,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

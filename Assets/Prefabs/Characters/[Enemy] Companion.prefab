@@ -536,6 +536,7 @@ MonoBehaviour:
   groundCheckCollider: {fileID: 4058238303049362350}
   ceilingCheckCollider: {fileID: 1706616017903692556}
   bodyCollider: {fileID: 6756067221394343119}
+  fallbackFollowTarget: {fileID: 0}
   rb: {fileID: 0}
   jumpsSinceGrounded: 0
 --- !u!114 &1741982274874318099
@@ -558,6 +559,7 @@ MonoBehaviour:
   attackCooldown: 1.5
   isRanged: 0
   projectile: {fileID: 0}
+  fallbackFollowTarget: {fileID: 0}
   followsTags:
   - Player
   attacksTags:
@@ -621,7 +623,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

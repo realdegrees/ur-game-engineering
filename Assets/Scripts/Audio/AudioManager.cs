@@ -3,94 +3,72 @@ using System.Collections.Generic;
 using UnityEngine;
 using Manager;
 
+[RequireComponent(typeof(AudioSource))]
 public class AudioManager : Manager<AudioManager>
 {
 
     [Header("Background Music")]
-    public AudioClip backgroundMusicClip;
-    private AudioSource backgroundMusic;
-
-    [Header("Volume Settings")]
-    [Range(0f, 1f)] public float backgroundMusicVolume = 0.5f;
-    [Range(0f, 1f)] public float duckingFactor = 0.3f;
-
-    private AudioSource soundEffect;
-    private float soundEffectVolume = 0.5f;
-
-    // public static AudioManager instance { get; private set; }
-
-    // private void Awake()
-    // {
-    //     if (instance != null)
-    //     {
-    //         Debug.Log("AudioManager already exists in the scene");
-    //     }
-    //     instance = this;
-    // }
+    public AudioClip backgroundAudio;
+    private AudioSource audioSource;
+    private float defaultBackgroundMusicVolume = 1f;
+    public float transitionDuration = .6f;
+    private Coroutine transitionCoroutine;
+    private int stopCount = 0;
 
     void Start()
     {
-        backgroundMusic = gameObject.AddComponent<AudioSource>();
-        soundEffect = gameObject.AddComponent<AudioSource>();
-        backgroundMusic.clip = backgroundMusicClip;
-        if (backgroundMusic != null)
-        {
-            backgroundMusic.volume = backgroundMusicVolume;
-            PlayMusic();
-        }
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.clip = backgroundAudio;
+        defaultBackgroundMusicVolume = audioSource.volume;
+        audioSource.Play();
     }
 
-    public void PlayMusic(bool loop = true)
-    {
-        if (backgroundMusic.clip != null)
-        {
-            backgroundMusic.loop = loop;
-            backgroundMusic.Play();
-        }
-    }
-
-    public void ChangeMusic(AudioClip newClip)
-    {
-        if (newClip != null)
-        {
-            if (!newClip.loadState.Equals(AudioDataLoadState.Loaded))
-            {
-                newClip.LoadAudioData();
-            }
-            if (backgroundMusic.clip != null) {
-                backgroundMusic.Stop();
-            }
-            backgroundMusic.clip = newClip;
-            backgroundMusic.volume = backgroundMusicVolume;
-            backgroundMusic.Play();
-        }
-    }
 
     public void StopMusic()
     {
-        backgroundMusic.Stop();
+        stopCount--;
+        if (stopCount <= 0)
+            StartTransition(audioSource.volume, 0);
     }
 
-    public void SetMusicVolume(float volume)
+    public void StartMusic()
     {
-        backgroundMusicVolume = volume;
-        backgroundMusic.volume = volume;
+        stopCount++;
+        if (stopCount <= 1)
+            StartTransition(audioSource.volume, defaultBackgroundMusicVolume);
     }
 
-    public void PlayAudioClip(AudioClip audioClip)
+
+
+    private void StartTransition(float from, float to)
     {
-        if (audioClip != null)
+        if (transitionCoroutine != null)
         {
-            audioClip.LoadAudioData();
+            StopCoroutine(transitionCoroutine);
         }
-        soundEffect.clip = audioClip;
-        soundEffect.volume = soundEffectVolume;
-        soundEffect.Play();
+        transitionCoroutine = StartCoroutine(TransitionMusic(from, to, transitionDuration));
     }
-
-    public void SetSoundEffectVolume(float volume)
+    private IEnumerator TransitionMusic(float from, float to, float duration)
     {
-        soundEffectVolume = volume;
-        soundEffect.volume = volume;
+        if (from == 0)
+        {
+            audioSource.UnPause();
+        }
+        float elapsed = 0f;
+        audioSource.volume = from;
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            audioSource.volume = Mathf.Lerp(from, to, t);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = to;
+        if (to == 0)
+        {
+            audioSource.Pause();
+        }
     }
 }
