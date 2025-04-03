@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using Assets.Scripts.Utility;
 public class ProjectileScript : MonoBehaviour
 {
     [HideInInspector]
@@ -48,10 +48,13 @@ public class ProjectileScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (rb.isKinematic) return;
-        Debug.Log(other.transform.root.name);
-        var ignore = ignoresTags.FirstOrDefault((t) => other.transform.root.CompareTag(t));
+        var ignore = ignoresTags.FirstOrDefault((t) =>
+        {
+            return Util.FindParentWithTag(other.transform, t) != null;
+        });
         if (ignore != null || other.isTrigger) return;
-        if (other.transform.root.TryGetComponent(out CharacterStats stats))
+        var stats = other.GetComponentInParent<CharacterStats>();
+        if (stats != null)
         {
             stats.TakeDamage(damage);
         }

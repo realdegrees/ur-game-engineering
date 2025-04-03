@@ -1,4 +1,5 @@
 using System.Linq;
+using Assets.Scripts.Utility;
 using UnityEngine;
 
 public class CompanionController : NPCController
@@ -17,7 +18,11 @@ public class CompanionController : NPCController
         base.Update();
         if (GameManager.Instance.Scenario == "B")
         {
-            bool enemiesInRange = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance).Any(h => h.transform.root.CompareTag("Hostile"));
+            bool enemiesInRange = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance)
+                .Any(h =>
+                {
+                    return Util.FindParentWithTag(h.transform, "Hostile") != null;
+                });
             animator.SetBool("Scared", enemiesInRange);
         }
     }

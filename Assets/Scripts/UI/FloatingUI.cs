@@ -42,7 +42,7 @@ public class FloatingUI : MonoBehaviour
     {
         // always keep the canvas rotate upwards in world space
         canvas.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        if (transform.root.rotation.eulerAngles.y == 180)
+        if (linkToStats.transform.rotation.eulerAngles.y == 180)
         {
             canvas.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
