@@ -800,11 +800,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6057316609677425318, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.088
+      value: -0.017
       objectReference: {fileID: 0}
     - target: {fileID: 6057316609677425318, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.109
+      value: 0.126
       objectReference: {fileID: 0}
     - target: {fileID: 6057316609677425318, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
