@@ -74,8 +74,8 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
             activations++;
 
             // Set and reset cooldown
-            StartCoroutine(Cooldown());
-            StartCoroutine(Duration());
+            if (cooldown > 0) StartCoroutine(Cooldown());
+            if (duration > 0) StartCoroutine(Duration());
             IEnumerator Cooldown()
             {
                 if (cooldown != 0)
