@@ -21,17 +21,19 @@ public class AudioZone : EditorZone<AudioZone>
 
         audioSource.loop = false;
         defaultVolume = audioSource.volume;
+        audioSource.volume = 0;
+        audioSource.clip = audios[Random.Range(0, audios.Count)];
+        audioSource.Play();
+        audioSource.Pause();
         OnActivate.AddListener((go) =>
         {
             StartTransition(audioSource.volume, defaultVolume);
             AudioManager.Instance.StopMusic();
-            Debug.Log("AudioZone activated: " + gameObject.name);
         });
         OnDeactivate.AddListener(() =>
         {
             StartTransition(audioSource.volume, 0);
             AudioManager.Instance.StartMusic();
-            Debug.Log("AudioZone deactivated: " + gameObject.name);
         });
     }
     private void StartTransition(float from, float to)
@@ -61,7 +63,7 @@ public class AudioZone : EditorZone<AudioZone>
     {
         if (from == 0)
         {
-            audioSource.clip = audios[Random.Range(0, audios.Count)];
+            audioSource.UnPause();
         }
         float elapsed = 0f;
         audioSource.volume = from;
@@ -76,7 +78,7 @@ public class AudioZone : EditorZone<AudioZone>
         audioSource.volume = to;
         if (to == 0)
         {
-            audioSource.Stop();
+            audioSource.Pause();
         }
     }
 

@@ -53,7 +53,7 @@ public class AudioManager : Manager<AudioManager>
     {
         if (from == 0)
         {
-            audioSource.Play();
+            audioSource.UnPause();
         }
         float elapsed = 0f;
         audioSource.volume = from;
@@ -68,7 +68,7 @@ public class AudioManager : Manager<AudioManager>
         audioSource.volume = to;
         if (to == 0)
         {
-            audioSource.Stop();
+            audioSource.Pause();
         }
     }
 }
