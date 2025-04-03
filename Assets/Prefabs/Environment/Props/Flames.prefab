@@ -219,7 +219,7 @@ MonoBehaviour:
   activationSeconds: 1
   damage: 2
   isContinuousSpikes: 1
-  trapAudio: {fileID: 0}
+  trapAudio: {fileID: 8300000, guid: bdbc926c942bc8f42a0aac5b84185aca, type: 3}
   trapSpeed: 0.2
   movementDuration: 0.5
   idleDuration: 1.5

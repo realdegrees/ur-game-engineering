@@ -552,11 +552,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAudios:
-  - {fileID: 8300000, guid: 1f085ff9b8b65d64ba0e287f9f4d62db, type: 3}
-  - {fileID: 8300000, guid: f55ab810dbc37444a995827fb1eb37af, type: 3}
-  - {fileID: 8300000, guid: 6efffd0b28c7c8f45a31d643a0aeb8b1, type: 3}
+  - {fileID: 8300000, guid: 545e520f31bbcdb498564df880514fd0, type: 3}
+  - {fileID: 8300000, guid: a59dfd92042eba7478168f6db2d5faa3, type: 3}
+  - {fileID: 8300000, guid: c15479dd7c117554b94ef812e7aed454, type: 3}
   deathAudios:
-  - {fileID: 8300000, guid: 4707cb64da4152d4da20e66b07805366, type: 3}
+  - {fileID: 8300000, guid: 0e5af5e79360ac3418b0ce92bfd29f78, type: 3}
   damage: 15
   maxHealth: 50
 --- !u!95 &3169233029227511642
