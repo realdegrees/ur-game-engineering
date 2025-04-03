@@ -552,17 +552,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAudios:
-  - {fileID: 8300000, guid: 03c60b6c6932e314aa4d7d5d94893fd8, type: 3}
-  - {fileID: 8300000, guid: ac364605ed6a9f741a2e88cc0418ad67, type: 3}
-  - {fileID: 8300000, guid: d63ba96732bf9b047aa9ab2685cba300, type: 3}
-  - {fileID: 8300000, guid: bcbc96a722705244392e63d23ae5fdfb, type: 3}
-  - {fileID: 8300000, guid: 67ab6496c78c5f7429c98070421bc173, type: 3}
-  - {fileID: 8300000, guid: a20f25bf8b4a88d45bc76ec81e648166, type: 3}
+  - {fileID: 8300000, guid: 545e520f31bbcdb498564df880514fd0, type: 3}
+  - {fileID: 8300000, guid: a59dfd92042eba7478168f6db2d5faa3, type: 3}
+  - {fileID: 8300000, guid: c15479dd7c117554b94ef812e7aed454, type: 3}
   deathAudios:
-  - {fileID: 8300000, guid: 9f730ecc8bf837b4a83c9c68d995e2b0, type: 3}
-  - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
-  damage: 20
-  maxHealth: 30
+  - {fileID: 8300000, guid: 0e5af5e79360ac3418b0ce92bfd29f78, type: 3}
+  damage: 15
+  maxHealth: 50
 --- !u!95 &3169233029227511642
 Animator:
   serializedVersion: 5

@@ -505,8 +505,8 @@ MonoBehaviour:
   stateMachine: {fileID: 0}
   patrolPoints: []
   attackSounds:
-  - {fileID: 8300000, guid: 39ea2c9e6ceec174eb1892d2d2af2de2, type: 3}
-  - {fileID: 8300000, guid: 5a81a03c2c5a26b41b6f7232e732e7c6, type: 3}
+  - {fileID: 8300000, guid: 8e350f8de874d0c41bde85cd8a355d0a, type: 3}
+  - {fileID: 8300000, guid: 8e65cd493411dda4da7b0c87a70a3a16, type: 3}
   attackCooldown: 2
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: fce020ea798a2554fb4251a65eb3569a, type: 3}
@@ -634,10 +634,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bcbc96a722705244392e63d23ae5fdfb, type: 3}
   - {fileID: 8300000, guid: 67ab6496c78c5f7429c98070421bc173, type: 3}
   - {fileID: 8300000, guid: a20f25bf8b4a88d45bc76ec81e648166, type: 3}
+  - {fileID: 8300000, guid: 7fcb9cac9918e604696964ce0a3da7d5, type: 3}
+  - {fileID: 8300000, guid: 1b933a2448b6d7949a3411136d113aa9, type: 3}
   deathAudios:
   - {fileID: 8300000, guid: 9f730ecc8bf837b4a83c9c68d995e2b0, type: 3}
   - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
-  damage: 15
+  - {fileID: 8300000, guid: d44ad040c86f44742aac62e0d041cedf, type: 3}
+  - {fileID: 8300000, guid: 8dbc4723efe90f041906615b3a45554a, type: 3}
+  damage: 10
   maxHealth: 50
 --- !u!95 &3169233029227511642
 Animator:

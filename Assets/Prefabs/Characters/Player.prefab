@@ -181,11 +181,11 @@ GameObject:
   - component: {fileID: 1156118234567648672}
   - component: {fileID: -2780013989880506495}
   - component: {fileID: 3535363739658791604}
-  - component: {fileID: -2716830011346329544}
   - component: {fileID: 2856253638579531388}
   - component: {fileID: 2448326226791570300}
   - component: {fileID: 5621203361860116621}
   - component: {fileID: 119605267860252882}
+  - component: {fileID: 6327394270404830086}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -294,24 +294,6 @@ MonoBehaviour:
   bodyCollider: {fileID: 6756067221394343119}
   rb: {fileID: 0}
   jumpsSinceGrounded: 0
---- !u!114 &-2716830011346329544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6962759502354806734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5190c57338c4e764a956e5586d4a4774, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  takeDamageAudios:
-  - {fileID: 8300000, guid: 03c60b6c6932e314aa4d7d5d94893fd8, type: 3}
-  deathAudios:
-  - {fileID: 8300000, guid: 9f730ecc8bf837b4a83c9c68d995e2b0, type: 3}
-  damage: 30
-  maxHealth: 300
 --- !u!50 &2856253638579531388
 Rigidbody2D:
   serializedVersion: 4
@@ -464,6 +446,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6327394270404830086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962759502354806734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5190c57338c4e764a956e5586d4a4774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  takeDamageAudios:
+  - {fileID: 8300000, guid: 03c60b6c6932e314aa4d7d5d94893fd8, type: 3}
+  - {fileID: 8300000, guid: ac364605ed6a9f741a2e88cc0418ad67, type: 3}
+  - {fileID: 8300000, guid: d63ba96732bf9b047aa9ab2685cba300, type: 3}
+  - {fileID: 8300000, guid: bcbc96a722705244392e63d23ae5fdfb, type: 3}
+  - {fileID: 8300000, guid: 67ab6496c78c5f7429c98070421bc173, type: 3}
+  - {fileID: 8300000, guid: a20f25bf8b4a88d45bc76ec81e648166, type: 3}
+  - {fileID: 8300000, guid: 7fcb9cac9918e604696964ce0a3da7d5, type: 3}
+  - {fileID: 8300000, guid: 1b933a2448b6d7949a3411136d113aa9, type: 3}
+  deathAudios:
+  - {fileID: 8300000, guid: 9f730ecc8bf837b4a83c9c68d995e2b0, type: 3}
+  - {fileID: 8300000, guid: 67c64f66213174843b8a7985a2603b9b, type: 3}
+  - {fileID: 8300000, guid: d44ad040c86f44742aac62e0d041cedf, type: 3}
+  - {fileID: 8300000, guid: 8dbc4723efe90f041906615b3a45554a, type: 3}
+  damage: 30
+  maxHealth: 200
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0
