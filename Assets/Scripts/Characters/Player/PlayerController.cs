@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterStateMachine))]
-public class PlayerController : Manager<PlayerController>
+public class PlayerController : MonoBehaviour
 {
     private Animator animator;
     [HideInInspector]
     public CharacterStateMachine stateMachine;
-
+    public static PlayerController Instance { get; protected set; } = null;
     private PlayerStats playerStats;
 
     public event Action OnFlip = delegate { };
@@ -29,6 +29,8 @@ public class PlayerController : Manager<PlayerController>
         TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
         TryGetComponent(out playerStats);
+
+        CameraManager.Instance.SetCameraType(CameraType.Follow, transform);
         InputManager.Instance.OnJumpPressed += HandleJump;
         InputManager.Instance.OnAttackPressed += () =>
         {
@@ -139,9 +141,8 @@ public class PlayerController : Manager<PlayerController>
     }
 
 
-    protected override void OnDestroy()
+    void OnDestroy()
     {
-        base.OnDestroy();
         InputManager.Instance.OnJumpPressed -= HandleJump;
     }
 }

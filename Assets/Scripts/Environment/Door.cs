@@ -15,7 +15,7 @@ public class Door : EditorZone<Door>
         TryGetComponent(out animator);
         OnActivate.AddListener((go) =>
         {
-            if (requiredKeys > 0 && go.TryGetComponent<PlayerInventory>(out var inventory))
+            if (requiredKeys > 0 && go.TryGetComponent<PlayerStats>(out var inventory))
             {
                 if (inventory.GetItems(EItemType.KEY).Count < requiredKeys)
                 {

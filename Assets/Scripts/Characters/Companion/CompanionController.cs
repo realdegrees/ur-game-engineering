@@ -11,13 +11,6 @@ public class CompanionController : NPCController
             attacksTags = new() { };
             followsTags = new() { };
         }
-        stateMachine.OnTargetChanged += (target) =>
-        {
-            if (target == null)
-            {
-                stateMachine.SetTarget(PlayerController.Instance.transform);
-            }
-        };
     }
     protected override void Update()
     {

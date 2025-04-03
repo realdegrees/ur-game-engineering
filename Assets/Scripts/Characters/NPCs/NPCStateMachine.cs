@@ -26,6 +26,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
     public PlayerBoundaryElement ground = new();
     public PlayerBoundaryElement ceiling = new();
     private Action OnLand = delegate { };
+    public Transform fallbackFollowTarget = null;
 
     public bool IsFacingRight { get; private set; } = true;
 
@@ -67,8 +68,11 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
     }
     public void Unfreeze()
     {
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         OnLand -= DoFreeze;
+        if (rb)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
     }
     // public bool IsFalling() => Vector2.Dot(rb.velocity, Physics2D.gravity.normalized) < 0;
 
@@ -79,7 +83,13 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         TryGetComponent(out seeker);
         Debug.Log(rb);
         States.ForEach(state => ((NPCState)state).SetRigidbody(rb));
-
+        OnTargetChanged += (target) =>
+        {
+            if (target == null && fallbackFollowTarget != null)
+            {
+                SetTarget(fallbackFollowTarget);
+            }
+        };
         StartCoroutine(UpdatePath());
     }
     IEnumerator UpdatePath() // Called in Awake
