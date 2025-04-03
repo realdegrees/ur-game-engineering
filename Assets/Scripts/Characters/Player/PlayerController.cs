@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Assets.Scripts.Utility;
 using Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,11 +22,6 @@ public class PlayerController : MonoBehaviour
 
     protected void Start()
     {
-        SceneManager.sceneLoaded += (scene, mode) =>
-        {
-            stateMachine.rb.transform.position = Vector3.zero;
-        };
-
         TryGetComponent(out animator);
         TryGetComponent(out stateMachine);
         TryGetComponent(out playerStats);
@@ -42,8 +38,11 @@ public class PlayerController : MonoBehaviour
             // trigger animation
             var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
             var hostileHits = hit
-                .Where(h => !h.isTrigger && h.transform.root.CompareTag("Hostile"))
-                .Select(h => h.transform.root.gameObject)
+                .Select(h =>
+                {
+                    return Util.FindParentWithTag(h.transform, "Hostile");
+                })
+                .Where(parent => parent != null)
                 .Distinct();
             foreach (var hostileHit in hostileHits)
             {

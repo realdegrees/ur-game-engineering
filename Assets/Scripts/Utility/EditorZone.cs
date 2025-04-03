@@ -131,17 +131,22 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (numberOfAllowedActivations > 0 && activations >= numberOfAllowedActivations || other.isTrigger) return;
-        var tag = other.transform.root.tag;
-        inZone.Add(other.transform.root.gameObject);
-        if (!activateTags.Contains(tag) || currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
-        OnActivate.Invoke(other.transform.root.gameObject);
+        var stats = other.GetComponentInParent<CharacterStats>();
+        if (stats == null) return; // Check if the other object has a CharacterStats component
+        var tag = stats.tag;
+        if (!activateTags.Contains(tag)) return; // Check if the tag is in the list of allowed tags
+        inZone.Add(stats.gameObject);
+        if (currentCooldown > 0 || inZone.Count > 1) return; // Check if the tag is in the list of allowed tags
+        OnActivate.Invoke(stats.gameObject);
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        var tag = other.transform.root.tag;
-        inZone.Remove(other.transform.root.gameObject);
-        if (!activateTags.Contains(tag) || other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
-
+        var stats = other.GetComponentInParent<CharacterStats>();
+        if (stats == null) return; // Check if the other object has a CharacterStats component
+        var tag = stats.tag;
+        if (!activateTags.Contains(tag)) return; // Check if the tag is in the list of allowed tags
+        inZone.Remove(stats.gameObject);
+        if (other.isTrigger || !deactivateOnExit || inZone.Count > 0) return; // Check if the tag is in the list of allowed tags
         OnDeactivate.Invoke();
     }
 

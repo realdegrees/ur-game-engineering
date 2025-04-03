@@ -4,6 +4,7 @@ using System.Collections;
 using Pathfinding;
 using UnityEngine;
 using System.Linq;
+using Assets.Scripts.Utility;
 
 [RequireComponent(typeof(NPCStateMachine))]
 [RequireComponent(typeof(AudioSource))]
@@ -79,7 +80,16 @@ public class NPCController : MonoBehaviour
         }
 
         var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance);
-        var target = hit.FirstOrDefault(h => followsTags.Any((t) => h.transform.root.CompareTag(t)));
+        var target = hit.Select(h =>
+        {
+            GameObject t = null;
+            foreach (var tag in followsTags)
+            {
+                t = Util.FindParentWithTag(h.transform, tag);
+                if (t != null) break;
+            }
+            return t != null ? t.transform : null;
+        }).FirstOrDefault(p => p != null);
 
         if (stateMachine.Target && maxFollowRangeFromOrigin > 0)
         {
@@ -92,7 +102,7 @@ public class NPCController : MonoBehaviour
         else if (target)
         {
             var hasLos = Physics2D.Linecast(stateMachine.rb.position, target.transform.position, LayerMask.GetMask("Ground")).collider == null;
-            if (hasLos) stateMachine.SetTarget(target.transform.root);
+            if (hasLos) stateMachine.SetTarget(target);
         }
         else if (patrolPoints.Count > 0)
         {
@@ -149,7 +159,7 @@ public class NPCController : MonoBehaviour
             var projectileGo = Instantiate(projectile, transform.position + transform.forward * 0.5f, Quaternion.identity);
             var projectileScript = projectileGo.GetComponent<ProjectileScript>();
             projectileScript.damage = characterStats.damage;
-            projectileScript.ignoresTags.Add(transform.root.tag);
+            projectileScript.ignoresTags.Add(tag);
             projectileScript.Init(stateMachine.Target.position - transform.position);
         }
         else

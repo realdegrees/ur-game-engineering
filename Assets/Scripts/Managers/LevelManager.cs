@@ -13,18 +13,16 @@ public class LevelManager : Manager<LevelManager>
     private List<SceneReference> levels = new();
     private SceneReference currentLevel;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
         StartCoroutine(SetLevelsFromScenario());
-
     }
 
     private IEnumerator SetLevelsFromScenario()
     {
         yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
         levels = GameManager.Instance.Scenario == "A" ? levels_scenario_a : levels_scenario_b;
+        currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
     }
     public void NextLevel()
     {
