@@ -40,7 +40,7 @@ public class Chest : EditorZone<Chest>
 
                 Vector3 forceDirection = Quaternion.Euler(0, 0, Random.Range(-20f, 20f)) * Vector3.up;
                 rb.AddForce(forceDirection.normalized * 8f, ForceMode2D.Impulse);
-                //rb.AddTorque(Random.Range(-10f, 10f), ForceMode2D.Impulse);
+                rb.AddTorque(Random.Range(-3f, 3f), ForceMode2D.Impulse);
             }
 
             if (go.TryGetComponent(out PickupableItem pickupable))

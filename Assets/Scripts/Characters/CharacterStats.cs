@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
 public abstract class CharacterStats : MonoBehaviour
@@ -14,7 +15,7 @@ public abstract class CharacterStats : MonoBehaviour
     [SerializeField]
     protected List<AudioClip> deathAudios;
 
-    public event Action<int> OnHealthChanged = delegate { };
+    public readonly UnityEvent<int> OnHealthChanged = new();
 
     public int damage;
     public int maxHealth = 100;
@@ -32,7 +33,7 @@ public abstract class CharacterStats : MonoBehaviour
     public void Heal(uint heal)
     {
         health = Mathf.Min(health + (int)heal, maxHealth);
-        OnHealthChanged?.Invoke(health);
+        OnHealthChanged.Invoke(health);
     }
 
 
@@ -48,7 +49,7 @@ public abstract class CharacterStats : MonoBehaviour
         if (health <= 0) return;
         health -= damageTaken;
         health = Math.Max(Math.Min(health, maxHealth), 0);
-        OnHealthChanged?.Invoke(health);
+        OnHealthChanged.Invoke(health);
         if (health <= 0)
         {
             audioSource.PlayOneShot(deathAudios[UnityEngine.Random.Range(0, deathAudios.Count)]);

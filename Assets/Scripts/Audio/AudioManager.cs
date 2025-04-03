@@ -35,7 +35,7 @@ public class AudioManager : Manager<AudioManager>
     public void StartMusic(AudioZone source)
     {
         stoppers.Remove(source);
-        if (stoppers.Count <= 0)
+        if (stoppers.Count <= 0 && audioSource)
             StartTransition(audioSource.volume, defaultBackgroundMusicVolume);
     }
 

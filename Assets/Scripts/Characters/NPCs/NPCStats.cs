@@ -5,7 +5,7 @@ public class NPCStats : CharacterStats
 {
     private void Start()
     {
-        OnHealthChanged += OnChangeHealthInvoked;
+        OnHealthChanged.AddListener(OnChangeHealthInvoked);
     }
     private void OnChangeHealthInvoked(int health)
     {

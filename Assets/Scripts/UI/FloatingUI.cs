@@ -25,7 +25,7 @@ public class FloatingUI : MonoBehaviour
         healthBar.maxValue = linkToStats.maxHealth;
         healthBar.minValue = 0;
         healthBar.value = linkToStats.GetHealth();
-        linkToStats.OnHealthChanged += health =>
+        linkToStats.OnHealthChanged.AddListener(health =>
         {
             if (health <= 0)
             {
@@ -33,7 +33,7 @@ public class FloatingUI : MonoBehaviour
                 return;
             }
             healthBar.value = health;
-        };
+        });
     }
 
     public void Update()
