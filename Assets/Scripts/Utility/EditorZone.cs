@@ -32,7 +32,6 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
 
     public UnityEvent<GameObject> OnActivate = new();
     public UnityEvent OnDeactivate = new();
-    public UnityEvent OnCooldownReset = new();
 
     protected float currentCooldown = 0;
     protected float currentDuration = 0;
@@ -87,7 +86,7 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
                         yield return null;
                     }
 
-                    OnCooldownReset.Invoke();
+                    OnDeactivate.Invoke();
                 }
             }
             IEnumerator Duration()

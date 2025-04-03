@@ -13,7 +13,7 @@ public class AudioManager : Manager<AudioManager>
     private float defaultBackgroundMusicVolume = 1f;
     public float transitionDuration = .6f;
     private Coroutine transitionCoroutine;
-    private int stopCount = 0;
+    private readonly HashSet<AudioZone> stoppers = new();
 
     void Start()
     {
@@ -25,17 +25,17 @@ public class AudioManager : Manager<AudioManager>
     }
 
 
-    public void StopMusic()
+    public void StopMusic(AudioZone source)
     {
-        stopCount--;
-        if (stopCount <= 0)
+        stoppers.Add(source);
+        if (stoppers.Count <= 1)
             StartTransition(audioSource.volume, 0);
     }
 
-    public void StartMusic()
+    public void StartMusic(AudioZone source)
     {
-        stopCount++;
-        if (stopCount <= 1)
+        stoppers.Remove(source);
+        if (stoppers.Count <= 0)
             StartTransition(audioSource.volume, defaultBackgroundMusicVolume);
     }
 
