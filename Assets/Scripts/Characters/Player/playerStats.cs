@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
-    private float maxHealthBarWidth;
     private readonly List<Item> items = new();
 
     protected override void Start()
     {
         base.Start();
-        maxHealthBarWidth = UIManager.Instance.healthBarIcon.rectTransform.localScale.x;
+        UIManager.Instance.healthBar.maxValue = maxHealth;
+        UIManager.Instance.healthBar.minValue = 0;
+        UIManager.Instance.healthBar.value = maxHealth;
+
         OnHealthChanged += health =>
         {
-            UIManager.Instance.healthBarIcon.rectTransform.localScale = new Vector3(
-                maxHealthBarWidth * ((float)health / (float)maxHealth),
-                UIManager.Instance.healthBarIcon.rectTransform.localScale.y,
-                UIManager.Instance.healthBarIcon.rectTransform.localScale.z
-            );
+            UIManager.Instance.healthBar.value = health;
         };
     }
 
@@ -31,7 +29,6 @@ public class PlayerStats : CharacterStats
         items.Add(item.GetItem());
         item.Pickup();
         UIManager.Instance.inventoryKeysText.text = items.Where(item => item.type == EItemType.KEY).ToArray().Length.ToString();
-        UIManager.Instance.inventoryPotionText.text = items.Where(item => item.type == EItemType.POTION).ToArray().Length.ToString();
 
     }
     public List<Item> GetItems(EItemType type)

@@ -224,7 +224,9 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
     private void GroundCheck()
     {
         var prev = ground.connected;
+        Physics2D.queriesHitTriggers = false;
         ground.hit = Physics2D.CapsuleCast(groundCheckCollider.bounds.center, groundCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, -transform.up, Config.BottomRange, Config.GroundLayer);
+        Physics2D.queriesHitTriggers = true;
         ground.collider = ground.hit.collider;
         ground.connected = ground.collider != null;
         ground.connectedOnThisFrame = false;
@@ -250,7 +252,9 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
 
     private void CeilingCheck()
     {
+        Physics2D.queriesHitTriggers = false;
         ceiling.hit = Physics2D.CapsuleCast(ceilingCheckCollider.bounds.center, ceilingCheckCollider.bounds.size, CapsuleDirection2D.Horizontal, 0f, transform.up, Config.TopRange, Config.GroundLayer);
+        Physics2D.queriesHitTriggers = true;
         ceiling.collider = ceiling.hit.collider;
         ceiling.angle = Vector2.Angle(transform.up, ceiling.hit.normal);
         ceiling.connected = ceiling.collider != null && ceiling.angle <= Config.CeilingAngleThreshold;

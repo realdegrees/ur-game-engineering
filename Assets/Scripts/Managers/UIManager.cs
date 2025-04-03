@@ -10,9 +10,7 @@ public class UIManager : Manager<UIManager>
     [Header("Inventory UI")]
     public Image inventoryKeysIcon;
     public TextMeshProUGUI inventoryKeysText;
-    public Image inventoryPotionIcon;
-    public TextMeshProUGUI inventoryPotionText;
-    public Image healthBarIcon;
+    public Slider healthBar;
 
     public void Disable()
     {

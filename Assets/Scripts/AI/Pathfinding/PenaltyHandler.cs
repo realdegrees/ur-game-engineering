@@ -29,6 +29,9 @@ public class PenaltyHandler : MonoBehaviour
                             var upHitDistance = gg.nodeSize * CeilingPenaltyDistance;
                             var downHitDistance = upHitDistance / 2f;
 
+
+                            Physics2D.queriesHitTriggers = false;
+
                             Collider2D self = Physics2D.OverlapPoint(pos, LayerMask.GetMask("Ground"));
 
                             if (self != null)
@@ -40,25 +43,26 @@ public class PenaltyHandler : MonoBehaviour
                             RaycastHit2D upHit = Physics2D.Raycast(pos, Vector2.up, upHitDistance, LayerMask.GetMask("Ground"));
                             RaycastHit2D downHit = Physics2D.Raycast(pos, Vector2.down, downHitDistance, LayerMask.GetMask("Ground"));
                             RaycastHit2D leftHit = Physics2D.Raycast(pos, Vector2.left, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
-                            RaycastHit2D rightHit = Physics2D.Raycast(pos, Vector2.right, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"), -Mathf.Infinity, Mathf.Infinity);
+                            RaycastHit2D rightHit = Physics2D.Raycast(pos, Vector2.right, gg.nodeSize * allowedGapWidth, LayerMask.GetMask("Ground"));
 
+                            Physics2D.queriesHitTriggers = true;
 
-                            if (upHit.collider != null && !upHit.collider.isTrigger)
+                            if (upHit.collider != null)
                             {
                                 var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(upHit.point, pos) / upHitDistance);
                                 node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(ceilingPenalty, airPenalty, normalizedHitDistance));
                             }
-                            if (downHit.collider != null && !downHit.collider.isTrigger) // Overrides upHit Penalty                      
+                            if (downHit.collider != null) // Overrides upHit Penalty                      
                             {
                                 var normalizedHitDistance = Mathf.Clamp01(Vector2.Distance(downHit.point, pos) / downHitDistance);
                                 node.Penalty = (uint)Mathf.RoundToInt(Mathf.Lerp(groundPenalty, airPenalty, normalizedHitDistance));
                             }
 
-                            if ((!downHit.collider || downHit.collider.isTrigger) && (!upHit.collider || upHit.collider.isTrigger))
+                            if (!downHit.collider && !upHit.collider)
                             {
                                 node.Penalty = airPenalty;
                             }
-                            if (leftHit.collider != null && rightHit.collider != null && !leftHit.collider.isTrigger && !rightHit.collider.isTrigger)
+                            if (leftHit.collider != null && rightHit.collider != null)
                             {
                                 var distance = Vector2.Distance(leftHit.point, rightHit.point);
                                 if (distance < allowedGapWidth)
@@ -66,7 +70,7 @@ public class PenaltyHandler : MonoBehaviour
                                     node.Penalty = (uint)Mathf.RoundToInt(airPenalty * 2f);
                                 }
                             }
-                            if (leftHit.collider && !rightHit.collider && !leftHit.collider.isTrigger)
+                            if (leftHit.collider && !rightHit.collider)
                             {
                                 var hitDistance = Vector2.Distance(leftHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
@@ -74,7 +78,7 @@ public class PenaltyHandler : MonoBehaviour
                                     //node.Walkable = false;
                                 }
                             }
-                            if (rightHit.collider && !leftHit.collider && !rightHit.collider.isTrigger)
+                            if (rightHit.collider && !leftHit.collider)
                             {
                                 var hitDistance = Vector2.Distance(rightHit.point, pos);
                                 if (hitDistance <= gg.nodeSize)
