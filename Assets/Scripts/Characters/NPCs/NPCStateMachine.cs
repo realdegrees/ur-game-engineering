@@ -136,7 +136,8 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         }
         if (Target != null && path != null)
         {
-            var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > Config.ResumeDistance || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
+            TryGetComponent(out NPCController npcController);
+            var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > (npcController != null && npcController.isRanged ? Config.ResumeDistance : Config.FollowDistance) || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
             if (shouldMove) IsActive = true;
         }
         if (Target == null)

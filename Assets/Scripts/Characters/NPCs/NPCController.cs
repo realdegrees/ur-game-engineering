@@ -79,7 +79,7 @@ public class NPCController : MonoBehaviour
             patrolPointCenter = stateMachine.rb.position;
         }
 
-        var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance);
+        var hit = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.ResumeDistance);
         var target = hit.Select(h =>
         {
             GameObject t = null;
@@ -145,7 +145,7 @@ public class NPCController : MonoBehaviour
             return;
 
         var losCheck = Physics2D.Linecast(transform.position, stateMachine.Target.transform.position, LayerMask.GetMask("Ground"));
-        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > stateMachine.Config.ResumeDistance || stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition)
+        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > (isRanged ? stateMachine.Config.ResumeDistance : stateMachine.Config.FollowDistance) || stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition)
             return;
 
         DoAttack(targetStats);
