@@ -24,11 +24,11 @@ MonoBehaviour:
   MaxWalkSpeed: 1
   GroundAccelerationRate: 6
   GroundDecelerationRate: 8
-  AirAccelerationRate: 9
-  AirDecelerationRate: 6
+  AirAccelerationRate: 5.05
+  AirDecelerationRate: 4.21
   GravityMultiplier: 0
-  FollowDistance: 0.5
-  ResumeDistance: 0.6
+  FollowDistance: 0.4
+  ResumeDistance: 2
   MaxJumpHeight: 2
   MinJumpHeight: 0.5
   JumpSpeedMult: 1.8

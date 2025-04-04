@@ -22,19 +22,19 @@ MonoBehaviour:
   LedgeDepthThreshold: 1
   LedgeDecelerationFactor: 20
   MaxWalkSpeed: 2
-  GroundAccelerationRate: 6
-  GroundDecelerationRate: 8
+  GroundAccelerationRate: 4
+  GroundDecelerationRate: 10
   AirAccelerationRate: 9
-  AirDecelerationRate: 6
-  GravityMultiplier: 0.85
-  FollowDistance: 2
-  ResumeDistance: 3
-  MaxJumpHeight: 3
-  MinJumpHeight: 2
+  AirDecelerationRate: 8
+  GravityMultiplier: 0.8
+  FollowDistance: 1.3
+  ResumeDistance: 2
+  MaxJumpHeight: 1.9
+  MinJumpHeight: 1.5
   JumpSpeedMult: 2
   FastFallIntensity: 2
   jumpForce: 30
-  jumpDetectionDistance: 0.2
+  jumpDetectionDistance: 0.08
   pathUpdateDelta: 0.1
   TurnThreshold: 0.1
   GroundLayer:

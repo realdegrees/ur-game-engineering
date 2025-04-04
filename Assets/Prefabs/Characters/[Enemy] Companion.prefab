@@ -407,7 +407,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8e65cd493411dda4da7b0c87a70a3a16, type: 3}
   attackCooldown: 1.5
   isRanged: 0
-  projectile: {fileID: 0}
+  projectile: {fileID: 6846088989974114753, guid: fce020ea798a2554fb4251a65eb3569a, type: 3}
   fallbackFollowTarget: {fileID: 0}
   followsTags:
   - Player
