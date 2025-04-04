@@ -2908,6 +2908,8 @@ MonoBehaviour:
     sceneAsset: {fileID: 0}
     scenePath: 
   levels_scenario_a:
+  - sceneAsset: {fileID: 102900000, guid: 02067a96f249c8740883775eea99c118, type: 3}
+    scenePath: TransitionControls
   - sceneAsset: {fileID: 102900000, guid: 4bf93569961daae48913825234547db8, type: 3}
     scenePath: TransitionIntro
   - sceneAsset: {fileID: 102900000, guid: 1ccc1df52b6463640ab8e2fd54d30ca7, type: 3}
@@ -2935,6 +2937,8 @@ MonoBehaviour:
   - sceneAsset: {fileID: 102900000, guid: 79b0cbf286d0d084196f445ec5d7b346, type: 3}
     scenePath: BossScene
   levels_scenario_b:
+  - sceneAsset: {fileID: 102900000, guid: 02067a96f249c8740883775eea99c118, type: 3}
+    scenePath: TransitionControls
   - sceneAsset: {fileID: 102900000, guid: 4bf93569961daae48913825234547db8, type: 3}
     scenePath: TransitionIntro
   - sceneAsset: {fileID: 102900000, guid: 1ccc1df52b6463640ab8e2fd54d30ca7, type: 3}
