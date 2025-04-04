@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Manager;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : Manager<AudioManager>
@@ -22,8 +23,14 @@ public class AudioManager : Manager<AudioManager>
         audioSource.clip = backgroundAudio;
         defaultBackgroundMusicVolume = audioSource.volume;
         audioSource.Play();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        stoppers.Clear();
+        audioSource.Stop();
+        audioSource.Play();
+    }
 
     public void StopMusic(AudioZone source)
     {

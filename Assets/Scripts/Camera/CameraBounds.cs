@@ -27,11 +27,6 @@ public class CameraBounds : EditorZone<CameraBounds>
 
     private void CheckRequirements()
     {
-        if (boundsCollider == GetComponentInChildren<CompositeCollider2D>())
-        {
-            Debug.LogWarning($"Camera bounds collider on {gameObject.name} has the same root as an editor zone. This will result in the zone triggering when the player collides with the bounds collider! Put the bounds collider on a separate object.");
-        }
-
         if (!boundsCollider.isTrigger)
         {
             Debug.LogWarning($"Camera bounds collider on {gameObject.name} is not set to 'Trigger'. Setting it automatically.");
