@@ -21,7 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
   LedgeDepthThreshold: 1
   LedgeDecelerationFactor: 20
-  MaxWalkSpeed: 2.8
+  MaxWalkSpeed: 2.7
   GroundAccelerationRate: 6
   GroundDecelerationRate: 8
   AirAccelerationRate: 9
@@ -29,8 +29,8 @@ MonoBehaviour:
   GravityMultiplier: 0.79
   FollowDistance: 1.8
   ResumeDistance: 2.7
-  MaxJumpHeight: 2.1
-  MinJumpHeight: 1
+  MaxJumpHeight: 2.4
+  MinJumpHeight: 1.4
   JumpSpeedMult: 2
   FastFallIntensity: 2
   jumpForce: 30
