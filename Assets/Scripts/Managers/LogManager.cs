@@ -167,9 +167,9 @@ public class LogManager : Manager<LogManager>
         }
 
 #if !UNITY_EDITOR // ? This is used to force the upload in non-editor mode even if the variable is disabled
-        if (!SendLogsToServerInEditor && !isLogFinalized)
+        if (!SendLogsToServerInEditor && !logSentToServer)
         {
-            isLogFinalized = true; // Prevent multiple uploads
+            logSentToServer = true; // Prevent multiple uploads
             
             return UploadLog(fullId, json);
         }
