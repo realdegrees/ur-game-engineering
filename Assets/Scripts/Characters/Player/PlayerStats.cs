@@ -28,6 +28,10 @@ public class PlayerStats : CharacterStats
     }
     private void HandleDeath(int health)
     {
+        if (health > 0)
+        {
+            return;
+        }
         // disable the statemachine component and set rigidbody freezerotation to false, then apply a rotation force backwards to the rigidbody
         var sm = GetComponent<CharacterStateMachine>();
         var playerController = GetComponent<PlayerController>();

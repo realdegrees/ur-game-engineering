@@ -1,7 +1,5 @@
 using System;
 using Manager;
-using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class InputManager : Manager<InputManager>

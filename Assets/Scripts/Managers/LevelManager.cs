@@ -16,18 +16,38 @@ public class LevelManager : Manager<LevelManager>
     private GameObject player;
     private GameObject companion;
 
+    private bool companionDead = false;
+    private bool playerDead = false;
+
     private void Update()
     {
-        if (player == null || companion == null)
+        var playerDied = !playerDead && player != null && player.GetComponent<PlayerStats>().GetHealth() <= 0;
+        var companionDied = !companionDead && companion != null && companion.GetComponent<NPCStats>().GetHealth() <= 0;
+        if (playerDied)
         {
+            playerDead = true;
+            ReloadLevel();
+        }
+        else if (companionDied)
+        {
+            companionDead = true;
             ReloadLevel();
         }
     }
     private void Start()
     {
+        SceneManager.sceneLoaded += (scene, mode) => InitializeSceneObjects();
+        InitializeSceneObjects();
+        StartCoroutine(SetLevelsFromScenario());
+    }
+
+
+    private void InitializeSceneObjects()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
         companion = GameObject.FindGameObjectWithTag("Companion");
-        StartCoroutine(SetLevelsFromScenario());
+        playerDead = false;
+        companionDead = false;
     }
 
     private IEnumerator SetLevelsFromScenario()
@@ -39,6 +59,7 @@ public class LevelManager : Manager<LevelManager>
     public void ReloadLevel()
     {
         if (currentLevel.SceneName == null) return;
+        SceneManager.UnloadSceneAsync(currentLevel.SceneName);
         SceneManager.LoadScene(currentLevel.SceneName);
     }
     public void NextLevel()
