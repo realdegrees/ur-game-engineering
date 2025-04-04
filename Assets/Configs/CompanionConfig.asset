@@ -21,7 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
   LedgeDepthThreshold: 1
   LedgeDecelerationFactor: 20
-  MaxWalkSpeed: 2.5
+  MaxWalkSpeed: 2.8
   GroundAccelerationRate: 6
   GroundDecelerationRate: 8
   AirAccelerationRate: 9
