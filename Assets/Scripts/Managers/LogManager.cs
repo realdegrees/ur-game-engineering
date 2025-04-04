@@ -45,6 +45,7 @@ public class LogManager : Manager<LogManager>
     private LogData logData;
     [Header("Debug")]
     public bool SendLogsToServerInEditor = false; // Set to true to send logs in the editor
+    private bool logSentToServer = false; // Flag to check if the log has been finalized
 
     public void Start()
     {
@@ -130,7 +131,7 @@ public class LogManager : Manager<LogManager>
     }
 
 
-    private void UploadLog(string id, string log)
+    private bool UploadLog(string id, string log)
     {
         try
         {
@@ -138,16 +139,17 @@ public class LogManager : Manager<LogManager>
             webClient.Headers[System.Net.HttpRequestHeader.ContentType] = "application/json";
             webClient.Headers[System.Net.HttpRequestHeader.Authorization] = "Bearer ur-game-engineering-2025";
             webClient.UploadString("https://ge-log-api.realdegrees.dev/" + id, "POST", log);
-            Debug.Log("Log file successfully posted to the server.");
+            return true;
         }
         catch (Exception e)
         {
             Debug.LogError("Failed to send logfile to the server: " + e.Message);
+            return false;
         }
     }
 
     // Call at the end of the project (or when you want to finalize the log)
-    public void FinalizeLog()
+    public bool FinalizeLog()
     {
         logData.finishTime = DateTime.UtcNow.ToString("o");
 
@@ -157,18 +159,21 @@ public class LogManager : Manager<LogManager>
         var logFilePath = Path.Combine(Application.persistentDataPath, fullId + ".json");
         File.WriteAllText(logFilePath, json);
         Debug.Log("Study Log file written to: " + logFilePath);
-        if (SendLogsToServerInEditor)
+        if (SendLogsToServerInEditor && !logSentToServer)
         {
-            UploadLog(fullId, json);
-            return;
+            logSentToServer = true; // Prevent multiple uploads
+
+            return UploadLog(fullId, json);
         }
 
 #if !UNITY_EDITOR // ? This is used to force the upload in non-editor mode even if the variable is disabled
-        if (!SendLogsToServerInEditor)
+        if (!SendLogsToServerInEditor && !isLogFinalized)
         {
-            UploadLog(fullId, json);
-            return;
+            isLogFinalized = true; // Prevent multiple uploads
+            
+            return UploadLog(fullId, json);
         }
 #endif
+        return false;
     }
 }
