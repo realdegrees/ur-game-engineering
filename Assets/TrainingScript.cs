@@ -41,7 +41,7 @@ public class TrainingScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (companionSciptedTarget == null)
+        if (companionSciptedTarget != null && companionSciptedTarget.GetComponent<NPCStats>().GetHealth() <= 0)
         {
             enabled = false;
             onBatKilledDialogue.OnActivate.Invoke(companion);

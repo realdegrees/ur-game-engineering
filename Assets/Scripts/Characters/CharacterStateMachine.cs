@@ -40,7 +40,7 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
 
     private void DoFreeze()
     {
-        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         OnLand -= DoFreeze;
     }
     public void Freeze()

@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAttack()
     {
-        if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).TotalMilliseconds <= attackCooldown * 1000)
+        if (playerStats.damage <= 0 || (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezeAll || (DateTime.Now - lastAttack).TotalMilliseconds <= attackCooldown * 1000))
             return;
 
         // get enemies in range
