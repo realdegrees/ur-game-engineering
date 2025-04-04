@@ -7,20 +7,30 @@ public class BossFightScript : MonoBehaviour
     public NPCStateMachine bossStateMachine;
     public NPCStateMachine companionStateMachine;
     public NextLevelZone playerRunAwayZone;
+
+    private string dialogueChoice;
+
     // Start is called before the first frame update
     void Start()
     {
         entryDialogue.OnDeactivate.AddListener(() =>
         {
-            // TODO: Get dialogue choices
+            dialogueChoice = DialogueManagerInk.Instance.currentDialogueChoice;
 
-            // Case 1: Player chooses to fight
-            // bossStateMachine.SetTarget(PlayerController.Instance.transform);
-            // companionStateMachine.SetTarget(PlayerController.Instance.transform);
-
-            // Case 2: Player chooses to run
-            // playerRunAwayZone.gameObject.SetActive(true); // Activate the nextlevelzone at the entrance
-            // StartCoroutine(MovePlayerToExit()); // Forcefully move the player towards the zone to end the level
+            if (dialogueChoice == "ATTACK")
+            {
+                Debug.Log("Define attack logic here");
+                // Case 1: Player chooses to fight
+                // bossStateMachine.SetTarget(PlayerController.Instance.transform);
+                // companionStateMachine.SetTarget(PlayerController.Instance.transform);
+            }
+            if (dialogueChoice == "RUN AWAY")
+            {
+                Debug.Log("Define running logic here");
+                // Case 2: Player chooses to run
+                // playerRunAwayZone.gameObject.SetActive(true); // Activate the nextlevelzone at the entrance
+                // StartCoroutine(MovePlayerToExit()); // Forcefully move the player towards the zone to end the level
+            }
         });
     }
     void Update()
