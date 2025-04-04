@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/BaseScene/BaseScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Transitions/TransitionControls.unity
+    guid: 02067a96f249c8740883775eea99c118
+  - enabled: 1
     path: Assets/Scenes/Transitions/TransitionIntro.unity
     guid: 4bf93569961daae48913825234547db8
   - enabled: 1
