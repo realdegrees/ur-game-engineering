@@ -8,19 +8,25 @@ public class GameManager : Manager<GameManager>
 {
     private string scenario = null;
     [HideInInspector] public string id;
-    [HideInInspector] public string Scenario => overrideScenario ? overrideScenarioName : scenario;
+    [HideInInspector] public string Scenario => scenario;
 
 
     [Header("Debug")]
-    public bool overrideScenario = false;
-    public string overrideScenarioName = "A";
+    public string overrideScenarioName = "";
     public bool UseRandomUserId = false; // Set this to true to use a random user ID
 
     // Start is called before the first frame update
     protected override void Awake()
     {
-        id = UseRandomUserId ? System.Guid.NewGuid().ToString("N")[..8] : SystemInfo.deviceUniqueIdentifier[..8];
-        StartCoroutine(FetchScenario());
+        id = UseRandomUserId ? "RandomId-" + System.Guid.NewGuid().ToString("N")[..8] : SystemInfo.deviceUniqueIdentifier[..8];
+        if (overrideScenarioName != "")
+        {
+            scenario = overrideScenarioName;
+        }
+        else
+        {
+            StartCoroutine(FetchScenario());
+        }
         base.Awake();
     }
 

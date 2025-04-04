@@ -3,18 +3,23 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Menu : MonoBehaviour
+public class PostGameMenu : MonoBehaviour
 {
     public Button questionnaireButton;
     public Button startButton;
     public Button userIdCopyButton;
     public TextMeshProUGUI userId;
+    public TextMeshProUGUI logStatusText;
 
     private void Start()
     {
         UIManager.Instance.Disable();
-        userId.text = "Generating ID...";
+        userId.text = GameManager.Instance.id.ToString();
         StartCoroutine(SetUserIdText());
+
+        bool isLogSent = LogManager.Instance.FinalizeLog();
+        logStatusText.text = isLogSent ? "Logs sent to the server successfully." : "Failed to send the logs to the server, please contact us so we can retrieve the logs from the local files with your help. Please still fill out the questionnaire below first.";
+        logStatusText.color = isLogSent ? Color.green : Color.red;
 
         userIdCopyButton.onClick.AddListener(() =>
         {
@@ -28,7 +33,7 @@ public class Menu : MonoBehaviour
 
         questionnaireButton.onClick.AddListener(() =>
         {
-            var link = "https://docs.google.com/forms/d/e/1FAIpQLScWHVgTQgy8hpYqxSTQT-GOtWGT8U4Ox-9NBmQFKJpNuyzIHA/viewform";
+            var link = "https://docs.google.com/forms/d/e/1FAIpQLSel45g3T_z8MNDJUIf_HXS6aggP8U7hX08ZRLdsoZJFZdR3_g/viewform";
             TextEditor textEditor = new()
             {
                 text = link
@@ -36,7 +41,7 @@ public class Menu : MonoBehaviour
             textEditor.SelectAll();
             textEditor.Copy();
             Application.OpenURL(link);
-            StartCoroutine(EnableStartButtonAfterDelay(1f));
+            StartCoroutine(EnableStartButtonAfterDelay(4f));
         });
 
         startButton.onClick.AddListener(() =>
