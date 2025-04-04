@@ -27,7 +27,7 @@ MonoBehaviour:
   AirAccelerationRate: 9
   AirDecelerationRate: 6
   GravityMultiplier: 0.85
-  FollowDistance: 1
+  FollowDistance: 0.25
   ResumeDistance: 2
   MaxJumpHeight: 0.8
   MinJumpHeight: 0.1

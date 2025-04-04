@@ -8,6 +8,7 @@ using UnityEngine;
 [Serializable]
 public class LogData
 {
+    public bool foundEasterEgg;
     public string startTime;
     public string finishTime;
     public string operatingSystem;
@@ -122,6 +123,12 @@ public class LogManager : Manager<LogManager>
         };
         logData.dialogueChoices.Add(dialogue);
     }
+
+    public void LogEasterEgg()
+    {
+        logData.foundEasterEgg = true;
+    }
+
 
     private void UploadLog(string id, string log)
     {
