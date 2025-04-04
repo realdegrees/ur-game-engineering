@@ -3,6 +3,8 @@ using System.Collections;
 using Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class LevelManager : Manager<LevelManager>
 {
@@ -13,9 +15,69 @@ public class LevelManager : Manager<LevelManager>
     private List<SceneReference> levels = new();
     private SceneReference currentLevel;
 
+    private GameObject player;
+    private GameObject companion;
+
+    private bool companionDead = false;
+    private bool playerDead = false;
+
+    private void Update()
+    {
+        var playerDied = !playerDead && player != null && player.GetComponent<PlayerStats>().GetHealth() <= 0;
+        var companionDied = !companionDead && companion != null && companion.GetComponent<NPCStats>().GetHealth() <= 0;
+        if (playerDied)
+        {
+            playerDead = true;
+            companionDead = true;
+            StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "You died"));
+        }
+        else if (companionDied)
+        {
+            companionDead = true;
+            playerDead = true;
+            StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "Your companion died"));
+        }
+    }
+    private IEnumerator TransitionDeathUI(Image deathBackground, TextMeshProUGUI deathText, string text)
+    {
+        float duration = 3f;
+        float elapsedTime = 0f;
+
+        Color backgroundColor = deathBackground.color;
+        Color textColor = deathText.color;
+        deathText.text = text;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsedTime / duration);
+
+            backgroundColor.a = alpha;
+            textColor.a = alpha;
+
+            deathBackground.color = backgroundColor;
+            deathText.color = textColor;
+
+            yield return null;
+        }
+        ReloadLevel();
+
+    }
     private void Start()
     {
+        SceneManager.sceneLoaded += (scene, mode) => InitializeSceneObjects();
+        InitializeSceneObjects();
         StartCoroutine(SetLevelsFromScenario());
+
+    }
+
+
+    private void InitializeSceneObjects()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        companion = GameObject.FindGameObjectWithTag("Companion");
+        playerDead = false;
+        companionDead = false;
     }
 
     private IEnumerator SetLevelsFromScenario()
@@ -23,6 +85,12 @@ public class LevelManager : Manager<LevelManager>
         yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
         levels = GameManager.Instance.Scenario == "A" ? levels_scenario_a : levels_scenario_b;
         currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
+    }
+    public void ReloadLevel()
+    {
+        if (currentLevel.SceneName == null) return;
+        SceneManager.UnloadSceneAsync(currentLevel.SceneName);
+        SceneManager.LoadScene(currentLevel.SceneName);
     }
     public void NextLevel()
     {

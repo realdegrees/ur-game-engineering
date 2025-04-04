@@ -32,38 +32,8 @@ public class PlayerController : MonoBehaviour
 
         CameraManager.Instance.SetCameraType(CameraType.Follow, transform);
         InputManager.Instance.OnJumpPressed += HandleJump;
-        InputManager.Instance.OnAttackPressed += () =>
-        {
-            if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).TotalMilliseconds <= attackCooldown * 1000)
-                return;
-
-            // get enemies in range
-            // deal damage to enemies
-            // trigger animation
-            var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            var hostileHits = hit
-                .Select(h =>
-                {
-                    return Util.FindParentWithTag(h.transform, "Hostile");
-                })
-                .Where(parent => parent != null)
-                .Distinct();
-            foreach (var hostileHit in hostileHits)
-            {
-                var enemy = hostileHit;
-                var losCheck = Physics2D.Linecast(transform.position, enemy.transform.position, LayerMask.GetMask("Ground"));
-                if (losCheck.collider != null)
-                    continue;
-
-                if (enemy.TryGetComponent(out CharacterStats stats))
-                {
-                    stats.TakeDamage(playerStats.damage);
-                }
-            }
-            animator.SetTrigger("Attack");
-            PlayRandomAttackSound();
-            lastAttack = DateTime.Now;
-        };
+        InputManager.Instance.OnAttackPressed += HandleAttack;
+        HandleAttack();
 
         // TODO wherever the player attack method is called, also trigger the animation parameter "Attack"
         stateMachine.OnStateEnter += (state) =>
@@ -74,6 +44,46 @@ public class PlayerController : MonoBehaviour
             }
         };
     }
+
+    private void OnDestroy()
+    {
+        InputManager.Instance.OnJumpPressed -= HandleJump;
+        InputManager.Instance.OnAttackPressed -= HandleAttack;
+    }
+
+    private void HandleAttack()
+    {
+        if (stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition || (DateTime.Now - lastAttack).TotalMilliseconds <= attackCooldown * 1000)
+            return;
+
+        // get enemies in range
+        // deal damage to enemies
+        // trigger animation
+        var hit = Physics2D.OverlapCircleAll(transform.position, attackRange);
+        var hostileHits = hit
+            .Select(h =>
+            {
+                return Util.FindParentWithTag(h.transform, "Hostile");
+            })
+            .Where(parent => parent != null)
+            .Distinct();
+        foreach (var hostileHit in hostileHits)
+        {
+            var enemy = hostileHit;
+            var losCheck = Physics2D.Linecast(transform.position, enemy.transform.position, LayerMask.GetMask("Ground"));
+            if (losCheck.collider != null)
+                continue;
+
+            if (enemy.TryGetComponent(out CharacterStats stats))
+            {
+                stats.TakeDamage(playerStats.damage);
+            }
+        }
+        animator.SetTrigger("Attack");
+        PlayRandomAttackSound();
+        lastAttack = DateTime.Now;
+    }
+
     private void PlayRandomAttackSound()
     {
         if (attackSounds.Length > 0)
@@ -150,11 +160,5 @@ public class PlayerController : MonoBehaviour
             stateMachine.jumpsSinceGrounded++;
             stateMachine.EnterState(ECharacterState.Falling);
         }
-    }
-
-
-    void OnDestroy()
-    {
-        InputManager.Instance.OnJumpPressed -= HandleJump;
     }
 }
