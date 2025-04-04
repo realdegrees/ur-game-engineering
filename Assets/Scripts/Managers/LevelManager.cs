@@ -3,6 +3,8 @@ using System.Collections;
 using Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class LevelManager : Manager<LevelManager>
 {
@@ -26,19 +28,45 @@ public class LevelManager : Manager<LevelManager>
         if (playerDied)
         {
             playerDead = true;
-            ReloadLevel();
+            StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "You died"));
         }
         else if (companionDied)
         {
             companionDead = true;
-            ReloadLevel();
+            StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "Your companion died"));
         }
+    }
+    private IEnumerator TransitionDeathUI(Image deathBackground, TextMeshProUGUI deathText, string text)
+    {
+        float duration = 3f;
+        float elapsedTime = 0f;
+
+        Color backgroundColor = deathBackground.color;
+        Color textColor = deathText.color;
+        deathText.text = text;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsedTime / duration);
+
+            backgroundColor.a = alpha;
+            textColor.a = alpha;
+
+            deathBackground.color = backgroundColor;
+            deathText.color = textColor;
+
+            yield return null;
+        }
+        ReloadLevel();
+
     }
     private void Start()
     {
         SceneManager.sceneLoaded += (scene, mode) => InitializeSceneObjects();
         InitializeSceneObjects();
         StartCoroutine(SetLevelsFromScenario());
+
     }
 
 
