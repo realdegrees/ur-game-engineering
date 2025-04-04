@@ -28,11 +28,13 @@ public class LevelManager : Manager<LevelManager>
         if (playerDied)
         {
             playerDead = true;
+            companionDead = true;
             StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "You died"));
         }
         else if (companionDied)
         {
             companionDead = true;
+            playerDead = true;
             StartCoroutine(TransitionDeathUI(UIManager.Instance.deathBackground, UIManager.Instance.deathText, "Your companion died"));
         }
     }
