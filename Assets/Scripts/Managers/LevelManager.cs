@@ -13,8 +13,20 @@ public class LevelManager : Manager<LevelManager>
     private List<SceneReference> levels = new();
     private SceneReference currentLevel;
 
+    private GameObject player;
+    private GameObject companion;
+
+    private void Update()
+    {
+        if (player == null || companion == null)
+        {
+            ReloadLevel();
+        }
+    }
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        companion = GameObject.FindGameObjectWithTag("Companion");
         StartCoroutine(SetLevelsFromScenario());
     }
 
