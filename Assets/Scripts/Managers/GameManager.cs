@@ -8,9 +8,12 @@ public class GameManager : Manager<GameManager>
 {
     private string scenario = null;
     [HideInInspector] public string id;
-    [HideInInspector] public string Scenario => scenario;
+    [HideInInspector] public string Scenario => overrideScenario ? overrideScenarioName : scenario;
+
 
     [Header("Debug")]
+    public bool overrideScenario = false;
+    public string overrideScenarioName = "A";
     public bool UseRandomUserId = false; // Set this to true to use a random user ID
 
     // Start is called before the first frame update

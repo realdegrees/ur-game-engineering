@@ -145,7 +145,7 @@ public class NPCController : MonoBehaviour
             return;
 
         var losCheck = Physics2D.Linecast(transform.position, stateMachine.Target.transform.position, LayerMask.GetMask("Ground"));
-        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > (isRanged ? stateMachine.Config.ResumeDistance : stateMachine.Config.FollowDistance) || stateMachine.rb.constraints == RigidbodyConstraints2D.FreezePosition)
+        if (losCheck.collider != null || Vector2.Distance(stateMachine.Target.position, stateMachine.rb.position) > (isRanged ? stateMachine.Config.ResumeDistance : stateMachine.Config.FollowDistance) || stateMachine.rb.constraints == RigidbodyConstraints2D.FreezeAll)
             return;
 
         DoAttack(targetStats);

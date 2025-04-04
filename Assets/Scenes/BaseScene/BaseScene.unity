@@ -404,7 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5598644136269111868, guid: 03efbde767d59454697803b03e772198, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -309
+      value: -369
       objectReference: {fileID: 0}
     - target: {fileID: 5598644136269111868, guid: 03efbde767d59454697803b03e772198, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3558,6 +3558,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 
+  overrideScenario: 1
+  overrideScenarioName: B
   UseRandomUserId: 0
 --- !u!4 &1572878980
 Transform:
