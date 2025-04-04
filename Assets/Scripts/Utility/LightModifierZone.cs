@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LightModifierZone : EditorZone<LightModifierZone>
 {
-    public Light2D globalLight;
+    private Light2D globalLight;
     public float lightIntensity = 1f;
     private float defaultIntensity = 1f;
     private Color defaultBackgroundColor = Color.white;

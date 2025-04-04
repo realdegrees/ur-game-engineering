@@ -38,7 +38,6 @@ public class FloatingUI : MonoBehaviour
 
     public void Update()
     {
-        Debug.Log("FloatingHealthbar: Updating canvas rotation");
         // always keep the canvas rotate upwards in world space
         canvas.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
         if (linkToStats.transform.rotation.eulerAngles.y != 0)
