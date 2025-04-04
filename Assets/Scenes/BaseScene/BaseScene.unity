@@ -3558,8 +3558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 
-  overrideScenario: 1
-  overrideScenarioName: B
+  overrideScenarioName: 
   UseRandomUserId: 0
 --- !u!4 &1572878980
 Transform:
@@ -3938,7 +3937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488ff46893f49c14997e9477e54fb6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SendLogsToServerInEditor: 0
+  SendLogsToServerInEditor: 1
 --- !u!4 &2096828517
 Transform:
   m_ObjectHideFlags: 0

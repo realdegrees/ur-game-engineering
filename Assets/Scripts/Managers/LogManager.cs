@@ -47,10 +47,10 @@ public class LogManager : Manager<LogManager>
     public bool SendLogsToServerInEditor = false; // Set to true to send logs in the editor
     private bool logSentToServer = false; // Flag to check if the log has been finalized
 
-    public void Start()
+    protected override void Awake()
     {
+        base.Awake();
         // Create log file path (using persistentDataPath ensures it works on all platforms)
-
         // Initialize log data and record start time for the project
         logData = new LogData
         {

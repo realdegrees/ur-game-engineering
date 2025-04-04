@@ -18,8 +18,8 @@ public class PostGameMenu : MonoBehaviour
         StartCoroutine(SetUserIdText());
 
         bool isLogSent = LogManager.Instance.FinalizeLog();
-        logStatusText.text = isLogSent ? "Failed to send the logs to the server, please contact us so we can retrieve the logs from the local files with your help." : "Logs sent to the server successfully.";
-        logStatusText.color = isLogSent ? Color.red : Color.green;
+        logStatusText.text = isLogSent ? "Logs sent to the server successfully." : "Failed to send the logs to the server, please contact us so we can retrieve the logs from the local files with your help. Please still fill out the questionnaire below first.";
+        logStatusText.color = isLogSent ? Color.green : Color.red;
 
         userIdCopyButton.onClick.AddListener(() =>
         {
