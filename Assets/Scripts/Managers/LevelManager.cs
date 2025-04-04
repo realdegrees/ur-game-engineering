@@ -24,6 +24,11 @@ public class LevelManager : Manager<LevelManager>
         levels = GameManager.Instance.Scenario == "A" ? levels_scenario_a : levels_scenario_b;
         currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
     }
+    public void ReloadLevel()
+    {
+        if (currentLevel.SceneName == null) return;
+        SceneManager.LoadScene(currentLevel.SceneName);
+    }
     public void NextLevel()
     {
         if (levels.Count == 0) return;
