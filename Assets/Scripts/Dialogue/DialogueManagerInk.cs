@@ -28,6 +28,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     public TMPro.TextMeshProUGUI dialogueText;
     public Animator animator;
     public float typingSpeed = 0.02f;
+    public string currentDialogueChoice;
 
     private Story currentStory;
     private bool dialogueIsPlaying;
@@ -202,6 +203,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     public void MakeChoice(int choiceIndex)
     {
         LogManager.Instance.LogDialogueChoice(currentStory.currentText, currentStory.currentChoices[choiceIndex].text);
+        currentDialogueChoice = currentStory.currentChoices[choiceIndex].text;
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
     }
