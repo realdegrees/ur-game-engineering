@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45b607dc0b919e340aadb80e2f2bdd6a, type: 3}
-  m_Name: KingConfig
+  m_Name: CompanionEnemyConfig
   m_EditorClassIdentifier: 
   states:
   - {fileID: 11400000, guid: 0e4bcd56f0cf28f40ac4ad391ad05d6c, type: 2}
-  - {fileID: 11400000, guid: 7909bcc99e86d584e8ebb56ae4b983bf, type: 2}
   - {fileID: 11400000, guid: 5a63a3a8fb849a7498ea31f0bb2f53e0, type: 2}
   - {fileID: 11400000, guid: 40198bb179df6a14c98372a98503d0ba, type: 2}
+  - {fileID: 11400000, guid: 7909bcc99e86d584e8ebb56ae4b983bf, type: 2}
   - {fileID: 11400000, guid: bf3bb0303f806f649bd91e9f52a4ac0f, type: 2}
   - {fileID: 11400000, guid: 7dedd17bed0ff4043a71b9f157da4cd0, type: 2}
-  LedgeDepthThreshold: 1
+  LedgeDepthThreshold: 0.5
   LedgeDecelerationFactor: 20
-  MaxWalkSpeed: 2
-  GroundAccelerationRate: 4
-  GroundDecelerationRate: 10
+  MaxWalkSpeed: 2.7
+  GroundAccelerationRate: 6
+  GroundDecelerationRate: 8
   AirAccelerationRate: 9
   AirDecelerationRate: 8
-  GravityMultiplier: 0.8
-  FollowDistance: 1.04
-  ResumeDistance: 2.04
-  MaxJumpHeight: 2
-  MinJumpHeight: 1.5
+  GravityMultiplier: 0.79
+  FollowDistance: 2.93
+  ResumeDistance: 5.68
+  MaxJumpHeight: 2.4
+  MinJumpHeight: 1.4
   JumpSpeedMult: 2
   FastFallIntensity: 2
   jumpForce: 30

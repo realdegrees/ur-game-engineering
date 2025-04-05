@@ -18,6 +18,7 @@ public class BossFightScript : MonoBehaviour
     public NextLevelZone playerRunAwayZone;
 
     private string dialogueChoice;
+    private bool kingKilledDialogueTriggered = false;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +40,7 @@ public class BossFightScript : MonoBehaviour
                 bossStateMachine.SetTarget(playerStateMachine.transform);
                 companionStateMachine.SetTarget(playerStateMachine.transform);
             }
-            if (dialogueChoice == "RUN AWAY" || dialogueChoice == "SPARE") // TODO spare is just a placeholder
+            if (dialogueChoice == "Run Away" || dialogueChoice == "Show Empathy") // TODO spare is just a placeholder
             {
                 LevelManager.Instance.NextLevel();
             }
@@ -48,14 +49,14 @@ public class BossFightScript : MonoBehaviour
         onKingKilledDialogue.OnDeactivate.AddListener(() =>
         {
             dialogueChoice = DialogueManagerInk.Instance.currentDialogueChoice;
-            if (dialogueChoice == "ATTACK")
+            if (dialogueChoice == "KILL HIM")
             {
                 Debug.Log("Define attack logic here");
                 // Case 1: Player chooses to fight
                 bossStateMachine.SetTarget(playerStateMachine.transform);
                 companionStateMachine.SetTarget(playerStateMachine.transform);
             }
-            if (dialogueChoice == "RUN AWAY" || dialogueChoice == "SPARE") // TODO spare is just a placeholder
+            if (dialogueChoice == "Run Away") // TODO spare is just a placeholder
             {
                 LevelManager.Instance.NextLevel();
             }
@@ -63,9 +64,11 @@ public class BossFightScript : MonoBehaviour
     }
     void Update()
     {
-        if (bossStats.GetHealth() <= 0 && companionStats.GetHealth() > 0)
+        if (bossStats.GetHealth() <= 0 && companionStats.GetHealth() > 0 && !kingKilledDialogueTriggered)
         {
             onKingKilledDialogue.OnActivate.Invoke(playerStateMachine.gameObject);
+
+            kingKilledDialogueTriggered = true;
         }
         if (bossStateMachine == null && companionStateMachine == null)
         {
