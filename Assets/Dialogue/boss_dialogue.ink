@@ -32,10 +32,10 @@ No! You cannot do this! If you want to kill my father, you'll have to kill me, t
     -> figure_out
 
 == archie_attack ==
-* RUN AWAY
+* Run Away
 With a heavy heart, you leave Spud behind and run for your life...
 -> END
-* FIGHT THEM
+* ATTACK
 I never thought it would come to this, Spud... but here we are. #speaker:Player #portrait:player
 -> END
 
@@ -55,12 +55,12 @@ But I had no choice but to retreat. You have my gratitude for looking after my s
 -> explanations
 
 == explanations ==
-* Show empathy
+* Show Empathy
 I understand. I, no, my entire people have been deceived by a warmonger. I have so much innocent blood on my hands… #speaker:Player #portrait:player
 You do. But, you also showed mercy when you did not have to. You have my thanks. Without you, I would have also lost my son… #speaker:King #portrait:king
 I will go into hiding, and I will take my son with me. I hope you understand. You can accompany us, if you want. #speaker:King #portrait:king
 -> END
-* Only care about your duty
+* Only Care About Your Duty
 NO! I don’t care. I cannot bear to lose my son like this, but betraying my king is even worse! #speaker:Player #portrait:player
  But you do not have to lose Archie. You could stay here with us. It does not have to end this way. #speaker:King #portrait:king
  Please, don’t do this… #speaker:Archie #portrait:companion

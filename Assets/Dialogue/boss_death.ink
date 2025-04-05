@@ -11,7 +11,7 @@ If I had known he was your father, I never would have come here! I just wanted t
 -> archie_attack
 
 == archie_attack ==
-Stop crying. Look, I had no choice. It’s kill or be killed. So stand up and let’s go back. You hear me? #speaker:Player #portrait:player
+Stop crying. Look, I had no choice. It’s kill or be killed. So get up and let’s go back. You hear me? #speaker:Player #portrait:player
 ... #speaker:Archie #portrait:companion
 ....... #speaker:Archie #portrait:companion
 ... I am going to kill you! FOR PAPA!!! #speaker:Archie #portrait:companion
