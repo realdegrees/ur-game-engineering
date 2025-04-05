@@ -25,11 +25,11 @@ public class NPCIdleState : NPCState
     protected override float? OnPhysicsUpdate()
     {
         var csm = (NPCStateMachine)stateMachine;
-        if (csm.ground.collider && csm.ground.collider.attachedRigidbody)
+        if (csm.rb.velocity.magnitude > 0.1f)
         {
-            rb.velocity = csm.ground.collider.attachedRigidbody.velocity;
+            Exit();
+            csm.EnterState(ECharacterState.Decelerating);
         }
-
         return null;
     }
 

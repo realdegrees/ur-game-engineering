@@ -280,7 +280,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ed4e7971dd99ec1459749856f2b41d61, type: 3}
   - {fileID: 8300000, guid: 0efa31b3fef5bcf468be610185d4662a, type: 3}
   - {fileID: 8300000, guid: 2a2f5caadf98c8e4e8e011d408f68ec6, type: 3}
-  attackRange: 0.5
+  attackRange: 0.35
   attackCooldown: 0.3
 --- !u!114 &3535363739658791604
 MonoBehaviour:
@@ -480,6 +480,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8dbc4723efe90f041906615b3a45554a, type: 3}
   damage: 30
   maxHealth: 200
+  potionHealAmount: 30
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0

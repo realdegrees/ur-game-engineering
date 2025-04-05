@@ -64,6 +64,14 @@ public class ProjectileScript : MonoBehaviour
             rb.isKinematic = true;
             rb.transform.SetParent(other.transform);
             rb.position += (Vector2)rb.transform.forward * 0.5f;
+            if (TryGetComponent(out TrailRenderer trail))
+            {
+                trail.enabled = false;
+            }
+            if (TryGetComponent(out Collider2D col))
+            {
+                col.enabled = false;
+            }
         }
         else
         {

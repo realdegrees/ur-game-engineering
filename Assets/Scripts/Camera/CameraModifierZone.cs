@@ -9,9 +9,6 @@ public class CameraModifierZone : EditorZone<CameraModifierZone>
     public CameraType requiredCameraType;
     public Transform target;
 
-    public float zoom = 1; // TODO: implement fov change (with curve)
-
-
     private CameraType? cachedType;
     private Transform cachedTarget;
 

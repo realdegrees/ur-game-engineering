@@ -9,7 +9,6 @@ public enum EditorZoneBounds
     Collider
 }
 
-[RequireComponent(typeof(Collider2D))]
 public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
 {
     public List<string> activateTags = new() { "Player" };
@@ -46,11 +45,17 @@ public abstract class EditorZone<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Awake()
     {
         zoneCollider = GetComponent<Collider2D>();
-        if (!zoneCollider.isTrigger)
+        if (zoneCollider == null)
+        {
+            Debug.LogError($"No collider found on {gameObject.name}. Please add a collider to the zone.");
+
+        }
+        else if (!zoneCollider.isTrigger)
         {
             Debug.LogWarning($"Zone collider on {gameObject.name} is not set to 'Trigger'. Setting it automatically.");
             zoneCollider.isTrigger = true;
         }
+
 
         OnDeactivate.AddListener(() =>
         {

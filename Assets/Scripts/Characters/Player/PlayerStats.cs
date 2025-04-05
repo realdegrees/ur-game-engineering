@@ -121,5 +121,6 @@ public class PlayerStats : CharacterStats
         {
             items.Remove(item);
         }
+        UIManager.Instance.inventoryKeysText.text = items.Where(item => item.type == EItemType.KEY).ToArray().Length.ToString();
     }
 }
