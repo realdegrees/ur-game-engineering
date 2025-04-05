@@ -370,15 +370,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boss_spritesheet_13
+      name: boss_portrait
       rect:
         serializedVersion: 2
-        x: 47
-        y: 13
-        width: 14
-        height: 18
+        x: 46
+        y: 12
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -401,12 +401,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      boss_portrait: -1142568081
       boss_spritesheet_0: 1137095035
       boss_spritesheet_1: -2095093815
       boss_spritesheet_10: 900353666
       boss_spritesheet_11: -1333127967
       boss_spritesheet_12: 630786743
-      boss_spritesheet_13: -1142568081
       boss_spritesheet_2: 10634927
       boss_spritesheet_3: 1540443647
       boss_spritesheet_4: -1902635577

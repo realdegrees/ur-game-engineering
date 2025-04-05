@@ -138,6 +138,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: companion_child_portrait
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 11
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04d204bbc63f79645b93919d2ebb9893
+      internalID: -174616169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -149,6 +170,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      companion_child_portrait: -174616169
       companion_young: 926429286
       companion_young_cry: -997235644
   mipmapLimitGroupName: 
