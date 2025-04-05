@@ -2703,16 +2703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89c91ff96a7d484b997dbaa6e691707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpPressed: 0
-  JumpHeld: 0
-  JumpReleased: 0
-  AttackPressed: 0
-  AttackHeld: 0
-  AttackReleased: 0
-  CrouchHeld: 0
-  CrouchPressed: 0
-  CrouchReleased: 0
-  Movement: 0
+  disabled: 0
 --- !u!114 &1182795117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3145,8 +3136,8 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: b8bc0b5bc2f008a449057a54da4c6adc, type: 3}
     scenePath: MenuScene
   endScene:
-    sceneAsset: {fileID: 0}
-    scenePath: 
+    sceneAsset: {fileID: 102900000, guid: b753cb7c7f626b144b58369e09d8de8e, type: 3}
+    scenePath: PostGameScene
   levels_scenario_a:
   - sceneAsset: {fileID: 102900000, guid: 02067a96f249c8740883775eea99c118, type: 3}
     scenePath: TransitionControls

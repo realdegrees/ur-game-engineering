@@ -94,24 +94,24 @@ public class LevelManager : Manager<LevelManager>
     }
     public void NextLevel()
     {
-        if (levels.Count == 0) return;
         if (currentLevel.SceneName == null)
         {
             currentLevel = levels[0];
-            LogManager.Instance.LogLevelStart(currentLevel.SceneName);
+            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelStart(currentLevel.SceneName);
         }
         else
         {
             int index = levels.FindIndex(0, levels.Count, (level) => level.SceneName == currentLevel.SceneName);
             if (index == levels.Count - 1)
             {
-                LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
+                if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
+                SceneManager.LoadScene(endScene.SceneName);
                 return;
             }
 
-            LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
+            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
             currentLevel = levels[index + 1];
-            LogManager.Instance.LogLevelStart(currentLevel.SceneName);
+            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelStart(currentLevel.SceneName);
         }
 
         SceneManager.LoadScene(currentLevel.SceneName);

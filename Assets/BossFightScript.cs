@@ -69,6 +69,7 @@ public class BossFightScript : MonoBehaviour
         }
         if (bossStateMachine == null && companionStateMachine == null)
         {
+            this.enabled = false;
             LevelManager.Instance.NextLevel();
         }
     }

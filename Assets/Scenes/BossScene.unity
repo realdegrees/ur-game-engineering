@@ -1199,7 +1199,7 @@ MonoBehaviour:
   OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  inkJSON: {fileID: 0}
+  inkJSON: {fileID: 4900000, guid: 8593937279f4f3f40b1e3b7333c44078, type: 3}
 --- !u!61 &925126796
 BoxCollider2D:
   m_ObjectHideFlags: 0
