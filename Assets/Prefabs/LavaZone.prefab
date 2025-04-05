@@ -93,7 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activateTags:
   - Player
-  numberOfAllowedActivations: 1
+  numberOfAllowedActivations: 0
   duration: 0
   cooldown: 0
   freezeTags: []
