@@ -19,7 +19,7 @@ public class DamageZone : EditorZone<DamageZone>
     protected override void Start()
     {
         base.Start();
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
         StartCoroutine(DamageCycle());
