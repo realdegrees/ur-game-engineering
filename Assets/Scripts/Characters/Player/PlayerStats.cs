@@ -116,10 +116,11 @@ public class PlayerStats : CharacterStats
     }
     public void RemoveItems(EItemType type, int amount)
     {
-        var itemsToRemove = items.Where(item => item.type == type).Take(amount).ToList();
+        var itemsToRemove = items.Where(item => item.type == type).Take(amount);
         foreach (var item in itemsToRemove)
         {
             items.Remove(item);
         }
+        UIManager.Instance.inventoryKeysText.text = items.Where(item => item.type == EItemType.KEY).ToArray().Length.ToString();
     }
 }

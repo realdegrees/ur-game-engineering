@@ -77,6 +77,13 @@ public class PlayerController : MonoBehaviour
             if (enemy.TryGetComponent(out CharacterStats stats))
             {
                 stats.TakeDamage(playerStats.damage);
+                if (enemy.TryGetComponent(out Rigidbody2D enemyRb))
+                {
+                    Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
+                    knockbackDirection.y = Mathf.Abs(knockbackDirection.y) + 1f; // Slightly adjust the angle upwards
+                    knockbackDirection.Normalize();
+                    enemyRb.AddForce(knockbackDirection * 5f, ForceMode2D.Impulse);
+                }
             }
         }
         animator.SetTrigger("Attack");
