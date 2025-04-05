@@ -19,7 +19,7 @@ No! You cannot do this! If you want to kill my father, you'll have to kill me, t
     I never thought it would come to this, Spud... but here we are. #speaker:Player #portrait:player
     You monster!! #speaker:Archie #portrait:companion
     -> END
-* Convince Archie to fight with you
+* Convince Spud to Fight With You
     Stop this! This man before you has been planning to attack my kingdom for the second time now, and both times it was my duty to save Nightingdale by attacking first! #speaker:Player #portrait:player
     ... #speaker:Archie #portrait:companion
     Please, Spud, this man is a warmonger and a monster. I need your help! If I don't bring my king his head, I will be branded a traitor and lose you! #speaker:Player #portrait:player
