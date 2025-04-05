@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     [HideInInspector]
     public CharacterStateMachine stateMachine;
-    public static PlayerController Instance { get; protected set; } = null;
     private PlayerStats playerStats;
     public AudioClip[] attackSounds;
     private AudioSource audioSource;

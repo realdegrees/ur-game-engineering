@@ -4,8 +4,17 @@ using UnityEngine;
 public class BossFightScript : MonoBehaviour
 {
     public DialogueTrigger entryDialogue;
-    public NPCStateMachine bossStateMachine;
-    public NPCStateMachine companionStateMachine;
+    public DialogueTrigger onKingKilledDialogue;
+
+    public GameObject boss;
+    public GameObject companion;
+
+    private NPCStateMachine bossStateMachine;
+    private NPCStateMachine companionStateMachine;
+    private NPCStats bossStats;
+    private NPCStats companionStats;
+
+    public CharacterStateMachine playerStateMachine;
     public NextLevelZone playerRunAwayZone;
 
     private string dialogueChoice;
@@ -13,57 +22,54 @@ public class BossFightScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bossStateMachine = boss.GetComponent<NPCStateMachine>();
+        companionStateMachine = companion.GetComponent<NPCStateMachine>();
+        bossStats = boss.GetComponent<NPCStats>();
+        companionStats = companion.GetComponent<NPCStats>();
+
         entryDialogue.OnDeactivate.AddListener(() =>
         {
             dialogueChoice = DialogueManagerInk.Instance.currentDialogueChoice;
 
+            Debug.Log("Dialogue choice: " + dialogueChoice.ToString());
             if (dialogueChoice == "ATTACK")
             {
                 Debug.Log("Define attack logic here");
                 // Case 1: Player chooses to fight
-                // bossStateMachine.SetTarget(PlayerController.Instance.transform);
-                // companionStateMachine.SetTarget(PlayerController.Instance.transform);
+                bossStateMachine.SetTarget(playerStateMachine.transform);
+                companionStateMachine.SetTarget(playerStateMachine.transform);
             }
-            if (dialogueChoice == "RUN AWAY")
+            if (dialogueChoice == "RUN AWAY" || dialogueChoice == "SPARE") // TODO spare is just a placeholder
             {
-                Debug.Log("Define running logic here");
-                // Case 2: Player chooses to run
-                // playerRunAwayZone.gameObject.SetActive(true); // Activate the nextlevelzone at the entrance
-                // StartCoroutine(MovePlayerToExit()); // Forcefully move the player towards the zone to end the level
+                LevelManager.Instance.NextLevel();
+            }
+        });
+
+        onKingKilledDialogue.OnDeactivate.AddListener(() =>
+        {
+            dialogueChoice = DialogueManagerInk.Instance.currentDialogueChoice;
+            if (dialogueChoice == "ATTACK")
+            {
+                Debug.Log("Define attack logic here");
+                // Case 1: Player chooses to fight
+                bossStateMachine.SetTarget(playerStateMachine.transform);
+                companionStateMachine.SetTarget(playerStateMachine.transform);
+            }
+            if (dialogueChoice == "RUN AWAY" || dialogueChoice == "SPARE") // TODO spare is just a placeholder
+            {
+                LevelManager.Instance.NextLevel();
             }
         });
     }
     void Update()
     {
-        if (bossStateMachine == null && companionStateMachine != null)
+        if (bossStats.GetHealth() <= 0 && companionStats.GetHealth() > 0)
         {
-            // TODO Logic for when boss dies first (start another dialogue, offering the player a choice between spare, run and fight)
+            onKingKilledDialogue.OnActivate.Invoke(playerStateMachine.gameObject);
         }
         if (bossStateMachine == null && companionStateMachine == null)
         {
-            // TODO Logic for when both die (finish game) 
+            LevelManager.Instance.NextLevel();
         }
-    }
-
-    IEnumerator MovePlayerToExit()
-    {
-        // PlayerController.Instance.DisableMovement();
-        Rigidbody playerRigidbody = PlayerController.Instance.GetComponent<Rigidbody>();
-        Vector3 startPosition = PlayerController.Instance.transform.position;
-        Vector3 targetPosition = playerRunAwayZone.transform.position;
-        float elapsedTime = 0f;
-        float duration = 5f;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            Vector3 direction = (targetPosition - startPosition).normalized;
-            float force = Vector3.Distance(startPosition, targetPosition) / duration;
-            playerRigidbody.AddForce(direction * force, ForceMode.VelocityChange);
-            yield return null;
-        }
-
-        PlayerController.Instance.transform.position = targetPosition;
-        LevelManager.Instance.NextLevel();
     }
 }
