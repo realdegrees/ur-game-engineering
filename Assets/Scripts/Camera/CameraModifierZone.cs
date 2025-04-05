@@ -23,6 +23,10 @@ public class CameraModifierZone : EditorZone<CameraModifierZone>
     }
     #endregion
 
+    public void Deactivate()
+    {
+        OnDeactivate.Invoke();
+    }
     private void ApplyModifier(GameObject go)
     {
         cachedType = CameraManager.Instance.GetCameraType();

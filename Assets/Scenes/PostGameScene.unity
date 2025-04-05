@@ -947,7 +947,7 @@ MonoBehaviour:
   questionnaireButton: {fileID: 1561039700}
   startButton: {fileID: 1586258625}
   userIdCopyButton: {fileID: 1244445593}
-  userId: {fileID: 1925350668}
+  userId: {fileID: 1849386067}
   logStatusText: {fileID: 156244811}
 --- !u!1 &1087153498
 GameObject:

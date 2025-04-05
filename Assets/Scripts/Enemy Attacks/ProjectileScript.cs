@@ -29,12 +29,14 @@ public class ProjectileScript : MonoBehaviour
     }
     void Update()
     {
+
         timer += Time.deltaTime;
         if (timer > 5)
         {
             Destroy(gameObject);
         }
         if (rb.isKinematic) return;
+
         if (!spin)
         {
             transform.rotation = Quaternion.LookRotation(Vector3.forward, rb.velocity) * Quaternion.Euler(0, 0, rotationOffset);
@@ -43,6 +45,8 @@ public class ProjectileScript : MonoBehaviour
         {
             transform.Rotate(Vector3.forward * 150 * Time.deltaTime);
         }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)

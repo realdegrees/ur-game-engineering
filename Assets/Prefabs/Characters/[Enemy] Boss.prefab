@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3539786520740354139}
   - component: {fileID: 6756067221394343119}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2914267181576602931}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8106807810025195045}
   - component: {fileID: 1706616017903692556}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 4971181355030226967}
   - component: {fileID: 8445964360560508619}
   - component: {fileID: 3169233029227511642}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: '[Enemy] Boss'
   m_TagString: Hostile
   m_Icon: {fileID: 0}
@@ -203,8 +203,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2914267181576602931}
   - {fileID: 683187659928588718}
@@ -361,8 +361,7 @@ MonoBehaviour:
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: 16a1c7c9e69d11a45b09a2ba373e9898, type: 3}
   fallbackFollowTarget: {fileID: 0}
-  followsTags:
-  - Player
+  followsTags: []
   attacksTags:
   - Player
   maxFollowRangeFromOrigin: 8
@@ -523,7 +522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8069981488390023460}
   - component: {fileID: 5239874615934193930}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +589,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3605430601047233077}
   - component: {fileID: 4058238303049362350}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +657,7 @@ GameObject:
   - component: {fileID: 683187659928588718}
   - component: {fileID: 2785961060886215449}
   - component: {fileID: 5784319335608637517}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,6 +733,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healthbar
       objectReference: {fileID: 0}
+    - target: {fileID: 882714905308607759, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2949490221770664448, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -741,6 +744,10 @@ PrefabInstance:
     - target: {fileID: 2949490221770664448, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4236024618568306063, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6057316609677425318, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_Pivot.x
@@ -821,6 +828,10 @@ PrefabInstance:
     - target: {fileID: 6057316609677425318, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9093220162891498549, guid: 02dbf459264d762438ed3b1bcd0de9dd, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

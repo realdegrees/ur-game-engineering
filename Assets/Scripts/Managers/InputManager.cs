@@ -14,16 +14,18 @@ public class InputManager : Manager<InputManager>
     public event Action<float> OnMovementEnd = delegate { };
     public event Action<float> OnMovementFlip = delegate { };
 
-    public bool JumpPressed;
-    public bool JumpHeld;
-    public bool JumpReleased;
-    public bool AttackPressed;
-    public bool AttackHeld;
-    public bool AttackReleased;
-    public bool CrouchHeld;
-    public bool CrouchPressed;
-    public bool CrouchReleased;
-    public float Movement;
+    public bool JumpPressed { get; private set; }
+    public bool JumpHeld { get; private set; }
+    public bool JumpReleased { get; private set; }
+    public bool AttackPressed { get; private set; }
+    public bool AttackHeld { get; private set; }
+    public bool AttackReleased { get; private set; }
+    public bool CrouchHeld { get; private set; }
+    public bool CrouchPressed { get; private set; }
+    public bool CrouchReleased { get; private set; }
+    public float Movement { get; private set; }
+
+    public bool disabled = false;
 
     public void Move(InputAction.CallbackContext context)
     {
@@ -65,7 +67,7 @@ public class InputManager : Manager<InputManager>
 
     private void InvokeIfTrue(bool condition, Action inputEvent)
     {
-        if (condition)
+        if (condition && !disabled)
             inputEvent.Invoke();
     }
 }
