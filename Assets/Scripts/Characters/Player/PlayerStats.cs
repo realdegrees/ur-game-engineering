@@ -116,7 +116,7 @@ public class PlayerStats : CharacterStats
     }
     public void RemoveItems(EItemType type, int amount)
     {
-        var itemsToRemove = items.Where(item => item.type == type).Take(amount);
+        var itemsToRemove = items.Where(item => item.type == type).Take(amount).ToList();
         foreach (var item in itemsToRemove)
         {
             items.Remove(item);
