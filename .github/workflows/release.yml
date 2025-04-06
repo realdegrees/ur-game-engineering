@@ -83,13 +83,16 @@ jobs:
 
       - name: Create DMG Installer
         run: |
-          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameEngineeringStudy.dmg
+          mkdir -p Installer
+      - name: Create DMG Installer
+        run: |
+          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO Installer/GameEngineeringStudy.dmg
 
       - name: Upload Installer as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneOSX
-          path: GameEngineeringStudy.dmg
+          path: Installer
 
   create-release:
     name: Create Release
@@ -122,7 +125,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: InstallerStandaloneOSX
-          path: GameEngineeringStudy.dmg
+          path: Installer
 
       - name: Create GitHub Release Draft
         id: create_release
@@ -177,6 +180,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: GameEngineeringStudy.dmg
+          asset_path: Installer/GameEngineeringStudy.dmg
           asset_name: GameEngineeringStudy-Installer-macOS.dmg
           asset_content_type: application/octet-stream
