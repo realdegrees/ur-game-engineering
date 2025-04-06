@@ -587,7 +587,7 @@ MonoBehaviour:
   - Hostile
   maxFollowRangeFromOrigin: 0
   forceFollow: 1
-  forceFollowThreshold: 4
+  forceFollowThreshold: 5
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0
