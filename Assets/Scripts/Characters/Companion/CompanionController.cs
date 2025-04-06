@@ -18,7 +18,7 @@ public class CompanionController : NPCController
         base.Update();
         if (GameManager.Instance.Scenario == "B")
         {
-            bool enemiesInRange = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.FollowDistance)
+            bool enemiesInRange = Physics2D.OverlapCircleAll(stateMachine.rb.position, stateMachine.Config.ResumeDistance)
                 .Any(h =>
                 {
                     return Util.FindParentWithTag(h.transform, "Hostile") != null;
