@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
+using UnityEngine.XR;
 
 public class LevelManager : Manager<LevelManager>
 {
@@ -65,19 +67,22 @@ public class LevelManager : Manager<LevelManager>
     }
     private void Start()
     {
-        SceneManager.sceneLoaded += (scene, mode) => InitializeSceneObjects();
-        InitializeSceneObjects();
+        SceneManager.sceneLoaded += (scene, mode) => InitLevel(scene);
         StartCoroutine(SetLevelsFromScenario());
-
     }
-
-
-    private void InitializeSceneObjects()
+    private void InitLevel(Scene scene)
     {
         player = GameObject.FindGameObjectWithTag("Player");
         companion = GameObject.FindGameObjectWithTag("Companion");
         playerDead = false;
         companionDead = false;
+
+        bool isLevelScene = levels.Any(level => level.SceneName == scene.name);
+        bool isTransitionScene = scene.name.ToLower().Contains("transition");
+        if (isLevelScene && !isTransitionScene)
+        {
+            LogManager.Instance.LogLevelStart(currentLevel.SceneName);
+        }
     }
 
     private IEnumerator SetLevelsFromScenario()
@@ -85,6 +90,23 @@ public class LevelManager : Manager<LevelManager>
         yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
         levels = GameManager.Instance.Scenario == "A" ? levels_scenario_a : levels_scenario_b;
         currentLevel = levels.Find((level) => level.SceneName == SceneManager.GetActiveScene().name);
+
+        HandleLogOnSceneLoad();
+    }
+
+    private void HandleLogOnSceneLoad()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            var scene = SceneManager.GetSceneAt(i);
+            bool isLevelScene = levels.Any(level => level.SceneName == scene.name);
+            bool isTransitionScene = scene.name.ToLower().Contains("transition");
+            if (isLevelScene && !isTransitionScene)
+            {
+                LogManager.Instance.LogLevelStart(currentLevel.SceneName);
+                break;
+            }
+        }
     }
     public void ReloadLevel()
     {
@@ -94,27 +116,36 @@ public class LevelManager : Manager<LevelManager>
     }
     public void NextLevel()
     {
+        StartCoroutine(NextLevelCoroutine());
+    }
+
+    IEnumerator NextLevelCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
         if (currentLevel.SceneName == null)
         {
             currentLevel = levels[0];
-            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelStart(currentLevel.SceneName);
+        }
+
+        int index = levels.FindIndex(0, levels.Count, (level) => level.SceneName == currentLevel.SceneName);
+        if (index == levels.Count - 1)
+        {
+            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
+            SceneManager.LoadScene(endScene.SceneName);
         }
         else
         {
-            int index = levels.FindIndex(0, levels.Count, (level) => level.SceneName == currentLevel.SceneName);
-            if (index == levels.Count - 1)
-            {
-                if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
-                SceneManager.LoadScene(endScene.SceneName);
-                return;
-            }
-
             if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelEnd(currentLevel.SceneName);
             currentLevel = levels[index + 1];
-            if (!currentLevel.SceneName.ToLower().Contains("transition")) LogManager.Instance.LogLevelStart(currentLevel.SceneName);
-        }
 
-        SceneManager.LoadScene(currentLevel.SceneName);
+            SceneManager.LoadScene(currentLevel.SceneName);
+        }
     }
 
     public SceneReference GetCurrentLevel()

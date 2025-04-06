@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using Assets.Scripts.Utility;
 using UnityEngine;
@@ -7,6 +8,11 @@ public class CompanionController : NPCController
     protected override void Start()
     {
         base.Start();
+        StartCoroutine(SetTagsFromScenario());
+    }
+    IEnumerator SetTagsFromScenario()
+    {
+        yield return new WaitUntil(() => GameManager.Instance && GameManager.Instance.Scenario != null);
         if (GameManager.Instance.Scenario == "B")
         {
             attacksTags = new() { };

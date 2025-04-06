@@ -25,6 +25,17 @@ public class AudioManager : Manager<AudioManager>
         audioSource.Play();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    void LateUpdate()
+    {
+        var player = GameObject.FindWithTag("Player");
+        var targetPosition = player != null ? player.transform.position : Camera.main.transform.position;
+
+        // Follow the player's position
+        // Maintain a fixed rotation so that the listener's orientation remains constant
+        transform.SetPositionAndRotation(targetPosition, Quaternion.identity);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         stoppers.Clear();

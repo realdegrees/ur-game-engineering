@@ -8,9 +8,9 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
     public TextAsset inkJSON;
     public new readonly bool deactivateOnExit = false;
 
-    private void Deactivate()
+    private void DoDeactivate()
     {
-        DialogueManagerInk.Instance.OnDialogueEnd -= Deactivate;
+        DialogueManagerInk.Instance.OnDialogueEnd -= DoDeactivate;
         OnDeactivate.Invoke();
     }
     protected override void Start()
@@ -19,7 +19,7 @@ public class DialogueTrigger : EditorZone<DialogueTrigger>
         OnActivate.AddListener((go) =>
         {
             DialogueManagerInk.Instance.EnterDialogueMode(inkJSON);
-            DialogueManagerInk.Instance.OnDialogueEnd += Deactivate;
+            DialogueManagerInk.Instance.OnDialogueEnd += DoDeactivate;
         });
     }
 }

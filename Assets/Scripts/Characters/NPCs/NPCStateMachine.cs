@@ -81,7 +81,6 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         base.Awake();
         TryGetComponent(out rb);
         TryGetComponent(out seeker);
-        Debug.Log(rb);
         States.ForEach(state => ((NPCState)state).SetRigidbody(rb));
         OnTargetChanged += (target) =>
         {

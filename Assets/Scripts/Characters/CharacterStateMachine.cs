@@ -61,7 +61,6 @@ public class CharacterStateMachine : StateMachine<ECharacterState, PlayerMovemen
     {
         base.Awake();
         TryGetComponent(out rb);
-        Debug.Log(rb);
         States.ForEach(state => ((CharacterState)state).SetRigidbody(rb));
     }
 
