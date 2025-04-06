@@ -98,7 +98,8 @@ public class NPCController : MonoBehaviour
                 stateMachine.SetTarget(stateMachine.fallbackFollowTarget);
             }
         }
-        else if (target)
+        else if (target && target.TryGetComponent(out CharacterStats targetStats) && targetStats.GetHealth() > 0)
+
         {
             var hasLos = Physics2D.Linecast(stateMachine.rb.position, target.transform.position, LayerMask.GetMask("Ground")).collider == null;
             if (hasLos) stateMachine.SetTarget(target);
