@@ -40,7 +40,7 @@ I never thought it would come to this, Spud... but here we are. #speaker:Player 
 
 == figure_out ==
 Wait! Stop! #speaker:Player #portrait:player
-I don't want to fight you! I did not want to be involved in another war ever again. But, the king...
+I don't want to fight you! I did not want to be involved in another war ever again. But, the king... #speaker:Player #portrait:player
 #speaker:Player #portrait:player
 He threatened to harm you, Sp-... Archie, if I didn't comply... I don't know what to do anymore... #speaker:Player #portrait:player
 Don't believe your king's lies! He despises my kingdom and has always been envious of my nation's prosperity! #speaker:King #portrait:king
@@ -49,8 +49,8 @@ Tell me, what did your king tell you was the reason for attacking us? #speaker:K
 He told us that you were plotting a war against us. That we had to strike pre-emptively. #speaker:Player #portrait:player
 That was a lie. We were nothing but friendly toward your kingdom. And this is how you pay us back? #speaker:King #portrait:king
 ... #speaker:Player #portrait:player
-Your attack caught us off guard. During the sudden slaughter, I was separated from Archie. I feared him lost. #speaker:King #portrait:king
-But I had no choice but to retreat. You have my gratitude for looking after my son. But I'll have to ask you to stand down. Please. #speaker:King #portrait:king
+Your attack caught us off guard. During the massacre, I was separated from Archie. I feared him lost. #speaker:King #portrait:king
+I had no choice but to retreat. You have my gratitude for looking after my son. But I'll have to ask you to stand down. Please. #speaker:King #portrait:king
 -> explanations
 
 == explanations ==

@@ -18,5 +18,5 @@ Spud is charging at you! You could end him right there. Or you could run away an
 With a heavy heart, you leave Spud behind and run for your life...
 -> END
 + [KILL HIM]
-I never thought it would come to this, Spud... but here we are. #speaker:Player #portrait:player
+I'm sorry, Spud. But I have to do this. #speaker:Player #portrait:player
 -> END
