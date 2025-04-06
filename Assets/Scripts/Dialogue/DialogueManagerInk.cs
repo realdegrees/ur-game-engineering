@@ -34,6 +34,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     private Story currentStory;
     private bool dialogueIsPlaying;
+    private Coroutine displayLineCoroutine;
 
     public event Action OnDialogueEnd = delegate { };
 
@@ -80,6 +81,11 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         animator.Play("DialogueIn");
 
         ContinueStory();
+
+        // if (dialogueCanContinue)
+        // {
+        //     ContinueStory();
+        // }
     }
 
     // private IEnumerator FreezePlayer()
@@ -106,10 +112,14 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     public void ContinueStory()
     {
-        if (currentStory.canContinue)
+        if (currentStory.canContinue) 
         {
             //dialogueText.text = currentStory.Continue();
-            StartCoroutine(TypeSentence(currentStory.Continue()));
+            if (displayLineCoroutine != null)
+            {
+                StopCoroutine(displayLineCoroutine);
+            }
+            displayLineCoroutine = StartCoroutine(TypeSentence(currentStory.Continue()));
             DisplayChoices();
             HandleTags(currentStory.currentTags);
             continueBtn.interactable = currentStory.currentChoices.Count == 0;
