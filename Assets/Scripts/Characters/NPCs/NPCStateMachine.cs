@@ -84,12 +84,19 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         States.ForEach(state => ((NPCState)state).SetRigidbody(rb));
         OnTargetChanged += (target) =>
         {
-            if (target == null && fallbackFollowTarget != null)
+            if (target == null && fallbackFollowTarget)
             {
                 SetTarget(fallbackFollowTarget);
             }
         };
         StartCoroutine(UpdatePath());
+    }
+    private void Start()
+    {
+        if (Target == null)
+        {
+            SetTarget(null);
+        }
     }
     IEnumerator UpdatePath() // Called in Awake
     {
@@ -130,7 +137,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
         {
             if (stats.GetHealth() <= 0)
             {
-                SetTarget(null);
+                SetTarget(fallbackFollowTarget);
             }
         }
         if (Target != null && path != null)
@@ -139,10 +146,7 @@ public class NPCStateMachine : StateMachine<ECharacterState, NPCMovementConfig>
             var shouldMove = Vector2.Distance(Target.position, rb.transform.position) > (npcController != null && npcController.isRanged ? Config.ResumeDistance : Config.FollowDistance) || Physics2D.Linecast(ceilingCheckCollider.bounds.center, Target.position, Config.GroundLayer).collider != null;
             if (shouldMove) IsActive = true;
         }
-        if (Target == null)
-        {
-            SetTarget(null);
-        }
+
         if (IsActive && path != null) HandlePathTraversion();
 
         // This needs to be called as all states are updated in the base class

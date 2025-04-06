@@ -32,7 +32,6 @@ public class NPCController : MonoBehaviour
     private CharacterStats characterStats;
     private int currentPatrolPointIndex = 0;
     private Vector2 patrolPointCenter;
-    public Transform fallbackFollowTarget = null;
     public List<string> followsTags = new() { };
     public List<string> attacksTags = new() { };
     public int maxFollowRangeFromOrigin = 0;
@@ -96,7 +95,7 @@ public class NPCController : MonoBehaviour
             var distanceFromOrigin = Vector2.Distance(stateMachine.Target.position, patrolPointCenter);
             if (distanceFromOrigin > maxFollowRangeFromOrigin)
             {
-                stateMachine.SetTarget(fallbackFollowTarget);
+                stateMachine.SetTarget(stateMachine.fallbackFollowTarget);
             }
         }
         else if (target)
