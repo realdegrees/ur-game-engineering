@@ -95,7 +95,7 @@ jobs:
     name: Create Release
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    needs: [build-win, build-macos, installer-win]
+    needs: [build-win, build-macos, installer-win, installer-mac]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build-StandaloneWindows.zip
-          asset_name: GameEngineeringStudy-StandaloneWindows.zip
+          asset_name: GameEngineeringStudy-Standalone-Win.zip
           asset_content_type: application/zip
 
       - name: Upload Windows Installer to Release
@@ -158,7 +158,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: Inno/InstallerStandaloneWindows.exe
-          asset_name: GameEngineeringStudyInstaller.exe
+          asset_name: GameEngineeringStudy-Installer-Win.exe
           asset_content_type: application/octet-stream
 
       - name: Upload MacOS Build to Release
@@ -168,7 +168,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build-StandaloneOSX.zip
-          asset_name: GameEngineeringStudy-StandaloneOSX.zip
+          asset_name: GameEngineeringStudy-Standalone-macOS.zip
           asset_content_type: application/zip
 
       - name: Upload MacOS Installer to Release
@@ -178,5 +178,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: GameInstaller.dmg
-          asset_name: GameEngineeringStudyInstaller.dmg
+          asset_name: GameEngineeringStudy-Installer-macOS.dmg
           asset_content_type: application/octet-stream
