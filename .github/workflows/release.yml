@@ -83,13 +83,13 @@ jobs:
 
       - name: Create DMG Installer
         run: |
-          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
+          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO Installer/GameEngineeringStudy.dmg
 
       - name: Upload Installer as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneOSX
-          path: GameInstaller.dmg
+          path: Installer/GameEngineeringStudy.dmg
 
   create-release:
     name: Create Release
@@ -122,7 +122,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: InstallerStandaloneOSX
-          path: GameInstaller.dmg
+          path: Installer
 
       - name: Create GitHub Release Draft
         id: create_release
@@ -148,7 +148,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build-StandaloneWindows.zip
-          asset_name: build-StandaloneWindows.zip
+          asset_name: GameEngineeringStudy-StandaloneWindows.zip
           asset_content_type: application/zip
 
       - name: Upload Windows Installer to Release
@@ -158,7 +158,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: Inno/InstallerStandaloneWindows.exe
-          asset_name: InstallerStandaloneWindows.exe
+          asset_name: GameEngineeringStudyInstaller.exe
           asset_content_type: application/octet-stream
 
       - name: Upload MacOS Build to Release
@@ -168,7 +168,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build-StandaloneOSX.zip
-          asset_name: build-StandaloneOSX.zip
+          asset_name: GameEngineeringStudy-StandaloneOSX.zip
           asset_content_type: application/zip
 
       - name: Upload MacOS Installer to Release
@@ -177,6 +177,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: GameInstaller.dmg
-          asset_name: InstallerStandaloneStandaloneOSX.dmg
+          asset_path: Installer/GameInstaller.dmg
+          asset_name: GameEngineeringStudyInstaller.dmg
           asset_content_type: application/octet-stream
