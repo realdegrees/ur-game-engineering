@@ -108,8 +108,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     {
         if (currentStory.canContinue)
         {
-            dialogueText.text = currentStory.Continue();
-
+            //dialogueText.text = currentStory.Continue();
+            StartCoroutine(TypeSentence(currentStory.Continue()));
             DisplayChoices();
             HandleTags(currentStory.currentTags);
             continueBtn.interactable = currentStory.currentChoices.Count == 0;
@@ -212,13 +212,13 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         ContinueStory();
     }
 
-    // IEnumerator TypeSentence(DialogueLine dialogueLine)
-    // {
-    //     dialogueBody.text = "";
-    //     foreach (char letter in dialogueLine.line.ToCharArray())
-    //     {
-    //         dialogueBody.text += letter; 
-    //         yield return new WaitForSeconds(typingSpeed);
-    //     }
-    // }
+    IEnumerator TypeSentence(string dialogueLine)
+    {
+        dialogueText.text = "";
+        foreach (char letter in dialogueLine.ToCharArray())
+        {
+            dialogueText.text += letter; 
+            yield return new WaitForSeconds(typingSpeed);
+        }
+    }
 }
