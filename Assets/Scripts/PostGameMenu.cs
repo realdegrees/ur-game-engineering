@@ -17,7 +17,7 @@ public class PostGameMenu : MonoBehaviour
         userId.text = GameManager.Instance.id.ToString();
         StartCoroutine(SetUserIdText());
 
-        bool isLogSent = LogManager.Instance.FinalizeLog();
+        bool isLogSent = LogManager.Instance.FinalizeLog(true);
         logStatusText.text = isLogSent ? "Logs sent to the server successfully." : "Failed to send the logs to the server, please contact us so we can retrieve the logs from the local files with your help. Please still fill out the questionnaire below first.";
         logStatusText.color = isLogSent ? Color.green : Color.red;
 

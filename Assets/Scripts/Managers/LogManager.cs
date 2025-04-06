@@ -165,9 +165,9 @@ public class LogManager : Manager<LogManager>
     }
 
     // Call at the end of the project (or when you want to finalize the log)
-    public bool FinalizeLog()
+    public bool FinalizeLog(bool finished = false)
     {
-        logData.finishTime = DateTime.UtcNow.ToString("o");
+        logData.finishTime = finished ? DateTime.UtcNow.ToString("o") : "";
 
         // Serialize the log data to JSON
         string json = JsonUtility.ToJson(logData, true);
