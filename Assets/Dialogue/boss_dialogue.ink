@@ -12,15 +12,15 @@ You were planning to kill everybody who's left in Heartingdale, weren't you? #sp
 ... #speaker:Player #portrait:player
 You lied to me, didn't you? You did not find me in the ruins, you killed my entire family! And now you also want to kill my father?! I cannot accept that! #speaker:Spud #portrait:companion
 ... #speaker:Player #portrait:player
-... Yes, that is what I have to do. It is my duty to protect the Kingdom of Nightingdale. #speaker:Player #portrait:player
+... Yes, that is what I have to do. It is my duty to protect the Kingdom of Nightingale. #speaker:Player #portrait:player
 No! You cannot do this! If you want to kill my father, you'll have to kill me, too! #speaker:Spud #portrait:companion
 
 + [ATTACK]
     I never thought it would come to this, Spud... but here we are. #speaker:Player #portrait:player
-    You monster!! #speaker:Spud #portrait:companion
+    You monster!!! #speaker:Spud #portrait:companion
     -> END
 + [Convince Spud to Fight With You]
-    Stop this! This man before you has been planning to attack my kingdom for the second time now, and both times it was my duty to save Nightingdale by attacking first! #speaker:Player #portrait:player
+    Stop this! This man before you has been planning to attack my kingdom for the second time now, and both times it was my duty to save Nightingale by attacking first! #speaker:Player #portrait:player
     ... #speaker:Spud #portrait:companion
     Please, Spud, this man is a warmonger and a monster. I need your help! If I don't bring my king his head, I will be branded a traitor and lose you! #speaker:Player #portrait:player
     You did not even call me by my real name! My name is Archie, not Spud! #speaker:Spud #portrait:companion
