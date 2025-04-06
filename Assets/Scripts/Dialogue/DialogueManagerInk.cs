@@ -15,6 +15,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     [SerializeField] private Image displayPortrait;
     [SerializeField] private Sprite playerPortrait;
     [SerializeField] private Sprite companionPortrait;
+    [SerializeField] private Sprite childCompanionPortrait;
+    [SerializeField] private Sprite kingPortrait;
     [SerializeField] private GameObject portraitFrame;
     [SerializeField] private GameObject nameFrame;
     [SerializeField] private Button continueBtn;
@@ -32,6 +34,7 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     private Story currentStory;
     private bool dialogueIsPlaying;
+    private Coroutine displayLineCoroutine;
 
     public event Action OnDialogueEnd = delegate { };
 
@@ -48,7 +51,9 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         portraits = new Dictionary<string, Sprite>
         {
             { "player", playerPortrait },
-            { "companion", companionPortrait }
+            { "companion", companionPortrait },
+            { "child", childCompanionPortrait },
+            { "king", kingPortrait }
         };
 
         choicesText = new TextMeshProUGUI[choices.Length];
@@ -76,6 +81,11 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         animator.Play("DialogueIn");
 
         ContinueStory();
+
+        // if (dialogueCanContinue)
+        // {
+        //     ContinueStory();
+        // }
     }
 
     // private IEnumerator FreezePlayer()
@@ -102,10 +112,14 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
 
     public void ContinueStory()
     {
-        if (currentStory.canContinue)
+        if (currentStory.canContinue) 
         {
-            dialogueText.text = currentStory.Continue();
-
+            //dialogueText.text = currentStory.Continue();
+            if (displayLineCoroutine != null)
+            {
+                StopCoroutine(displayLineCoroutine);
+            }
+            displayLineCoroutine = StartCoroutine(TypeSentence(currentStory.Continue()));
             DisplayChoices();
             HandleTags(currentStory.currentTags);
             continueBtn.interactable = currentStory.currentChoices.Count == 0;
@@ -208,13 +222,13 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         ContinueStory();
     }
 
-    // IEnumerator TypeSentence(DialogueLine dialogueLine)
-    // {
-    //     dialogueBody.text = "";
-    //     foreach (char letter in dialogueLine.line.ToCharArray())
-    //     {
-    //         dialogueBody.text += letter; 
-    //         yield return new WaitForSeconds(typingSpeed);
-    //     }
-    // }
+    IEnumerator TypeSentence(string dialogueLine)
+    {
+        dialogueText.text = "";
+        foreach (char letter in dialogueLine.ToCharArray())
+        {
+            dialogueText.text += letter; 
+            yield return new WaitForSeconds(typingSpeed);
+        }
+    }
 }

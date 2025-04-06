@@ -1,13 +1,17 @@
 using Manager;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Container for all logging data
 [Serializable]
 public class LogData
 {
+    public string id;
+    public string scenario;
     public bool foundEasterEgg;
     public string startTime;
     public string finishTime;
@@ -52,8 +56,16 @@ public class LogManager : Manager<LogManager>
         base.Awake();
         // Create log file path (using persistentDataPath ensures it works on all platforms)
         // Initialize log data and record start time for the project
+        StartCoroutine(InitLogData());
+    }
+
+    IEnumerator InitLogData()
+    {
+        yield return new WaitUntil(() => GameManager.Instance != null && GameManager.Instance.id != null && GameManager.Instance.Scenario != null);
         logData = new LogData
         {
+            id = GameManager.Instance.id,
+            scenario = GameManager.Instance.Scenario,
             startTime = DateTime.UtcNow.ToString("o"),
             operatingSystem = SystemInfo.operatingSystem,
             deviceModel = SystemInfo.deviceModel,
@@ -91,6 +103,7 @@ public class LogManager : Manager<LogManager>
 
         // Store it for later update (for simplicity, we add it now)
         logData.levels.Add(level);
+        Debug.Log("[LOG] Level Started -> " + levelName);
     }
 
     // Call when a level ends; assumes the last level started is ending
@@ -106,6 +119,7 @@ public class LogManager : Manager<LogManager>
             DateTime start = DateTime.Parse(level.startTime);
             DateTime finish = DateTime.Parse(level.finishTime);
             level.duration = (float)(finish - start).TotalSeconds;
+            Debug.Log("[LOG] Level Ended -> " + levelName);
         }
         else
         {
@@ -123,6 +137,7 @@ public class LogManager : Manager<LogManager>
             timestamp = DateTime.UtcNow.ToString("o")
         };
         logData.dialogueChoices.Add(dialogue);
+        Debug.Log("[LOG] Dialogue Selected -> " + question + ": " + choice);
     }
 
     public void LogEasterEgg()
@@ -138,27 +153,28 @@ public class LogManager : Manager<LogManager>
             using var webClient = new System.Net.WebClient();
             webClient.Headers[System.Net.HttpRequestHeader.ContentType] = "application/json";
             webClient.Headers[System.Net.HttpRequestHeader.Authorization] = "Bearer ur-game-engineering-2025";
-            webClient.UploadString("https://ge-log-api.realdegrees.dev/" + id, "POST", log);
+            webClient.UploadString("https://ge-log-api.realdegrees.dev/log", "POST", log);
+            Debug.Log("[LOG] Log uploaded successfully.");
             return true;
         }
         catch (Exception e)
         {
-            Debug.LogError("Failed to send logfile to the server: " + e.Message);
+            Debug.LogError("[LOG] Failed to send logfile to the server: " + e.Message);
             return false;
         }
     }
 
     // Call at the end of the project (or when you want to finalize the log)
-    public bool FinalizeLog()
+    public bool FinalizeLog(bool finished = false)
     {
-        logData.finishTime = DateTime.UtcNow.ToString("o");
+        logData.finishTime = finished ? DateTime.UtcNow.ToString("o") : "";
 
         // Serialize the log data to JSON
         string json = JsonUtility.ToJson(logData, true);
         var fullId = GameManager.Instance.Scenario + "-" + GameManager.Instance.id;
         var logFilePath = Path.Combine(Application.persistentDataPath, fullId + ".json");
         File.WriteAllText(logFilePath, json);
-        Debug.Log("Study Log file written to: " + logFilePath);
+        Debug.Log("[LOG] Log file saved to: " + logFilePath);
         if (SendLogsToServerInEditor && !logSentToServer)
         {
             logSentToServer = true; // Prevent multiple uploads

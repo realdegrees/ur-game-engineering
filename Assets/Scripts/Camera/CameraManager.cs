@@ -3,6 +3,7 @@ using System.Collections;
 using Cinemachine;
 using Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum CameraType
 {
@@ -28,17 +29,10 @@ public class CameraManager : Manager<CameraManager>
     [SerializeField]
     private CameraData[] cameraData;
     private CameraData activeCameraData;
-    private AudioListener audioListener;
 
 
     private Coroutine verticalSnapCoroutine;
     private Coroutine flipCoroutine;
-
-    public void Update()
-    {
-        var player = FindFirstObjectByType<PlayerController>();
-        audioListener.enabled = player == null;
-    }
 
 
     public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
@@ -100,7 +94,15 @@ public class CameraManager : Manager<CameraManager>
     // Start is called before the first frame update
     public void Start()
     {
-        audioListener = GetComponentInChildren<AudioListener>();
+        SceneManager.sceneLoaded += (scene, mode) =>
+                {
+                    var player = FindFirstObjectByType<PlayerController>();
+                    if (player != null)
+                    {
+                        activeCameraData.camera.transform.position = player.transform.position;
+                    }
+                };
+        // audioListener = GetComponentInChildren<AudioListener>();
         foreach (CameraData details in cameraData)
         {
             // set transposer

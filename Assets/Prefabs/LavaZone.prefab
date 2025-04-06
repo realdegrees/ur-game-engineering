@@ -93,6 +93,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activateTags:
   - Player
+  - Hostile
+  - Companion
   numberOfAllowedActivations: 0
   duration: 0
   cooldown: 0

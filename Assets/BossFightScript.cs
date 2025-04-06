@@ -42,6 +42,8 @@ public class BossFightScript : MonoBehaviour
             }
             if (dialogueChoice == "Run Away" || dialogueChoice == "Show Empathy") // TODO spare is just a placeholder
             {
+                this.enabled = false;
+                Debug.Log("NextLevelA");
                 LevelManager.Instance.NextLevel();
             }
         });
@@ -58,6 +60,8 @@ public class BossFightScript : MonoBehaviour
             }
             if (dialogueChoice == "Run Away") // TODO spare is just a placeholder
             {
+                this.enabled = false;
+                Debug.Log("NextLevelB");
                 LevelManager.Instance.NextLevel();
             }
         });
@@ -73,6 +77,7 @@ public class BossFightScript : MonoBehaviour
         if (bossStateMachine == null && companionStateMachine == null)
         {
             this.enabled = false;
+            Debug.Log("NextLevelC");
             LevelManager.Instance.NextLevel();
         }
     }

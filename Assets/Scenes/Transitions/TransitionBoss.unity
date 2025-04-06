@@ -179,16 +179,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'After fighting your way through the castle you finally reach the throne
+  m_text: 'After fighting your way through the castle, you finally reach the throne
     room where you intend to confront the king.
 
 
     You enter the room when suddenly
-    your companion starts sobbing and yelling out for his father who turns out to
-    be the king.
+    Spud starts sobbing and yelling out for his father who turns out to be the king.
 
 
-    You run after him and try to find out what is going on...'
+    You
+    run after him and try to find out what is going on...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}
   m_sharedMaterial: {fileID: -5028685761662634538, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}

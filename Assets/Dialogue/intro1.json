@@ -1,1 +1,1 @@
-﻿{"inkVersion":21,"root":[["^Papa... Papa! ","#","^speaker:Child","/#","\n","^I can hear the cries of a small child... I've got to find him! ","#","^speaker:Player ","/#","#","^portrait:player","/#","\n","end",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
+﻿{"inkVersion":21,"root":[["^Papa... Papa! ","#","^speaker:Child ","/#","#","^portrait:child","/#","\n","^I can hear the cries of a small child... I've got to find him! ","#","^speaker:Player ","/#","#","^portrait:player","/#","\n","end",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}

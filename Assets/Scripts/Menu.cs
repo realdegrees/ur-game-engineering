@@ -9,6 +9,9 @@ public class Menu : MonoBehaviour
     public Button startButton;
     public Button userIdCopyButton;
     public TextMeshProUGUI userId;
+    public Toggle logAcknowledgmentToggle;
+
+    private bool questionnaireClicked = false;
 
     private void Start()
     {
@@ -36,6 +39,7 @@ public class Menu : MonoBehaviour
             textEditor.SelectAll();
             textEditor.Copy();
             Application.OpenURL(link);
+            questionnaireClicked = true;
             StartCoroutine(EnableStartButtonAfterDelay(1f));
         });
 
@@ -44,6 +48,18 @@ public class Menu : MonoBehaviour
             UIManager.Instance.Enable();
             LevelManager.Instance.NextLevel();
         });
+    }
+    private void Update()
+    {
+        bool logDataInitialized = GameManager.Instance && GameManager.Instance.Scenario != null;
+        if (questionnaireClicked && logAcknowledgmentToggle.isOn && logDataInitialized)
+        {
+            startButton.interactable = true;
+        }
+        else
+        {
+            startButton.interactable = false;
+        }
     }
     IEnumerator SetUserIdText()
     {

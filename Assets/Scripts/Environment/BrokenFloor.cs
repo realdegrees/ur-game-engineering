@@ -1,15 +1,11 @@
 using UnityEngine;
-using System.Collections;
-using System.Diagnostics;
 
 public class BrokenFloor : MonoBehaviour
 {
-
     public Sprite[] breakStages;
-    public float breakTime = 1.5f;
 
     private SpriteRenderer spriteRenderer;
-    private bool isActivated = false;
+    private int currentStage = 0;
 
     public void Start()
     {
@@ -18,21 +14,20 @@ public class BrokenFloor : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isActivated)
+        if (currentStage < breakStages.Length)
         {
-            StartCoroutine(BreakFloor());
-            isActivated = true;
+            AdvanceBreakStage();
         }
     }
-    
-    private IEnumerator BreakFloor()
-    {
-        for (int i = 0; i < breakStages.Length; i++)
-        {
-            spriteRenderer.sprite = breakStages[i];
-            yield return new WaitForSeconds(breakTime);
-        }
 
-        Destroy(gameObject);
+    private void AdvanceBreakStage()
+    {
+        spriteRenderer.sprite = breakStages[currentStage];
+        currentStage++;
+
+        if (currentStage >= breakStages.Length)
+        {
+            Destroy(gameObject);
+        }
     }
 }

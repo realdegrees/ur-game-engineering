@@ -73,16 +73,16 @@ public class PlayerController : MonoBehaviour
             if (losCheck.collider != null)
                 continue;
 
-            if (enemy.TryGetComponent(out CharacterStats stats))
+            if (enemy.TryGetComponent(out CharacterStats enemyStats) && enemy.TryGetComponent(out NPCStateMachine enemyStateMachine) && enemy.TryGetComponent(out Rigidbody2D enemyRb))
             {
-                stats.TakeDamage(playerStats.damage);
-                if (enemy.TryGetComponent(out Rigidbody2D enemyRb))
-                {
-                    Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
-                    knockbackDirection.y = Mathf.Abs(knockbackDirection.y) + 1f; // Slightly adjust the angle upwards
-                    knockbackDirection.Normalize();
-                    enemyRb.AddForce(knockbackDirection * 5f, ForceMode2D.Impulse);
-                }
+                enemyStats.TakeDamage(playerStats.damage);
+
+                Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
+                knockbackDirection.y = Mathf.Abs(knockbackDirection.y) + 1f; // Slightly adjust the angle upwards
+                knockbackDirection.Normalize();
+                enemyStateMachine.EnterState(ECharacterState.Decelerating);
+                enemyRb.AddForce(knockbackDirection * 5f, ForceMode2D.Impulse);
+
             }
         }
         animator.SetTrigger("Attack");
