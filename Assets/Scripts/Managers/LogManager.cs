@@ -88,22 +88,28 @@ public class LogManager : Manager<LogManager>
     // Call when a level (scene) starts
     public void LogLevelStart(string levelName)
     {
+        StartCoroutine(LogLevelStartCoroutine(levelName));
+    }
+
+    IEnumerator LogLevelStartCoroutine(string levelName)
+    {
+        yield return new WaitUntil(() => logData != null && logData.levels != null);
         // Check if the level already exists in the log
-        if (logData.levels.Exists(l => l.levelName == levelName))
+        if (!logData.levels.Exists(l => l.levelName == levelName))
         {
-            return;
+            // Create a new LevelData object with start time
+            LevelData level = new()
+            {
+                levelName = levelName,
+                startTime = DateTime.UtcNow.ToString("o")
+            };
+
+            // Store it for later update (for simplicity, we add it now)
+            logData.levels.Add(level);
+            Debug.Log("[LOG] Level Started -> " + levelName);
         }
 
-        // Create a new LevelData object with start time
-        LevelData level = new()
-        {
-            levelName = levelName,
-            startTime = DateTime.UtcNow.ToString("o")
-        };
 
-        // Store it for later update (for simplicity, we add it now)
-        logData.levels.Add(level);
-        Debug.Log("[LOG] Level Started -> " + levelName);
     }
 
     // Call when a level ends; assumes the last level started is ending
