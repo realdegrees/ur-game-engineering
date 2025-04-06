@@ -581,14 +581,13 @@ MonoBehaviour:
   attackCooldown: 1.5
   isRanged: 1
   projectile: {fileID: 6846088989974114753, guid: 34d1533eedf76c74c80f6e7d67ee4baf, type: 3}
-  fallbackFollowTarget: {fileID: 0}
   followsTags:
   - Hostile
   attacksTags:
   - Hostile
   maxFollowRangeFromOrigin: 0
   forceFollow: 1
-  forceFollowThreshold: 3
+  forceFollowThreshold: 4
 --- !u!1 &7450459480846787687
 GameObject:
   m_ObjectHideFlags: 0

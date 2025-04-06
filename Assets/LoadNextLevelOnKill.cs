@@ -24,6 +24,7 @@ public class LoadNextLevelOnKill : MonoBehaviour
         }
         if (kills == requiredKills.Count)
         {
+            this.enabled = false;
             LevelManager.Instance.NextLevel();
         }
     }

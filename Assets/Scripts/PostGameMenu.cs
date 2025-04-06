@@ -8,6 +8,7 @@ public class PostGameMenu : MonoBehaviour
     public Button questionnaireButton;
     public Button startButton;
     public Button userIdCopyButton;
+    public Button quitButton;
     public TextMeshProUGUI userId;
     public TextMeshProUGUI logStatusText;
 
@@ -48,6 +49,10 @@ public class PostGameMenu : MonoBehaviour
         {
             UIManager.Instance.Enable();
             LevelManager.Instance.NextLevel();
+        });
+        quitButton.onClick.AddListener(() =>
+        {
+            Application.Quit();
         });
     }
     IEnumerator SetUserIdText()
