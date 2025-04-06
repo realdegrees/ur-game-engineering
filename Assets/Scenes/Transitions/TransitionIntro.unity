@@ -179,8 +179,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'After receiving this letter from your King you joined the attack on Heartingdale
-    and crushed their defenses
+  m_text: 'After receiving this letter from your King, you joined the attack on Heartingdale
+    and crushed their defences.
 
 
     You wander the streets of Heartingdale looking
@@ -701,11 +701,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "My Knight,\n\r\nThe kingdom of Heartingdale is about to attack us. You
+  m_text: "My Knight,\n\r\nThe Kingdom of Heartingdale is about to attack us. You
     are ordered to group up and launch a pre-emptive attack. As you are aware, we
     are still recovering from our most recent war efforts, and thus a strong, decisive
     blow is needed. Take no prisoners and leave no one alive. \r\n\nKing Richard
-    I of the glorious kingdom of Nightingale.\r\n"
+    I of The Glorious Kingdom of Nightingale.\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}
   m_sharedMaterial: {fileID: -5028685761662634538, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}

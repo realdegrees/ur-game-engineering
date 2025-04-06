@@ -192,7 +192,7 @@ MonoBehaviour:
 
 
     You see this as an opportunity
-    to teach your son the hrash reality of this world, so you bring him with you...'
+    to teach your son the harsh reality of this world, so you bring him with you...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}
   m_sharedMaterial: {fileID: -5028685761662634538, guid: 41bcdf822a31c0a4ca272ada234f3b0d, type: 2}
@@ -707,10 +707,10 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'My Knight,
 
-    
 
-    You are ordered to report for military duty at
-    once. Your last orders before retiring were to eliminate everyone from the kingdom
+
+    You are ordered to report for military duty at once.
+    Your last orders before retiring were to eliminate everyone from the kingdom
     of Heartingdale, which has come to my attention has resulted in failure. The
     king of Heartingdale is alive and in hiding. You are to lead an attack to eliminate
     him at once. You owe your king obedience. Failure to comply will result in your
@@ -719,7 +719,7 @@ MonoBehaviour:
 
 
     King
-    Richard I of the glorious kingdom of Nightingale
+    Richard I of The Glorious Kingdom of Nightingale
 
 '
   m_isRightToLeft: 0
@@ -748,7 +748,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.8
+  m_fontSize: 15.05
   m_fontSizeBase: 22.98
   m_fontWeight: 400
   m_enableAutoSizing: 1

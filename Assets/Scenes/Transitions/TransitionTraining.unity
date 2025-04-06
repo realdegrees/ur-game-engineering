@@ -179,8 +179,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "A few years have passed...\n\nYou took the boy in as your own. \nThe horrors
-    of war made you resign from the military. \n\nBut for the boys own safety you
+  m_text: "A few years have passed...\n\nYou took the boy in as your own. Of course,
+    you don't know his real name, so you decided to just call him Spud.\n\nThe horrors
+    of war made you resign from the military. \n\nBut for Spud's own safety, you
     decided to train him so he could fight for himself if he would ever need to.\n\nYou
     take your son to an abandoned ruin to show him the basics of fighting..."
   m_isRightToLeft: 0
@@ -209,7 +210,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
+  m_fontSize: 31.55
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
