@@ -1,10 +1,9 @@
-using Cinemachine;
 using UnityEngine;
 
 
 public enum CameraBoundsActivationType
 {
-    Awake,
+    Start,
     Enter,
     Stay,
     Toggle,
@@ -19,20 +18,15 @@ public class CameraBounds : EditorZone<CameraBounds>
     public CompositeCollider2D boundsCollider;
     private CompositeCollider2D cachedBounds;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         CheckRequirements();
         InitListeners();
     }
 
     private void CheckRequirements()
     {
-        if (boundsCollider == GetComponentInChildren<CompositeCollider2D>())
-        {
-            Debug.LogWarning($"Camera bounds collider on {gameObject.name} has the same root as an editor zone. This will result in the zone triggering when the player collides with the bounds collider! Put the bounds collider on a separate object.");
-        }
-
         if (!boundsCollider.isTrigger)
         {
             Debug.LogWarning($"Camera bounds collider on {gameObject.name} is not set to 'Trigger'. Setting it automatically.");
@@ -45,7 +39,7 @@ public class CameraBounds : EditorZone<CameraBounds>
             boundsCollider.geometryType = CompositeCollider2D.GeometryType.Polygons;
         }
 
-        if (activationType == CameraBoundsActivationType.Awake)
+        if (activationType == CameraBoundsActivationType.Start)
         {
             SetBounds();
         }
@@ -53,11 +47,11 @@ public class CameraBounds : EditorZone<CameraBounds>
 
     private void InitListeners()
     {
-        OnActivate.AddListener(() =>
+        OnActivate.AddListener((go) =>
         {
             switch (activationType)
             {
-                case CameraBoundsActivationType.Awake:
+                case CameraBoundsActivationType.Start:
                     break;
                 case CameraBoundsActivationType.Enter:
                     SetBounds();
@@ -78,27 +72,23 @@ public class CameraBounds : EditorZone<CameraBounds>
         });
         OnDeactivate.AddListener(() =>
         {
-            if (activationType == CameraBoundsActivationType.Stay)
-            {
-                ResetBounds();
-            }
+            ResetBounds();
         });
-        OnCooldownReset.AddListener(ResetBounds);
     }
 
-    private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Default);
+    private Collider2D GetBounds() => CameraManager.Instance.GetCameraBounds(CameraType.Follow);
 
     private void SetBounds()
     {
         cachedBounds = GetBounds() as CompositeCollider2D;
-        CameraManager.Instance.SetCameraBounds(boundsCollider, CameraType.Default);
+        CameraManager.Instance.SetCameraBounds(boundsCollider, CameraType.Follow);
     }
     private void ResetBounds()
     {
         var currentCameraBounds = GetBounds();
         if (currentCameraBounds == boundsCollider)
         {
-            CameraManager.Instance.SetCameraBounds(cachedBounds, CameraType.Default);
+            CameraManager.Instance.SetCameraBounds(cachedBounds, CameraType.Follow);
             cachedBounds = null;
         }
     }

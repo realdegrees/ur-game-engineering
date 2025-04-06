@@ -2,20 +2,29 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 [Serializable]
 public abstract class State<EState, SConfig> : BaseState where EState : Enum where SConfig : StateMachineConfig<EState, SConfig>
 {
     public EState state { get; private set; }
     protected StateMachine<EState, SConfig> stateMachine;
-    protected SConfig Config => stateMachine.config;
-
+    protected SConfig Config => stateMachine.Config;
+    public State<EState, SConfig> enterOnComplete = null;
+    public State<EState, SConfig> enterOnCancel = null;
 
     public State(EState state)
     {
         this.state = state;
     }
 
+    public void UpdateReferences(Dictionary<State<EState, SConfig>, State<EState, SConfig>> stateMapping)
+    {
+        if (enterOnComplete != null)
+            enterOnComplete = stateMapping.ContainsKey(enterOnComplete) ? stateMapping[enterOnComplete] : enterOnComplete;
+        if (enterOnCancel != null)
+            enterOnCancel = stateMapping.ContainsKey(enterOnCancel) ? stateMapping[enterOnCancel] : enterOnCancel;
+    }
     public void Init(StateMachine<EState, SConfig> stateMachine)
     {
         this.stateMachine = stateMachine;
@@ -27,11 +36,11 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
 
     public void Loop()
     {
-        HandleLoop("OnLoop");
+        HandleLoop(nameof(OnLoop));
     }
     public void PhysicsUpdate()
     {
-        HandleLoop("OnPhysicsUpdate");
+        HandleLoop(nameof(OnPhysicsUpdate));
     }
     private void HandleLoop(string name)
     {
@@ -42,21 +51,23 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
         if (isCompleted)
         {
             Exit();
-            OnStateComplete.Invoke();
+            if (enterOnComplete != null)
+                enterOnComplete.Enter();
         }
         else if (Progress < 0)
         {
             Exit();
-            OnStateCancelled.Invoke();
+            if (enterOnCancel != null)
+                enterOnCancel.Enter();
         }
     }
     public void Enter()
     {
         if (enableStateEventLogs) Debug.Log($"Entering {state}");
-        stateMachine.OnBeforeStateEnter(state);
         Progress = 0;
         StartTime = Time.time;
         Active = true;
+        stateMachine.StateEntered(this);
         RunSubclassEventImplementation("OnEnter");
     }
     public void Exit()
@@ -64,7 +75,7 @@ public abstract class State<EState, SConfig> : BaseState where EState : Enum whe
         if (enableStateEventLogs) Debug.Log($"Exiting {state}");
         Active = false;
         RunSubclassEventImplementation("OnExit");
-        stateMachine.OnAfterStateExit(state);
+        stateMachine.StateExited(this);
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ jobs:
 
       # Download Windows Build Artifact
       - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows
           path: InnoBuild
@@ -61,10 +61,35 @@ jobs:
 
       # Output
       - name: Upload Installer as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: InstallerStandaloneWindows
           path: Inno/InstallerStandaloneWindows.exe
+
+  installer-mac:
+    name: Build Installer for MacOS
+    runs-on: macos-latest
+    if: github.event.pull_request.merged == true
+    needs: build-macos
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download MacOS Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-StandaloneOSX
+          path: MacBuild
+
+      - name: Create DMG Installer
+        run: |
+          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO GameInstaller.dmg
+
+      - name: Upload Installer as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: InstallerStandaloneOSX
+          path: GameInstaller.dmg
 
   create-release:
     name: Create Release
@@ -76,22 +101,28 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneWindows
           path: build-StandaloneWindows
 
       - name: Download Installer Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: InstallerStandaloneWindows
           path: Inno
 
       - name: Download MacOS Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-StandaloneOSX
           path: build-StandaloneOSX
+
+      - name: Download MacOS Installer Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: InstallerStandaloneOSX
+          path: GameInstaller.dmg
 
       - name: Create GitHub Release Draft
         id: create_release
@@ -120,7 +151,7 @@ jobs:
           asset_name: build-StandaloneWindows.zip
           asset_content_type: application/zip
 
-      - name: Upload Installer to Release
+      - name: Upload Windows Installer to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,3 +170,13 @@ jobs:
           asset_path: build-StandaloneOSX.zip
           asset_name: build-StandaloneOSX.zip
           asset_content_type: application/zip
+
+      - name: Upload MacOS Installer to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: GameInstaller.dmg
+          asset_name: InstallerStandaloneStandaloneOSX.dmg
+          asset_content_type: application/octet-stream

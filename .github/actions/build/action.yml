@@ -47,7 +47,7 @@ runs:
 
     # Upload build artifact
     - name: Upload Build as Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-${{ inputs.targetPlatform }}
         path: build/${{ inputs.targetPlatform }}

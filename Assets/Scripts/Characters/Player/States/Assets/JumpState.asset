@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c74cabeac18da4491dfd9cb9fe18da, type: 3}
+  m_Name: JumpState
+  m_EditorClassIdentifier: 
+  runParallel: 0
+  enableStateEventLogs: 0
+  enterOnComplete: {fileID: 11400000, guid: b0f2a732f7cb2154781aceb04bda3434, type: 2}
+  enterOnCancel: {fileID: 11400000, guid: 78727c9a15c5b394296b7ff0d385fa85, type: 2}

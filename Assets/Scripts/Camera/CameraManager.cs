@@ -6,7 +6,7 @@ using UnityEngine;
 
 public enum CameraType
 {
-    Default,
+    Follow,
     Fixed
 }
 [Serializable]
@@ -24,25 +24,35 @@ public class CameraData
 
 public class CameraManager : Manager<CameraManager>
 {
-    public PlayerController player;
     public CameraConfig config;
     [SerializeField]
     private CameraData[] cameraData;
     private CameraData activeCameraData;
+    private AudioListener audioListener;
 
 
     private Coroutine verticalSnapCoroutine;
     private Coroutine flipCoroutine;
 
+    public void Update()
+    {
+        var player = FindFirstObjectByType<PlayerController>();
+        audioListener.enabled = player == null;
+    }
+
 
     public void SetCameraBounds(Collider2D bounds, CameraType cameraType)
     {
-        CinemachineConfiner2D confiner = GetCameraData(cameraType).camera.GetComponent<CinemachineConfiner2D>();
+        var camera = GetCameraData(cameraType).camera;
+        if (camera == null) return;
+
+        CinemachineConfiner2D confiner = camera.GetComponent<CinemachineConfiner2D>();
         confiner.m_BoundingShape2D = bounds;
     }
     public Collider2D GetCameraBounds(CameraType cameraType)
     {
-        if (GetCameraData(cameraType).camera.TryGetComponent(out CinemachineConfiner2D confiner))
+        var camera = GetCameraData(cameraType).camera;
+        if (camera != null && camera.TryGetComponent(out CinemachineConfiner2D confiner))
         {
             return confiner.m_BoundingShape2D;
         }
@@ -50,9 +60,9 @@ public class CameraManager : Manager<CameraManager>
     }
 
 
-    private void OnPlayerFlip(bool isFacingRight)
+    private void OnPlayerFlip()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -65,7 +75,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerStartFalling()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -77,7 +87,7 @@ public class CameraManager : Manager<CameraManager>
 
     private void OnPlayerLand()
     {
-        var isFollowCamera = activeCameraData.type == CameraType.Default;
+        var isFollowCamera = activeCameraData.type == CameraType.Follow;
         if (!isFollowCamera)
             return;
 
@@ -88,10 +98,9 @@ public class CameraManager : Manager<CameraManager>
     }
 
     // Start is called before the first frame update
-    protected override void Awake()
+    public void Start()
     {
-        base.Awake();
-
+        audioListener = GetComponentInChildren<AudioListener>();
         foreach (CameraData details in cameraData)
         {
             // set transposer
@@ -108,10 +117,34 @@ public class CameraManager : Manager<CameraManager>
             }
         }
 
+        var playerStateMachine = FindFirstObjectByType<CharacterStateMachine>();
+        if (playerStateMachine == null) return;
+
         // ! Important to do this after setting up the cameras
-        player.OnLand.AddListener(OnPlayerLand);
-        player.OnStartFalling.AddListener(OnPlayerStartFalling);
-        player.OnFlip.AddListener(OnPlayerFlip);
+        playerStateMachine.OnStateExit += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    if (playerStateMachine.IsStateActive(ECharacterState.Jumping, ECharacterState.JumpApex))
+                    {
+                        OnPlayerLand();
+                    }
+                    break;
+            }
+
+        };
+        playerStateMachine.OnStateEnter += (state) =>
+        {
+            switch (state.state)
+            {
+                case ECharacterState.Falling:
+                    OnPlayerStartFalling();
+                    break;
+            }
+
+        };
+        playerStateMachine.GetComponent<PlayerController>().OnFlip += OnPlayerFlip;
     }
 
     public void SetCameraType(CameraType type, Transform target = null)
