@@ -15,6 +15,8 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
     [SerializeField] private Image displayPortrait;
     [SerializeField] private Sprite playerPortrait;
     [SerializeField] private Sprite companionPortrait;
+    [SerializeField] private Sprite childCompanionPortrait;
+    [SerializeField] private Sprite kingPortrait;
     [SerializeField] private GameObject portraitFrame;
     [SerializeField] private GameObject nameFrame;
     [SerializeField] private Button continueBtn;
@@ -48,7 +50,9 @@ public class DialogueManagerInk : Manager<DialogueManagerInk>
         portraits = new Dictionary<string, Sprite>
         {
             { "player", playerPortrait },
-            { "companion", companionPortrait }
+            { "companion", companionPortrait },
+            { "child", childCompanionPortrait },
+            { "king", kingPortrait }
         };
 
         choicesText = new TextMeshProUGUI[choices.Length];
