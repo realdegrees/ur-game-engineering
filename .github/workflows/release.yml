@@ -79,13 +79,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-StandaloneOSX
-          path: MacBuild
+          path: StandaloneOSX.app
 
       - name: Create DMG Installer
         run: |
           mkdir -p Installer
-          chmod +x MacBuild/StandaloneOSX.app/Contents/MacOS/StandaloneOSX
-          hdiutil create -volname "GameInstaller" -srcfolder MacBuild/StandaloneOSX.app -ov -format UDZO Installer/GameEngineeringStudy.dmg
+          chmod +x StandaloneOSX.app/Contents/MacOS/StandaloneOSX
+          hdiutil create -volname "GameInstaller" -srcfolder StandaloneOSX.app -ov -format UDZO Installer/GameEngineeringStudy.dmg
 
       - name: Upload Installer as Artifact
         uses: actions/upload-artifact@v4
