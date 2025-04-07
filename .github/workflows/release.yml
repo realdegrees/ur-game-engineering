@@ -84,9 +84,8 @@ jobs:
       - name: Create DMG Installer
         run: |
           mkdir -p Installer
-      - name: Create DMG Installer
-        run: |
-          hdiutil create -volname "GameInstaller" -srcfolder MacBuild -ov -format UDZO Installer/GameEngineeringStudy.dmg
+          chmod +x MacBuild/StandaloneOSX.app/Contents/MacOS/StandaloneOSX
+          hdiutil create -volname "GameInstaller" -srcfolder MacBuild/StandaloneOSX.app -ov -format UDZO Installer/GameEngineeringStudy.dmg
 
       - name: Upload Installer as Artifact
         uses: actions/upload-artifact@v4
