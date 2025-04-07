@@ -131,6 +131,8 @@ public class LevelManager : Manager<LevelManager>
         if (currentLevel.SceneName == null)
         {
             currentLevel = levels[0];
+            SceneManager.LoadScene(currentLevel.SceneName);
+            yield break;
         }
 
         int index = levels.FindIndex(0, levels.Count, (level) => level.SceneName == currentLevel.SceneName);
